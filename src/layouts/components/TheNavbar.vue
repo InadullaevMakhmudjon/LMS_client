@@ -16,55 +16,16 @@
 
       <!-- SM - OPEN SIDEBAR BUTTON -->
       <feather-icon class="sm:inline-flex xl:hidden cursor-pointer mr-1" icon="MenuIcon" @click.stop="showSidebar"></feather-icon>
-
-      <template v-if="breakpoint != 'md'">
-        <!-- STARRED PAGES - FIRST 10 -->
-        <ul class="vx-navbar__starred-pages">
-          <draggable v-model="starredPagesLimited" :group="{name: 'pinList'}" class="flex cursor-move">
-            <li class="starred-page" v-for="page in starredPagesLimited" :key="page.url">
-              <vx-tooltip :text="page.label" position="bottom" delay=".3s">
-                <feather-icon svgClasses="h-6 w-6" class="p-2 cursor-pointer" :icon="page.labelIcon" @click="$router.push(page.url)"></feather-icon>
-              </vx-tooltip>
-            </li>
-          </draggable>
-        </ul>
-
-        <!-- STARRED PAGES MORE -->
-        <div class="vx-navbar__starred-pages--more-dropdown" v-if="starredPagesMore.length">
-          <vs-dropdown vs-custom-content vs-trigger-click>
-            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" class="cursor-pointer p-2"></feather-icon>
-            <vs-dropdown-menu>
-              <ul class="vx-navbar__starred-pages-more--list">
-                <draggable v-model="starredPagesMore" :group="{name: 'pinList'}" class="cursor-move">
-                  <li class="starred-page--more flex items-center cursor-pointer" v-for="page in starredPagesMore" :key="page.url" @click="$router.push(page.url)">
-                    <feather-icon svgClasses="h-5 w-5" class="ml-2 mr-1" :icon="page.labelIcon"></feather-icon>
-                    <span class="px-2 pt-2 pb-1">{{ page.label }}</span>
-                  </li>
-                </draggable>
-              </ul>
-            </vs-dropdown-menu>
-          </vs-dropdown>
-        </div>
-
-        <div class="bookmark-container">
-          <feather-icon icon="StarIcon" :svgClasses="['stoke-current text-warning', {'text-white': navbarColor != '#fff'}]" class="cursor-pointer p-2" @click.stop="showBookmarkPagesDropdown = !showBookmarkPagesDropdown" />
-                    <div v-click-outside="outside" class="absolute bookmark-list w-1/3 xl:w-1/4 mt-4" v-if="showBookmarkPagesDropdown">
-          <vx-auto-suggest :autoFocus="true" :data="navbarSearchAndPinList" @selected="selected" @actionClicked="actionClicked" inputClassses="w-full" show-action show-pinned background-overlay></vx-auto-suggest>
-          </div>
-        </div>
-      </template>
-
+       
+        <!-- Quick access buttons-->
+        <div class="flex">
+            <vs-button radius color="#2CA3F2" type="border" to="/book/create-book" icon="book"  size="large"></vs-button>
+            <vs-button class="ml-2" radius color="success" type="border" size="large" icon="vertical_align_bottom"></vs-button>
+            <vs-button class="ml-2" radius color="primary" type="border" size="large" icon="vertical_align_top"></vs-button>
+        </div>      
 
       <vs-spacer></vs-spacer>
-
-            <!-- SEARCHBAR -->
-            <div class="search-full-container w-full h-full absolute left-0 rounded-lg" :class="{'flex': showFullSearch}" v-show="showFullSearch">
-                <vx-auto-suggest :autoFocus="showFullSearch" :data="navbarSearchAndPinList" @selected="selected" ref="navbarSearch" @closeSearchbar="showFullSearch = false" placeholder="Search..." class="w-full" inputClassses="w-full vs-input-no-border vs-input-no-shdow-focus no-icon-border" icon="SearchIcon" background-overlay></vx-auto-suggest>
-                <div class="absolute right-0 h-full z-50">
-                    <feather-icon icon="XIcon" class="px-4 cursor-pointer h-full close-search-icon" @click="showFullSearch = false"></feather-icon>
-                </div>
-            </div>
-            <feather-icon icon="SearchIcon" @click="showFullSearch = true" class="cursor-pointer navbar-fuzzy-search ml-4"></feather-icon>
+      <h5 class="">english</h5> 
 
       <!-- NOTIFICATIONS -->
       <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
@@ -116,7 +77,7 @@
       <div class="the-navbar__user-meta flex items-center">
         <div class="text-right leading-tight hidden sm:block">
           <p class="font-semibold">{{ user_displayName }}</p>
-          <small>Available</small>
+          <small>Librarian</small>
         </div>
         <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer">
           <div class="con-img ml-3">
@@ -235,7 +196,7 @@ export default {
 
         // PROFILE
         user_displayName() {
-            return "john_doe"
+            return "Aliev Azam"
             // return JSON.parse(localStorage.getItem('userInfo')).displayName
         },
         activeUserImg() {

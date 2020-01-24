@@ -19,17 +19,28 @@
 ==========================================================================================*/
 
 
-export default [
-  {
-    url: "/",
-    name: "Home",
-    slug: "home",
-    icon: "HomeIcon",
-  },
-  {
-    url: "/page2",
-    name: "Page 2",
-    slug: "page2",
-    icon: "FileIcon",
-  },
+export default [{
+        url: "/",
+        name: "Home",
+        slug: "home",
+        icon: "HomeIcon",
+    },
+    {
+        url: "/books",
+        name: "Books",
+        slug: "books",
+        icon: "BookIcon",
+    },
+    {
+        url: "/users",
+        name: "Users",
+        slug: "users",
+        icon: "UsersIcon",
+    },
+    {
+        url: "/settings",
+        name: "Settings",
+        slug: "settings",
+        icon: "SettingsIcon",
+    },
 ]

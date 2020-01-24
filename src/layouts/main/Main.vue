@@ -11,7 +11,8 @@
 <template>
     <div class="layout--main" :class="[navbarClasses, footerClasses, {'app-page': isAppPage}]">
 
-        <vx-sidebar :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo.png')" title="Vuesax" parent=".layout--main" />
+     <vx-sidebar :sidebarItems="sidebarItems" :logo="require('@/assets/images/logo/logo1.png')" title="Library" parent=".layout--main" />
+
 
         <div id="content-area" :class="[contentAreaClass, {'show-overlay': bodyOverlay}]">
 
