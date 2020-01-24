@@ -46,19 +46,29 @@ const router = new Router({
                     name: 'home',
                     component: () =>
                         import('./views/Home.vue'),
-                        meta: {
-                            breadcrumb: [
-                                { title: 'Home', url: '/books' },
-                                { title: 'book item', active: true },
-                            ],
-                            rule: 'editor'
-                        }
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/books' },
+                            { title: 'book item', active: true },
+                        ],
+                        rule: 'editor',
+                        pageTitle: 'Home'
+                    }
                 },
                 {
                     path: '/books',
                     name: 'books',
                     component: () =>
-                        import('./views/Books.vue')
+                        import('./views/book/Books.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Books', url: '/books' },
+                            { title: 'book item', active: true },
+                        ],
+                        parent: 'books',
+                        pageTitle: 'Books'
+
+                    }
                 },
                 {
                     path: '/book/create-book',
@@ -66,13 +76,12 @@ const router = new Router({
                     component: () => import('./views/book/Create.vue'),
                     meta: {
                         breadcrumb: [
-                            { title: 'Books', url: '/books' },
-                            { title: 'Books' },
-                            { title: 'Books some', url: '/settings' },
-                            { title: 'book item', active: true },
+                            { title: 'Home', url: '/' },
+                            { title: 'Create New Book', url: '/books' },
+                            { title: 'Create New Book', active: true },
                         ],
                         parent: 'books',
-                        rule: 'editor'
+                        pageTitle: 'Create Book'
                     }
                 },
 

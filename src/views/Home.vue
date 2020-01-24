@@ -45,10 +45,16 @@
         </div>
       </vs-col>
     </vs-row>
+    <vs-row>
+      <vs-col>
+        <report/>
+      </vs-col>
+    </vs-row>
   </div>
 </template>
 <script>
 import VxBreadcrumb from "../layouts/components/VxBreadcrumb.vue";
+import Report from '../components/LMS/Books/Report'
 export default {
   data() {
     return {
@@ -105,7 +111,8 @@ export default {
     }
   },
   components: {
-    VxBreadcrumb
+    VxBreadcrumb,
+    Report
   }
 };
 </script>
