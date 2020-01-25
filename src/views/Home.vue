@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h4>You are in Home</h4>
     <vs-row class="mt-5">
       <vs-col
         v-for="(item, i) in analysis"
