@@ -11,10 +11,12 @@
 
 <template functional>
     <footer class="the-footer flex-wrap justify-between" :class="classes">
-        <span>COPYRIGHT @ {{ new Date().getFullYear() }} <a href="https://themeforest.net/user/pixinvent/portfolio?ref=pixinvent" target="_blank" rel="nofollow">Pixinvent</a>, All rights Reserved</span>
+        <span>COPYRIGHT @ {{ new Date().getFullYear() }} <a href="https://inha.uz" target="_blank" rel="nofollow">Inha.uz</a>, Inha university in Tashkent</span>
         <span class="md:flex hidden items-center">
-            <span>Hand-crafted & Made with</span>
-            <feather-icon icon="HeartIcon" svgClasses="stroke-current text-danger w-6 h-6" class="ml-2" />
+           <a href="http://itsolutions.uz/" target="_blank" rel="nofollow">
+            <feather-icon icon="BarChart2Icon" svgClasses="stroke-current text-primary w-6 h-6" class="" />
+           IT solutions</a>
+           
         </span>
     </footer>
 </template>
