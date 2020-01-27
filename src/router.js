@@ -77,7 +77,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
-                            { title: 'Create New Book', url: '/books' },
+                            { title: 'All books', url: '/books' },
                             { title: 'Create New Book', active: true },
                         ],
                         parent: 'books',

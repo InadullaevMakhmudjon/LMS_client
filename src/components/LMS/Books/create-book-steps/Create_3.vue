@@ -40,6 +40,15 @@
               ></vs-list-item>
             </vs-list>
           </vs-col>
+          <vs-col
+           class="pl-5 ml-5"
+            vs-type="flex"
+            vs-align="center"
+            vs-lg="4"
+            vs-sm="4"
+            vs-xs="12">
+            
+          </vs-col>
         </div>
       </vx-card>
     </vs-row>
@@ -48,18 +57,10 @@
 
 <script>
 export default {
+  
+  props:['bookObj'],
   data: () => ({
     bookObj: [
-      // "The foundation of Calculus",
-      // "James Stewart",
-      // "English",
-      // "Mathematics",
-      // "23232-4323434-233-34",
-      // "Freshman",
-      // "121",
-      // "Aliev Azam",
-      // "A4, A4",
-      // "23 days"
       { text: "Book title", value: "The foundation of Calculus" },
       { text: "Book Author", value: "James Stewart" },
       { text: "Language", value: "English" },

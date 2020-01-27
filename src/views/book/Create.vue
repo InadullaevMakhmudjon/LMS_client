@@ -8,21 +8,35 @@
   >
     <!-- tab 1 content -->
     <tab-content title="Step 1" class="mb-5">
-      <first-step />
+      <vx-card fixed-height="1000">
+      <first-step :bookObj="bookObj" />
+      </vx-card>
     </tab-content>
     <!-- tab 2 content -->
     <tab-content title="Step 2" class="mb-5">
-      <second-step />
+      <second-step :shelfs="shelfs" :shelflist="shelfList"/>
     </tab-content>
 
     <!-- tab 3 content -->
     <tab-content title="Step 3" class="mb-5">
-      <third-step />
+      <third-step :bookObj="bookObj" />
     </tab-content>
+     
+       <template slot="footer" slot-scope="props">
+       <div class="wizard-footer-left">
+           <wizard-button  @click.native="props.prevTab()" :style="props.fillButtonStyle">Back</wizard-button>
+        </div>
+        <div class="wizard-footer-right">
+          <wizard-button disabled v-if="!props.isLastStep" @click.native="nextTab(props)" class="wizard-footer-right" :style="props.fillButtonStyle">Next</wizard-button>
+           <wizard-button v-if="!props.isLastStep" @click.native="submitData()" class="mx-2 wizard-footer-right" :style="props.fillButtonStyle"><strong>Save</strong></wizard-button>
+          <wizard-button  v-else @click.native="formSubmitted" class="wizard-footer-right finish-button" :style="props.fillButtonStyle">{{props.isLastStep ? 'Save' : 'Next'}}</wizard-button>
+        </div>
+      </template>
   </form-wizard>
 </template>
 
 <script>
+
 import { FormWizard, TabContent } from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import Create_1 from "../../components/LMS/Books/create-book-steps/Create_1";
@@ -32,38 +46,37 @@ import Create_3 from "../../components/LMS/Books/create-book-steps/Create_3";
 export default {
   data() {
     return {
-      firstName: "",
-      lastName: "",
-      email: "",
-      city: "new-york",
-      proposalTitle: "",
-      jobTitle: "",
-      textarea: "",
-      eventName: "",
-      eventLocation: "san-francisco",
-      status: "plannning",
-      cityOptions: [
-        { text: "New York", value: "new-york" },
-        { text: "Chicago", value: "chicago" },
-        { text: "San Francisco", value: "san-francisco" },
-        { text: "Boston", value: "boston" }
-      ],
-      statusOptions: [
-        { text: "Plannning", value: "plannning" },
-        { text: "In Progress", value: "in progress" },
-        { text: "Finished", value: "finished" }
-      ],
-      LocationOptions: [
-        { text: "New York", value: "new-york" },
-        { text: "Chicago", value: "chicago" },
-        { text: "San Francisco", value: "san-francisco" },
-        { text: "Boston", value: "boston" }
-      ]
+    bookObj: {
+        title:'',
+        author:'',
+        ISBNcode:'',
+        courseYear:0,
+        isborrowable:1,
+        duration:0,
+        categoryId:0,
+        languageId:0,
+        description:'',
+        image:''
+
+    },
+    shelfs:[],
+    shelfList:[
+      { text:'A1',  value:'1'},
+      { text:'A2',  value:'2'},
+      { text:'A3',  value:'3'},
+      { text:'A4',  value:'4'}
+    ]
     };
   },
   methods: {
     formSubmitted() {
-      alert("Form submitted!");
+      console.log(this.bookObj)
+    },
+    nextTab(props){
+      props.nextTab()
+    },
+    submitData() {
+      console.log(this.bookObj)
     }
   },
   components: {
@@ -72,6 +85,6 @@ export default {
     FirstStep: Create_1,
     SecondStep: Create_2,
     ThirdStep: Create_3
-  }
+  },
 };
 </script>

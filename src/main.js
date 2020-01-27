@@ -53,6 +53,9 @@ Vue.use(VueHammer)
 import 'prismjs'
 import 'prismjs/themes/prism-tomorrow.css'
 
+//vue wizard
+import VueFormWizard from 'vue-form-wizard'
+Vue.use(VueFormWizard)
 
 // Feather font icon
 require('./assets/css/iconfont.css')

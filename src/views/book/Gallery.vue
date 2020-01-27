@@ -3,13 +3,12 @@
     <vs-row>
       <vs-col
         vs-offset="1"
-        v-tooltip="'col - 10'"
         vs-type="flex"
         vs-justify="center"
         vs-align="center"
         vs-w="10"
       >
-        <div class=" ">
+        <div class="mt-2">
           <vs-button class="" color="#2ca3f2" to="/book/create-book" dark>
             Create Book
           </vs-button>
@@ -19,7 +18,7 @@
         <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
           <vs-select
             size="large"
-            v-model="city"
+            v-model="selectedCourse"
             class="w-full select-large"
             label="Year"
           >
@@ -36,7 +35,7 @@
         <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
           <vs-select
             size="large"
-            v-model="city"
+            v-model="selectedBookType"
             class="w-full select-large"
             label="Books type"
           >
@@ -53,7 +52,7 @@
         <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
           <vs-select
             size="large"
-            v-model="city"
+            v-model="selectedSubject"
             class="w-full select-large"
             label="Subjects"
           >
@@ -70,7 +69,7 @@
         <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
           <vs-select
             size="large"
-            v-model="city"
+            v-model="selectedCategory"
             class="w-full select-large"
             label="Category"
           >
@@ -87,7 +86,7 @@
         <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
           <vs-select
             size="large"
-            v-model="city"
+            v-model="selectedLanguage"
             class="w-full select-large"
             label="Language"
           >
@@ -105,7 +104,6 @@
     <vs-row>
       <vs-col
         vs-offset="1"
-        v-tooltip="'col - 10'"
         vs-type="flex"
         vs-justify="center"
         vs-align="center"
@@ -122,14 +120,14 @@
     </vs-row>
 
     <p class="text-grey text-2xl text-center mt-5 mb-5">
-      734 results found in Book list
+      5 results found in Book list
     </p>
 
     <vs-row>
       <vs-col
         v-for="(col, index) in 5"
         :key="index"
-        v-tooltip="'col - 3'"
+
         vs-type="flex"
         vs-justify="center"
         vs-align="center"
@@ -178,6 +176,14 @@
 <script>
 export default {
   data: () => ({
+    selectedCourse:'',
+    searchQuery:'',
+    selectedLanguage:'',
+    selectedCategory:'',
+    selectedSubject:'',
+    selectedBookType:'',
+    updateSearchQuery:'',
+
     year: [
       { text: "Freshman", value: "1" },
       { text: "Sophomore", value: "2" },
