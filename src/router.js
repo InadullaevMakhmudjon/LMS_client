@@ -95,7 +95,15 @@ const router = new Router({
                     path: '/settings',
                     name: 'Settings',
                     component: () =>
-                        import('./views/Settings.vue')
+                        import('./views/Settings.vue'),
+                        meta: {
+                            breadcrumb: [
+                                { title: 'Home', url: '/' },
+                                { title: 'book item', active: true },
+                            ],
+                            pageTitle: 'Settings'
+    
+                        }
                 },
             ],
         },

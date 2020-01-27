@@ -9,24 +9,30 @@
 
         <template slot="append">
           <div class="append-text btn-addon">
-            <vs-button color="#2ca3f2">Check</vs-button>
+            <vs-button @click="checkISBN(bookObj.ISBNcode)" :color="isValidIsbn ? '#2ca3f2' :'success'"
+              >{{isValidIsbn ? 'Check': 'checked'}}</vs-button
+            >
           </div>
         </template>
       </vx-input-group>
       <!--book title-->
       <vs-input
+        :disabled="isValidIsbn"
         label="Book title"
         v-model="bookObj.title"
         class="w-full mt-3"
       />
+     
       <!--book isbn -->
       <vs-input
+        disabled
         label="Book ISBN"
         v-model="bookObj.ISBNcode"
         class="w-full mt-5"
       />
       <!--book category-->
       <vs-select
+        :disabled="isValidIsbn"
         v-model="bookObj.categoryId"
         class="w-full select-large mt-5"
         label="Category"
@@ -41,6 +47,7 @@
       </vs-select>
       <!--book responsible person-->
       <vs-select
+        :disabled="isValidIsbn"
         v-model="bookResponsiblePerson"
         class="w-full select-large mt-5"
         label="Responsible Person"
@@ -58,6 +65,7 @@
     <div class="vx-col sm:w-full md:w-1/3 w-full mt-5">
       <!--book author-->
       <vs-select
+        :disabled="isValidIsbn"
         v-model="bookObj.author"
         class="w-full select-large mt-0"
         label="Book Author"
@@ -72,6 +80,7 @@
       </vs-select>
       <!--book langugage-->
       <vs-select
+        :disabled="isValidIsbn"
         v-model="bookObj.languageId"
         class="w-full select-large mt-3"
         label="Book Language"
@@ -86,7 +95,10 @@
       </vs-select>
       <!--book is borrawable and duration in days-->
       <vs-row class="mt-5" vs-align="center" vs-justify="between">
-        <vs-checkbox class="" v-model="bookObj.isBorrowable"
+        <vs-checkbox
+          :disabled="isValidIsbn"
+          class=""
+          v-model="bookObj.isBorrowable"
           >Is borrowable</vs-checkbox
         >
         <vs-input-number
@@ -98,6 +110,7 @@
       </vs-row>
       <!--appended courses for the book-->
       <vs-select
+        :disabled="isValidIsbn"
         v-model="bookObj.courseYear"
         class="w-full select-large mt-3"
         label="School Year"
@@ -112,6 +125,7 @@
       </vs-select>
       <!--book description-->
       <vs-textarea
+        :disabled="isValidIsbn"
         height="200"
         class="mt-5"
         label="Book Definition"
@@ -121,6 +135,7 @@
     <div class="vx-col sm:w-full  md:w-1/3 w-full mt-5 justify-center">
       <!--image uploading-->
       <vs-upload
+        :disabled="isValidIsbn"
         v-model="bookObj.image"
         limit="1"
         :fileName="bookObj.title"
@@ -139,10 +154,11 @@ export default {
     bookObj: {
       type: Object,
       required: true
-    }
+    },   
   },
   data() {
     return {
+      isValidIsbn: true,
       bookResponsiblePerson: "",
       resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
       bookAuthorList: [
@@ -200,6 +216,10 @@ export default {
         title: "Upload Success",
         text: "Cover has been successfully uploaded"
       });
+    },
+    checkISBN(isbn) {
+
+      this.isValidIsbn = false
     }
   }
 };
