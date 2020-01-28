@@ -11,10 +11,11 @@
         <p>{{ item.text }}</p>
         <vx-input-group class="mb-base">
           <vs-input
+          autofocus
+          type="text"
             v-model="item.value"
-           @keyup.enter="addlist(item.value, item.lists)"
+            @keyup.enter="addlist(item.value, item.lists)"
           />
-
           <template slot="append">
             <div class="append-text btn-addon">
               <vs-button
@@ -29,7 +30,7 @@
           </template>
         </vx-input-group>
         <template class="justify-between" lang="html">
-          <vx-list :list="item.lists" icon="BookmarkIcon" ></vx-list>
+          <vx-list :list="item.lists" icon="BookmarkIcon"></vx-list>
         </template>
       </vx-card>
     </vs-col>
@@ -45,10 +46,15 @@ export default {
     ]
   }),
   methods: {
-    addlist(val, arr, event) {
+    addlist(val, arr, placehold) {
+      if (val !== "") {
         arr.push(val);
-        val = "AAAAAAAAAAAAA";
+        console.log(val);
+      
+      } else {
+        //handler
       }
     }
   }
+};
 </script>
