@@ -298,9 +298,10 @@ export default {
   box-shadow: 4px 4px 4px #dddddd;
 }
 .center {
+
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 100%;
 }
 </style>
