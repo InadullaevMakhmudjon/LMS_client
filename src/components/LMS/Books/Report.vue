@@ -21,7 +21,7 @@
           :key="i"
           class="vx-col md:w-1/6 xs:w-1/4 w-full mt-5 mb-5"
         >
-          <vs-select v-model="city" class="w-full select-large" label="City">
+          <vs-select class="w-full select-large" label="City">
             <vs-select-item
               :key="index"
               :value="item.value"
