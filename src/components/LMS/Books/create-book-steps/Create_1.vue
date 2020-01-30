@@ -9,8 +9,10 @@
 
         <template slot="append">
           <div class="append-text btn-addon">
-            <vs-button @click="checkISBN(bookObj.ISBNcode)" :color="isValidIsbn ? '#2ca3f2' :'success'"
-              >{{isValidIsbn ? 'Check': 'checked'}}</vs-button
+            <vs-button
+              @click="checkISBN(bookObj.ISBNcode)"
+              :color="isValidIsbn ? '#2ca3f2' : 'success'"
+              >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
             >
           </div>
         </template>
@@ -20,9 +22,9 @@
         :disabled="isValidIsbn"
         label="Book title"
         v-model="bookObj.title"
-        class="w-full mt-3"
+        class="w-full mt-5"
       />
-     
+
       <!--book isbn -->
       <vs-input
         disabled
@@ -133,7 +135,22 @@
       />
     </div>
     <div class="vx-col sm:w-full  md:w-1/3 w-full mt-5 justify-center">
+<<<<<<< HEAD
       <p>Upload book cover image here</p>
+=======
+      <!--image uploading-->
+      <!-- <vs-upload
+        :disabled="isValidIsbn"
+        v-model="bookObj.image"
+        limit="1"
+        :fileName="bookObj.title"
+        class="mt-5"
+        @on-success="successUpload"
+      /> -->
+      <!-- <vs-button label="img" class="primary mb-4" dark @click="onPickFile"
+        >Upload image</vs-button> -->
+          <p>Upload book cover image here</p>
+>>>>>>> e7936f85672411e3fdb74d4245e5804bcd8d5143
       <vx-input-group class="mb-base">
         <template slot="prepend">
           <div class="prepend-text btn-addon">
@@ -160,6 +177,13 @@
         />
       </template>
     </div>
+    <vs-popup
+      background-color="rgba(0, 0, 0, 0.8)"
+      :title="bookObj.title + ' ( Cover )'"
+      :active.sync="popupActivo"
+    >
+      <img class="center" :src="imageUrl" />
+    </vs-popup>
   </div>
 </template>
 <script>
@@ -177,15 +201,18 @@ export default {
     bookObj: {
       type: Object,
       required: true
-    },   
+    }
   },
   data() {
     return {
       popupActivo: false,
       image: null,
       imageUrl: "",
+<<<<<<< HEAD
       loading: false,
       isUploadable: true,
+=======
+>>>>>>> e7936f85672411e3fdb74d4245e5804bcd8d5143
       isValidIsbn: true,
       bookResponsiblePerson: "",
       resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
@@ -217,6 +244,7 @@ export default {
     TabContent
   },
   methods: {
+<<<<<<< HEAD
     getAll() {
       this.loading = true;
       Promise.all([
@@ -238,6 +266,12 @@ export default {
     onfilepicked(event) {
       const files = event.target.files;
       let filename = files[0].name;
+=======
+    onfilepicked(event) {
+      const files = event.target.files;
+      let filename = files[0].name;
+
+>>>>>>> e7936f85672411e3fdb74d4245e5804bcd8d5143
       if (filename.lastIndexOf(".") <= 0) {
         return alert("please, input correct image file!");
       }
@@ -247,12 +281,25 @@ export default {
       });
       fileReader.readAsDataURL(files[0]);
       this.image = files[0].name;
+<<<<<<< HEAD
       this.bookObj.imageFile.append('image', files[0]);
     },
     onPickFile() {
       this.$refs.fileInput.click();
     },
     successUpload(value) {
+=======
+      console.log(this.image)
+    },
+    showImage(imageUrl) {
+      console.log(imageUrl);
+    },
+
+    onPickFile() {
+      this.$refs.fileInput.click();
+    },
+    successUpload() {
+>>>>>>> e7936f85672411e3fdb74d4245e5804bcd8d5143
       this.$vs.notify({
         color: "success",
         title: "Upload Success",
@@ -260,6 +307,7 @@ export default {
       });
     },
     checkISBN(isbn) {
+<<<<<<< HEAD
       Books.checkISBN(isbn)
       .then(() => this.isValidIsbn = false)
       .catch(() => this.isValidIsbn = true);     
@@ -267,6 +315,30 @@ export default {
   },
   mounted() {
     this.getAll();
+=======
+      console.log(isbn);
+      this.isValidIsbn = false;
+    }
+>>>>>>> e7936f85672411e3fdb74d4245e5804bcd8d5143
   }
 };
 </script>
+<style>
+.zooming {
+  cursor: pointer;
+  transition: transform 0.4s;
+}
+
+.zooming:hover {
+  transform: scale(1.01);
+  border-radius: 2px;
+  box-shadow: 4px 4px 4px #dddddd;
+}
+.center {
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+</style>
