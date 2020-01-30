@@ -58,21 +58,25 @@
 <script>
 export default {
   
-  props:['bookObj'],
-  data: () => ({
-    bookObj: [
-      { text: "Book title", value: "The foundation of Calculus" },
-      { text: "Book Author", value: "James Stewart" },
-      { text: "Language", value: "English" },
-      { text: "Category", value: "Mathematics" },
-      { text: "ISBN", value: "23232-4323434-233-34" },
-      { text: "School Year", value: "Freshman" },
-      { text: "Item Quantity", value: "121" },
-      { text: "Responsible Person", value: "Aliev Azam" },
-      { text: "Book Location", value: "A2, A4" },
-      { text: "Borrowing Period", value: "23 days" }
-    ]
-  })
+  props: {
+    bookObj: {
+      type: Object,
+      default: function() {
+          return [
+          { text: "Book title", value: "The foundation of Calculus" },
+          { text: "Book Author", value: "James Stewart" },
+          { text: "Language", value: "English" },
+          { text: "Category", value: "Mathematics" },
+          { text: "ISBN", value: "23232-4323434-233-34" },
+          { text: "School Year", value: "Freshman" },
+          { text: "Item Quantity", value: "121" },
+          { text: "Responsible Person", value: "Aliev Azam" },
+          { text: "Book Location", value: "A2, A4" },
+          { text: "Borrowing Period", value: "23 days" }
+        ]
+      }
+    }
+  },
 };
 </script>
 
