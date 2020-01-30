@@ -47,6 +47,7 @@ export default {
     types: [
       { text: "Add category", value: "", lists: ['Computer','ID'] },
       { text: "Add subject", value: "",lists: [] },
+       { text: "Add author", value: "", lists: [] },
       { text: "Add shelf", value: "", lists: [] }
     ]
   }),
