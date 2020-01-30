@@ -95,15 +95,9 @@
 export default {
   data: () => ({
     types: [
-<<<<<<< HEAD
       { text: "Add category", value: "", lists: ['Computer','ID'] },
       { text: "Add subject", value: "",lists: [] },
        { text: "Add author", value: "", lists: [] },
-=======
-      { text: "Add category", value: "", lists: ["Computer", "ID"] },
-      { text: "Add subject", value: "", lists: [] },
-      { text: "Add author", value: "", lists: [] },
->>>>>>> b3a1e6e4b528ca80e26cdb8797783072aa5ca090
       { text: "Add shelf", value: "", lists: [] }
     ]
   }),
