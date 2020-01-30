@@ -66,21 +66,23 @@ import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import Create_1 from "../../components/LMS/Books/create-book-steps/Create_1";
 import Create_2 from "../../components/LMS/Books/create-book-steps/Create_2";
 import Create_3 from "../../components/LMS/Books/create-book-steps/Create_3";
+import Books from '@/services/Books';
 
 export default {
   data() {
     return {
       bookObj: {
         title: "",
-        author: "",
+        authorId: 0,
         ISBNcode: "",
         courseYear: 0,
-        isborrowable: 1,
+        isborrowable: false,
         duration: 0,
         categoryId: 0,
         languageId: 0,
         description: "",
-        image: ""
+        image: "https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1906/sabelskaya190600770.jpg",
+        imageFile: new FormData(),
       },
       shelfs: [],
       shelfList: [
@@ -88,7 +90,9 @@ export default {
         { text: "A2", value: "2" },
         { text: "A3", value: "3" },
         { text: "A4", value: "4" }
-      ]
+      ],
+      categories: [],
+      languages: [],
     };
   },
   methods: {
@@ -99,16 +103,56 @@ export default {
       props.nextTab();
     },
     submitData(title) {
-       this.$vs.notify({
-        time: 3000,
-        title: title,
-        text: "The book has successfully added",
-        color: "success",
-        iconPack: "feather",
-        icon: "icon-check-circle"
+      Books.uploadImage(this.bookObj.imageFile)
+      .then(({ imageUrl }) => {
+          this.bookObj.isborrowable = this.bookObj.isborrowable ? 1 : 0;
+          this.bookObj.image = imageUrl;
+          Books.create(this.bookObj)
+          .then(() => {
+            this.$vs.notify({
+              time: 3000,
+              title: title,
+              text: "The book has successfully added",
+              color: "success",
+              iconPack: "feather",
+              icon: "icon-check-circle"
+            });
+            this.$router.push("/books");
+          })
+          .catch(err => {
+            this.$vs.notify({
+              time: 3000,
+              title: title,
+              text: err.message || 'Error occured',
+              color: "danger",
+              iconPack: "feather",
+            });
+        })
       });
-        this.$router.push("/books");
-      console.log(this.bookObj);
+      /*
+      this.bookObj.isborrowable = this.bookObj.isborrowable ? 1 : 0
+        Books.create(this.bookObj)
+        .then(() => {
+          this.$vs.notify({
+            time: 3000,
+            title: title,
+            text: "The book has successfully added",
+            color: "success",
+            iconPack: "feather",
+            icon: "icon-check-circle"
+          });
+          this.$router.push("/books");
+        })
+        .catch(err => {
+          this.$vs.notify({
+            time: 3000,
+            title: title,
+            text: err.message || 'Error occured',
+            color: "danger",
+            iconPack: "feather",
+          });
+        })
+        */
     }
   },
   components: {
