@@ -16,5 +16,5 @@ export function execute(promise) {
 }
 
 export const API = axios.create({
-    baseURL: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : 'http://localhost:3030/api/'
+    baseURL: process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : 'http://localhost:3031/api/'
 });

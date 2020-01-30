@@ -104,7 +104,7 @@
           >Is borrowable</vs-checkbox
         >
         <vs-input-number
-          v-if="bookObj.isBorrowable"
+          v-if="bookObj.isborrowable"
           label="Duration:"
           class="flex-1 w-1/6"
           v-model="bookObj.duration"
