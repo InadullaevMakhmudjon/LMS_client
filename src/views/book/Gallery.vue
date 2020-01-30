@@ -43,7 +43,7 @@
               :key="index"
               :value="item.value"
               :text="item.text"
-              v-for="(item, index) in books"
+              v-for="(item, index) in bookTypes"
               class="w-full"
             />
           </vs-select>
@@ -125,9 +125,8 @@
 
     <vs-row>
       <vs-col
-        v-for="(col, index) in 5"
-        :key="index"
-
+        v-for="book in books"
+        :key="book.id"
         vs-type="flex"
         vs-justify="center"
         vs-align="center"
@@ -135,11 +134,11 @@
       >
         <div
           class="vx-col w-full sm:w-1/2 lg:w-full mb-base"
-          @click="funct(index)"
+          @click="funct(book.id)"
         >
           <vx-card class="m-1">
             <img
-              src="https://dynamic.indigoimages.ca/books/1285740629.jpg?altimages=false&scaleup=true&width=614&maxheight=614&quality=85&lang=en"
+              :src="book.image"
               alt="content-img"
               class="responsive"
             />
@@ -151,20 +150,20 @@
                   color="success"
                   active="true"
                 >
-                  <span class="text-1xs align-center"> borrowable </span
+                  <span class="text-1xs align-center"> (borrowable)! </span
                   ><feather-icon icon="CheckCircleIcon" svgClasses="h-4 w-4" />
                 </vs-alert>
 
                 <vs-alert
                   class="w-1/4 p-0 mb-2 text-center align-center"
                   active="true"
-                  >22 / 300</vs-alert
+                  >(22 / 300)!</vs-alert
                 >
               </vs-row>
 
-              <h3 class="mb-2">Calculus fundamental 2nd Edition</h3>
-              <p class="text-primary">by Stewan Juram</p>
-              <p class="text-black text-2xs">ISBN: 2019-212-34-4322-43</p>
+              <h3 class="mb-2">{{ book.title }}</h3>
+              <p class="text-primary">{{ `by ${book.author ? book.author.name : '-'}` }}</p>
+              <p class="text-black text-2xs">{{ `ISBN: ${book.ISBNCode}` }}</p>
             </div>
           </vx-card>
         </div>
@@ -174,6 +173,8 @@
 </template>
 
 <script>
+import Books from '@/services/Books';
+
 export default {
   data: () => ({
     selectedCourse:'',
@@ -191,7 +192,7 @@ export default {
       { text: "Junior", value: "4" },
       { text: "staff", value: "5" }
     ],
-    books: [
+    bookTypes: [
       { text: "borrowable", value: "1" },
       { text: "Not borrowable", value: "2" }
     ],
@@ -225,12 +226,29 @@ export default {
       { text: "Italian", value: "5" },
       { text: "Spain", value: "6" },
       { text: "Chinese", value: "7" }
+    ],
+    books: [
+      {
+        id: 1,
+        title: '',
+        author: { name },
+        image: '',
+        ISBNCode: '',
+      }
     ]
   }),
   methods: {
+    getAll() {
+      Books.getAll().then(books => {
+        this.books = books;
+      });
+    },
     funct(parm) {
       console.log(parm);
     }
+  },
+  mounted() {
+    this.getAll();
   }
 };
 </script>
