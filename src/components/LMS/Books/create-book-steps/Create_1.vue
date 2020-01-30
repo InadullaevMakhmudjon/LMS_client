@@ -4,7 +4,7 @@
     <div class="vx-col  sm:w-full md:w-1/3 w-full mt-5">
       <!--check Isbn-->
       <p>Check ISBN: (example: 2-266-11156-6)</p>
-      <vx-input-group class="mb-base">
+      <vx-input-group class="">
         <vs-input v-model="bookObj.ISBNcode" />
 
         <template slot="append">
@@ -62,14 +62,54 @@
           class="w-full"
         />
       </vs-select>
+      <vs-select
+        :disabled="isValidIsbn"
+        v-model="bookObj.type"
+        class="w-full select-large mt-5"
+        label="Book type"
+      >
+        <vs-select-item
+          v-for="item in resPersonList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
+          class="w-full"
+        />
+      </vs-select>
+      <!--published year -->
+      <div class="mt-5">
+        <span class="text-1xs">Published year:</span>
+        <datepicker
+          :disabled="isValidIsbn"
+          v-model="publishedYear"
+          format="yyyy"
+          :minimumView="'year'"
+          :maximumView="'year'"
+        ></datepicker>
+      </div>
     </div>
 
     <div class="vx-col sm:w-full md:w-1/3 w-full mt-5">
+      <!--Book subjects-->
+      <vs-select
+        :disabled="isValidIsbn"
+        v-model="bookObj.subjects"
+        class="w-full select-large mt-0"
+        label="Book Subject"
+      >
+        <vs-select-item
+          v-for="item in bookSubjectList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
+          class="w-full"
+        />
+      </vs-select>
       <!--book author-->
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.authorId"
-        class="w-full select-large mt-0"
+        class="w-full select-large mt-4"
         label="Book Author"
       >
         <vs-select-item
@@ -139,11 +179,18 @@
       <vx-input-group class="mb-base">
         <template slot="prepend">
           <div class="prepend-text btn-addon">
-            <vs-button  :disabled="isValidIsbn" color="primary"  class="primary" dark @click="onPickFile" >Upload</vs-button>
+            <vs-button
+              :disabled="isValidIsbn"
+              color="primary"
+              class="primary"
+              dark
+              @click="onPickFile"
+              >Upload</vs-button
+            >
           </div>
         </template>
 
-        <vs-input disabled v-model="image"  />
+        <vs-input disabled v-model="image" />
       </vx-input-group>
       <input
         type="file"
@@ -172,14 +219,16 @@
   </div>
 </template>
 <script>
-import Books from '@/services/Books.js'
+import Datepicker from "vuejs-datepicker";
+import Books from "@/services/Books.js";
 import { TabContent } from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
-import Authors from '@/services/Authors';
-import Categories from '@/services/Categories';
-import Languages from '@/services/Languages'
-import Users from '@/services/Users';
-import Courses from '@/services/Courses';
+import Authors from "@/services/Authors";
+import Categories from "@/services/Categories";
+import Languages from "@/services/Languages";
+import Users from "@/services/Users";
+import Courses from "@/services/Courses";
+import Subjects from "@/services/Subjects";
 
 export default {
   props: {
@@ -190,6 +239,7 @@ export default {
   },
   data() {
     return {
+      publishedYear: 2,
       popupActivo: false,
       image: null,
       imageUrl: "",
@@ -199,6 +249,7 @@ export default {
       bookResponsiblePerson: "",
       resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
       bookAuthorList: [],
+      bookSubjectList:[],
       courseList: [],
       subjects: [
         { text: "Comxorithm", value: "1" },
@@ -219,11 +270,14 @@ export default {
   },
   computed: {
     baseUrl() {
-      return process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : 'http://localhost:3030/api'
+      return process.env.NODE_ENV === "production"
+        ? process.env.VUE_APP_BASE_URL
+        : "http://localhost:3030/api";
     }
   },
-  component: {
-    TabContent
+  components: {
+    TabContent,
+    Datepicker
   },
   methods: {
     getAll() {
@@ -234,15 +288,19 @@ export default {
         Languages.getAll(),
         Users.getAll(),
         Courses.getAll(),
-      ]).then(result => {
-        const [authors, categories, languages, users, courses] = result;
-        this.bookAuthorList = authors;
-        this.categoryList = categories;
-        this.languageList = languages;
-        this.resPersonList = users;
-        this.courseList = courses;
-      }).catch((error) => console.log(error.message))
-      .finally(() => this.loading = false);
+        Subjects.getAll()
+      ])
+        .then(result => {
+          const [authors, categories, languages, users, courses, subjects] = result;
+          this.bookAuthorList = authors;
+          this.categoryList = categories;
+          this.languageList = languages;
+          this.resPersonList = users;
+          this.courseList = courses;
+          this.bookSubjectList = subjects
+        })
+        .catch(error => console.log(error.message))
+        .finally(() => (this.loading = false));
     },
     onfilepicked(event) {
       const files = event.target.files;
@@ -256,7 +314,7 @@ export default {
       });
       fileReader.readAsDataURL(files[0]);
       this.image = files[0].name;
-      this.bookObj.imageFile.append('image', files[0]);
+      this.bookObj.imageFile.append("image", files[0]);
     },
     onPickFile() {
       this.$refs.fileInput.click();
@@ -270,11 +328,12 @@ export default {
     },
     checkISBN(isbn) {
       Books.checkISBN(isbn)
-      .then(() => this.isValidIsbn = false)
-      .catch(() => this.isValidIsbn = true);     
-    },
+        .then(() => (this.isValidIsbn = false))
+        .catch(() => (this.isValidIsbn = true));
+    }
   },
   mounted() {
+    console.log();
     this.getAll();
   }
 };
@@ -291,7 +350,6 @@ export default {
   box-shadow: 4px 4px 4px #dddddd;
 }
 .center {
-
   display: block;
   margin-left: auto;
   margin-right: auto;
