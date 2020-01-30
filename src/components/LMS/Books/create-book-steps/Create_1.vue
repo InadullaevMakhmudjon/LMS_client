@@ -3,7 +3,7 @@
   <div class="vx-row">
     <div class="vx-col  sm:w-full md:w-1/3 w-full mt-5">
       <!--check Isbn-->
-      <p>Check ISBN: (example: 3232-24324-232)</p>
+      <p>Check ISBN: (example: 2-266-11156-6)</p>
       <vx-input-group class="mb-base">
         <vs-input v-model="bookObj.ISBNcode" />
 
@@ -38,10 +38,10 @@
         label="Category"
       >
         <vs-select-item
-          :key="index"
-          :value="item.value"
-          :text="item.text"
-          v-for="(item, index) in categoryList"
+          v-for="item in categoryList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
           class="w-full"
         />
       </vs-select>
@@ -53,10 +53,10 @@
         label="Responsible Person"
       >
         <vs-select-item
-          :key="index"
-          :value="item.value"
-          :text="item.text"
-          v-for="(item, index) in resPersonList"
+          v-for="item in resPersonList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
           class="w-full"
         />
       </vs-select>
@@ -66,15 +66,15 @@
       <!--book author-->
       <vs-select
         :disabled="isValidIsbn"
-        v-model="bookObj.author"
+        v-model="bookObj.authorId"
         class="w-full select-large mt-0"
         label="Book Author"
       >
         <vs-select-item
-          :key="index"
-          :value="item.value"
-          :text="item.text"
-          v-for="(item, index) in bookAuthorList"
+          v-for="item in bookAuthorList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
           class="w-full"
         />
       </vs-select>
@@ -86,10 +86,10 @@
         label="Book Language"
       >
         <vs-select-item
-          :key="index"
-          :value="item.value"
-          :text="item.text"
-          v-for="(item, index) in languageList"
+          v-for="item in languageList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
           class="w-full"
         />
       </vs-select>
@@ -98,7 +98,7 @@
         <vs-checkbox
           :disabled="isValidIsbn"
           class=""
-          v-model="bookObj.isBorrowable"
+          v-model="bookObj.isborrowable"
           >Is borrowable</vs-checkbox
         >
         <vs-input-number
@@ -116,10 +116,10 @@
         label="School Year"
       >
         <vs-select-item
-          :key="index"
-          :value="item.value"
-          :text="item.text"
-          v-for="(item, index) in courseList"
+          v-for="item in courseList"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
           class="w-full"
         />
       </vs-select>
@@ -133,21 +133,44 @@
       />
     </div>
     <div class="vx-col sm:w-full  md:w-1/3 w-full mt-5 justify-center">
-      <!--image uploading-->
-      <vs-upload
-        :disabled="isValidIsbn"
-        v-model="bookObj.image"
-        limit="1"
-        :fileName="bookObj.title"
-        class="mt-5"
-        @on-success="successUpload"
+      <p>Upload book cover image here</p>
+      <vx-input-group class="mb-base">
+        <template slot="prepend">
+          <div class="prepend-text btn-addon">
+            <vs-button  :disabled="isValidIsbn" color="primary"  class="primary" dark @click="onPickFile" >Upload</vs-button>
+          </div>
+        </template>
+
+        <vs-input disabled v-model="image"  />
+      </vx-input-group>
+      <input
+        type="file"
+        style="display:none"
+        ref="fileInput"
+        accept="image/*"
+        @change="onfilepicked"
       />
+      <template v-if="imageUrl">
+        <img
+          class="zooming"
+          height="300"
+          v-if="!popupActivo"
+          @click="popupActivo = true"
+          :src="imageUrl"
+        />
+      </template>
     </div>
   </div>
 </template>
 <script>
+import Books from '@/services/Books.js'
 import { TabContent } from "vue-form-wizard";
 import "vue-form-wizard/dist/vue-form-wizard.min.css";
+import Authors from '@/services/Authors';
+import Categories from '@/services/Categories';
+import Languages from '@/services/Languages'
+import Users from '@/services/Users';
+import Courses from '@/services/Courses';
 
 export default {
   props: {
@@ -158,23 +181,18 @@ export default {
   },
   data() {
     return {
+      popupActivo: false,
+      image: null,
+      imageUrl: "",
+      loading: false,
+      isUploadable: true,
       isValidIsbn: true,
       bookResponsiblePerson: "",
       resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
-      bookAuthorList: [
-        { text: "Juvana Robertson", value: "1" },
-        { text: "Stewart Helligan", value: "2" },
-        { text: "Mark Tsuri", value: "3" }
-      ],
-      courseList: [
-        { text: "Freshman", value: "1" },
-        { text: "Sophomore", value: "2" },
-        { text: "Senior", value: "3" },
-        { text: "Junior", value: "4" },
-        { text: "staff", value: "5" }
-      ],
+      bookAuthorList: [],
+      courseList: [],
       subjects: [
-        { text: "Computer Algorithm", value: "1" },
+        { text: "Comxorithm", value: "1" },
         { text: "System Analysis", value: "2" },
         { text: "Calculus", value: "3" },
         { text: "Physics", value: "4" },
@@ -186,31 +204,55 @@ export default {
         { text: "Discrete Mathematics", value: "10" },
         { text: "Signal and Systems", value: "11" }
       ],
-      categoryList: [
-        { text: "Computer Science", value: "1" },
-        { text: "Data Science", value: "2" },
-        { text: "Biology", value: "3" },
-        { text: "Chemistry", value: "4" },
-        { text: "Lingustics", value: "5" },
-        { text: "Algorithms", value: "6" },
-        { text: "Phylosophy", value: "7" }
-      ],
-      languageList: [
-        { text: "Uzbek", value: "1" },
-        { text: "English", value: "2" },
-        { text: "Russian", value: "3" },
-        { text: "Korean", value: "4" },
-        { text: "Italian", value: "5" },
-        { text: "Spain", value: "6" },
-        { text: "Chinese", value: "7" }
-      ]
+      categoryList: [],
+      languageList: []
     };
+  },
+  computed: {
+    baseUrl() {
+      return process.env.NODE_ENV === 'production' ? process.env.VUE_APP_BASE_URL : 'http://localhost:3030/api'
+    }
   },
   component: {
     TabContent
   },
   methods: {
-    successUpload() {
+    getAll() {
+      this.loading = true;
+      Promise.all([
+        Authors.getAll(),
+        Categories.getAll(),
+        Languages.getAll(),
+        Users.getAll(),
+        Courses.getAll(),
+      ]).then(result => {
+        const [authors, categories, languages, users, courses] = result;
+        this.bookAuthorList = authors;
+        this.categoryList = categories;
+        this.languageList = languages;
+        this.resPersonList = users;
+        this.courseList = courses;
+      }).catch((error) => console.log(error.message))
+      .finally(() => this.loading = false);
+    },
+    onfilepicked(event) {
+      const files = event.target.files;
+      let filename = files[0].name;
+      if (filename.lastIndexOf(".") <= 0) {
+        return alert("please, input correct image file!");
+      }
+      const fileReader = new FileReader();
+      fileReader.addEventListener("load", () => {
+        this.imageUrl = fileReader.result;
+      });
+      fileReader.readAsDataURL(files[0]);
+      this.image = files[0].name;
+      this.bookObj.imageFile.append('image', files[0]);
+    },
+    onPickFile() {
+      this.$refs.fileInput.click();
+    },
+    successUpload(value) {
       this.$vs.notify({
         color: "success",
         title: "Upload Success",
@@ -218,9 +260,13 @@ export default {
       });
     },
     checkISBN(isbn) {
-
-      this.isValidIsbn = false
-    }
+      Books.checkISBN(isbn)
+      .then(() => this.isValidIsbn = false)
+      .catch(() => this.isValidIsbn = true);     
+    },
+  },
+  mounted() {
+    this.getAll();
   }
 };
 </script>
