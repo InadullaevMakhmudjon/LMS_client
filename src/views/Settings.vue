@@ -65,15 +65,14 @@
 
                 <vs-list>
                   <vs-list-item
-                    v-for="(n, i) in item.lists"
-                    :key="i"
-                    :title="n"
-                  >
+                    v-for="itemChild in item.lists"
+                    :key="itemChild.id"
+                    :title="itemChild.name">
                     <vs-button
                       radius
                       color="danger"
                       size="size"
-                      @click="deleteShelf()"
+                      @click="deleteItem(item.id, itemChild.id)"
                       type="border"
                       icon="delete_outline"
                     ></vs-button>
@@ -91,25 +90,78 @@
   </div>
 </template>
 <script>
-/* eslint-disable */
+import Categories from '@/services/Categories';
+import Subjects from '@/services/Subjects';
+import Authors from '@/services/Authors';
+
 export default {
   data: () => ({
     types: [
-      { text: "Add category", value: "", lists: ['Computer','ID'] },
-      { text: "Add subject", value: "",lists: [] },
-       { text: "Add author", value: "", lists: [] },
-      { text: "Add shelf", value: "", lists: [] }
+      { id: 1, text: "Add category", value: "", lists: [] },
+      { id: 2, text: "Add subject", value: "",lists: [] },
+      { id: 3, text: "Add author", value: "", lists: [] },
+      /* { text: "Add shelf", value: "", lists: [] } */
     ]
   }),
   methods: {
+    getAll() {
+      Promise.all([
+        Categories.getAll(),
+        Authors.getAll(),
+      ]).then(result => {
+        const [categories, authors] = result;
+        this.types[0].lists = categories;
+        this.types[2].lists = authors;
+      });
+    },
     addlist(item) {
-      if (item.value !== "") {
-        item.lists.unshift(item.value);
-      } else {
-        //handler return
+      switch(item.id) {
+        case 1:
+          Categories.create(item.value)
+            .then(() => this.getAll())
+            .catch(err => console.error(err))
+            .finally(() => { item.value = "" });
+          return;
+        case 2:
+          Subjects.create(item.value)
+            .then(() => this.getAll())
+            .catch(err => console.error(err))
+            .finally(() => { item.value = "" });
+          return;
+        case 3:
+          Authors.create(item.value)
+          .then(() => this.getAll())
+          .catch(err => console.error(err))
+          .finally(() => { item.value = "" });
+          return;
+        default:
+          return;
       }
-      item.value = "";
+    },
+    deleteItem(id, itemId) {
+      switch(id) {
+        case 1:
+          Categories.delete(itemId)
+          .then(() => this.getAll())
+          .catch(error => console.error(error))
+          return;
+        case 2:
+          Subjects.delete(itemId)
+          .then(() => this.getAll())
+          .catch(error => console.error(error))
+          return;
+        case 3:
+          Authors.delete(itemId)
+          .then(() => this.getAll())
+          .catch(error => console.error(error))
+          return;
+        default:
+          return;
+      }
     }
-  }
+  },
+  mounted() {
+    this.getAll();
+  },
 };
 </script>
