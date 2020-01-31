@@ -64,12 +64,12 @@
       </vs-select>
       <vs-select
         :disabled="isValidIsbn"
-        v-model="bookObj.type"
+        v-model="bookObj.typeId"
         class="w-full select-large mt-5"
         label="Book type"
       >
         <vs-select-item
-          v-for="item in resPersonList"
+          v-for="item in bookTypeList"
           :key="item.id"
           :value="item.id"
           :text="item.name"
@@ -229,6 +229,7 @@ import Languages from "@/services/Languages";
 import Users from "@/services/Users";
 import Courses from "@/services/Courses";
 import Subjects from "@/services/Subjects";
+import BookTypes from '@/services/BookTypes';
 
 export default {
   props: {
@@ -248,6 +249,7 @@ export default {
       isValidIsbn: true,
       bookResponsiblePerson: "",
       resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
+      bookTypeList: [],
       bookAuthorList: [],
       bookSubjectList:[],
       courseList: [],
@@ -275,6 +277,11 @@ export default {
         : "http://localhost:3030/api";
     }
   },
+  watch: {
+    publishedYear(value) {
+      this.bookObj.publishedYear = value.getFullYear()
+    }
+  },
   components: {
     TabContent,
     Datepicker
@@ -288,16 +295,18 @@ export default {
         Languages.getAll(),
         Users.getAll(),
         Courses.getAll(),
-        Subjects.getAll()
+        Subjects.getAll(),
+        BookTypes.getAll(),
       ])
         .then(result => {
-          const [authors, categories, languages, users, courses, subjects] = result;
+          const [authors, categories, languages, users, courses, subjects, bookTypes] = result;
           this.bookAuthorList = authors;
           this.categoryList = categories;
           this.languageList = languages;
           this.resPersonList = users;
           this.courseList = courses;
-          this.bookSubjectList = subjects
+          this.bookSubjectList = subjects;
+          this.bookTypeList = bookTypes;
         })
         .catch(error => console.log(error.message))
         .finally(() => (this.loading = false));
