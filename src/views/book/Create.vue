@@ -77,6 +77,7 @@ export default {
         authorId: 0,
         ISBNcode: "",
         courseYear: 0,
+        subjectId: 0,
         isborrowable: false,
         duration: 0,
         categoryId: 0,

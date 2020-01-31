@@ -93,7 +93,7 @@
       <!--Book subjects-->
       <vs-select
         :disabled="isValidIsbn"
-        v-model="bookObj.subjects"
+        v-model="bookObj.subjectId"
         class="w-full select-large mt-0"
         label="Book Subject"
       >
