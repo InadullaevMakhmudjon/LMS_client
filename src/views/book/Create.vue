@@ -73,12 +73,14 @@ export default {
     return {
       bookObj: {
         title: "",
+        typeId: 0,
         authorId: 0,
         ISBNcode: "",
         courseYear: 0,
         isborrowable: false,
         duration: 0,
         categoryId: 0,
+        publishedYear: 0,
         languageId: 0,
         description: "",
         image: "https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1906/sabelskaya190600770.jpg",
@@ -105,6 +107,7 @@ export default {
     submitData(title) {
       Books.uploadImage(this.bookObj.imageFile)
       .then(({ imageUrl }) => {
+        
           this.bookObj.isborrowable = this.bookObj.isborrowable ? 1 : 0;
           this.bookObj.image = imageUrl;
           Books.create(this.bookObj)
@@ -129,30 +132,6 @@ export default {
             });
         })
       });
-      /*
-      this.bookObj.isborrowable = this.bookObj.isborrowable ? 1 : 0
-        Books.create(this.bookObj)
-        .then(() => {
-          this.$vs.notify({
-            time: 3000,
-            title: title,
-            text: "The book has successfully added",
-            color: "success",
-            iconPack: "feather",
-            icon: "icon-check-circle"
-          });
-          this.$router.push("/books");
-        })
-        .catch(err => {
-          this.$vs.notify({
-            time: 3000,
-            title: title,
-            text: err.message || 'Error occured',
-            color: "danger",
-            iconPack: "feather",
-          });
-        })
-        */
     }
   },
   components: {

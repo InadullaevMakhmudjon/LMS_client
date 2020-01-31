@@ -43,7 +43,7 @@
             <!-- left -->
             <vs-tabs position="left" color="primary">
               <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
-                <vx-input-group class="mb-base">
+                <vx-input-group class="mb-base w-full">
                   <vs-input
                     type="text"
                     v-model="item.value"
@@ -108,9 +108,11 @@ export default {
       Promise.all([
         Categories.getAll(),
         Authors.getAll(),
+        Subjects.getAll(),
       ]).then(result => {
-        const [categories, authors] = result;
+        const [categories, authors, subjects] = result;
         this.types[0].lists = categories;
+        this.types[1].lists = subjects;
         this.types[2].lists = authors;
       });
     },
