@@ -106,7 +106,7 @@
         />
       </vs-select>
       <!--book author-->
-      <vs-select
+      <!-- <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.authorId"
         class="w-full select-large mt-4"
@@ -119,12 +119,25 @@
           :text="item.name"
           class="w-full"
         />
-      </vs-select>
+      </vs-select> -->
+      <p class="mt-4 text-small">Book Author</p>
+      <v-select
+        :disabled="isValidIsbn"
+        multiple
+        placeholder="choose..."
+        v-model="bookObj.authorId"
+        taggable
+        push-tags
+        :options="bookAuthorList"
+        :reduce="item => item.id"
+        label="name"
+      />
+
       <!--book langugage-->
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.languageId"
-        class="w-full select-large mt-3"
+        class="w-full select-large mt-4"
         label="Book Language"
       >
         <vs-select-item
@@ -219,6 +232,7 @@
   </div>
 </template>
 <script>
+import vSelect from "vue-select";
 import Datepicker from "vuejs-datepicker";
 import Books from "@/services/Books.js";
 import { TabContent } from "vue-form-wizard";
@@ -229,7 +243,7 @@ import Languages from "@/services/Languages";
 import Users from "@/services/Users";
 import Courses from "@/services/Courses";
 import Subjects from "@/services/Subjects";
-import BookTypes from '@/services/BookTypes';
+import BookTypes from "@/services/BookTypes";
 
 export default {
   props: {
@@ -240,6 +254,10 @@ export default {
   },
   data() {
     return {
+      bookTest: [
+        { code: "CA", country: "Canada" },
+        { code: "USA", country: "America" }
+      ],
       publishedYear: 2,
       popupActivo: false,
       image: null,
@@ -251,7 +269,7 @@ export default {
       resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
       bookTypeList: [],
       bookAuthorList: [],
-      bookSubjectList:[],
+      bookSubjectList: [],
       courseList: [],
       subjects: [
         { text: "Comxorithm", value: "1" },
@@ -279,12 +297,13 @@ export default {
   },
   watch: {
     publishedYear(value) {
-      this.bookObj.publishedYear = value.getFullYear()
+      this.bookObj.publishedYear = value.getFullYear();
     }
   },
   components: {
     TabContent,
-    Datepicker
+    Datepicker,
+    vSelect
   },
   methods: {
     getAll() {
@@ -296,10 +315,18 @@ export default {
         Users.getAll(),
         Courses.getAll(),
         Subjects.getAll(),
-        BookTypes.getAll(),
+        BookTypes.getAll()
       ])
         .then(result => {
-          const [authors, categories, languages, users, courses, subjects, bookTypes] = result;
+          const [
+            authors,
+            categories,
+            languages,
+            users,
+            courses,
+            subjects,
+            bookTypes
+          ] = result;
           this.bookAuthorList = authors;
           this.categoryList = categories;
           this.languageList = languages;
@@ -342,7 +369,6 @@ export default {
     }
   },
   mounted() {
-    console.log();
     this.getAll();
   }
 };
@@ -363,5 +389,9 @@ export default {
   margin-left: auto;
   margin-right: auto;
   width: 100%;
+}
+.text-small {
+  font-size: 12px;
+  color: rgb(97, 96, 96);
 }
 </style>
