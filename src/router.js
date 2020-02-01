@@ -96,14 +96,14 @@ const router = new Router({
                     name: 'Settings',
                     component: () =>
                         import('./views/Settings.vue'),
-                        meta: {
-                            breadcrumb: [
-                                { title: 'Home', url: '/' },
-                                { title: 'book item', active: true },
-                            ],
-                            pageTitle: 'Settings'
-    
-                        }
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'book item', active: true },
+                        ],
+                        pageTitle: 'Settings'
+
+                    }
                 },
             ],
         },
@@ -148,4 +148,8 @@ router.afterEach(() => {
     }
 })
 
+// router.beforeEach((to, from, next) => {
+//     if (to.path === "/pages/login" || to.path === "/pages/error-404") return next();
+//     router.push({ path: '/pages/login', query: { to: to.path } })
+// })
 export default router
