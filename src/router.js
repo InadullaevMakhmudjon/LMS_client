@@ -36,7 +36,7 @@ const router = new Router({
             // =============================================================================
             path: '',
             component: () =>
-                import('./layouts/main/Main.vue'),
+                import ('./layouts/main/Main.vue'),
             children: [
                 // =============================================================================
                 // Theme Routes
@@ -45,7 +45,7 @@ const router = new Router({
                     path: '/',
                     name: 'home',
                     component: () =>
-                        import('./views/Home.vue'),
+                        import ('./views/Home.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
@@ -59,7 +59,7 @@ const router = new Router({
                     path: '/books',
                     name: 'books',
                     component: () =>
-                        import('./views/book/Books.vue'),
+                        import ('./views/book/Books.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Books', url: '/books' },
@@ -73,7 +73,8 @@ const router = new Router({
                 {
                     path: '/book/create-book',
                     name: 'create_book',
-                    component: () => import('./views/book/Create.vue'),
+                    component: () =>
+                        import ('./views/book/Create.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
@@ -89,13 +90,13 @@ const router = new Router({
                     path: '/users',
                     name: 'Users',
                     component: () =>
-                        import('./views/Users.vue')
+                        import ('./views/Users.vue')
                 },
                 {
                     path: '/settings',
                     name: 'Settings',
                     component: () =>
-                        import('./views/Settings.vue'),
+                        import ('./views/Settings.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
@@ -113,7 +114,7 @@ const router = new Router({
         {
             path: '',
             component: () =>
-                import('@/layouts/full-page/FullPage.vue'),
+                import ('@/layouts/full-page/FullPage.vue'),
             children: [
                 // =============================================================================
                 // PAGES
@@ -122,13 +123,13 @@ const router = new Router({
                     path: '/pages/login',
                     name: 'page-login',
                     component: () =>
-                        import('@/views/pages/Login.vue')
+                        import ('@/views/pages/Login.vue')
                 },
                 {
                     path: '/pages/error-404',
                     name: 'page-error-404',
                     component: () =>
-                        import('@/views/pages/Error404.vue')
+                        import ('@/views/pages/Error404.vue')
                 },
             ]
         },

@@ -196,7 +196,7 @@ export default {
 
         // PROFILE
         user_displayName() {
-            return "Aliev Azam"
+            return "Arabkhonova Mokhina"
             // return JSON.parse(localStorage.getItem('userInfo')).displayName
         },
         activeUserImg() {

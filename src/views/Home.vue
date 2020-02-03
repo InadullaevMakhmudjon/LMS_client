@@ -8,6 +8,7 @@
         vs-justify="center"
         vs-align="center"
         vs-w="3"
+        class="xs:w-full md:w-1/4"
       >
         <div class="vx-col w-full md:w-full mb-base">
         
