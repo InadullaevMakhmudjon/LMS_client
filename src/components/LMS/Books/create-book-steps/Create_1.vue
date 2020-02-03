@@ -122,14 +122,13 @@
       </vs-select> -->
       <p class="mt-4 text-small">Book Author</p>
       <v-select
-        :disabled="isValidIsbn"
         multiple
         placeholder="choose..."
-        v-model="bookObj.authorId"
+        v-model="selectedAuthors"
         taggable
         push-tags
         :options="bookAuthorList"
-        :reduce="item => item.id"
+        :create-option=" item => ({ id: 0, name: item }) "
         label="name"
       />
 
@@ -259,6 +258,7 @@ export default {
         { code: "USA", country: "America" }
       ],
       publishedYear: 2,
+      selectedAuthors:[],
       popupActivo: false,
       image: null,
       imageUrl: "",
@@ -298,6 +298,10 @@ export default {
   watch: {
     publishedYear(value) {
       this.bookObj.publishedYear = value.getFullYear();
+    },
+    selectedAuthors(val){
+ this.bookObj.authors = val
+ console.log(this.bookObj.authors)
     }
   },
   components: {

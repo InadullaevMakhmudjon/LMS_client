@@ -162,7 +162,7 @@
               </vs-row>
 
               <h3 class="mb-2">{{ book.title }}</h3>
-              <p class="text-primary">{{ `by ${book.author ? book.author.name : '-'}` }}</p>
+              <p class="text-primary">{{ `by ${book.authorName}` }}</p>
               <p class="text-black text-2xs">{{ `ISBN: ${book.ISBNCode}` }}</p>
             </div>
           </vx-card>
@@ -237,14 +237,22 @@ export default {
       }
     ]
   }),
+  computed: {
+    authors() {
+      return 
+    }
+  },
   methods: {
     getAll() {
       Books.getAll().then(books => {
         this.books = books;
+        this.books.forEach(book => {
+          book.authorName = book.authors.map(({ name }) => name).join(', ');
+        });
       });
     },
     funct(parm) {
-      console.log(parm);
+      // console.log(parm);
     }
   },
   mounted() {

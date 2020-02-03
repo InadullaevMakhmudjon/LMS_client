@@ -53,7 +53,14 @@
           @click.native="formSubmitted"
           class="wizard-footer-right finish-button"
           :style="props.fillButtonStyle"
-          >{{ props.isLastStep ? "Save" : "Next" }}</wizard-button
+          >{{ props.isLastStep ? "Save" : "Next" }}</wizard-button>
+
+          <wizard-button
+         
+          @click.native="formSubmitted"
+          class="wizard-footer-right finish-button"
+          :style="props.fillButtonStyle"
+          >checking</wizard-button
         >
       </div>
     </template>
@@ -74,7 +81,7 @@ export default {
       bookObj: {
         title: "",
         typeId: 0,
-        authorId: 0,
+        authors:[],
         ISBNcode: "",
         courseYear: 0,
         subjectId: 0,
@@ -100,7 +107,7 @@ export default {
   },
   methods: {
     formSubmitted() {
-      console.log(this.bookObj);
+      // console.log(this.bookObj);
     },
     nextTab(props) {
       props.nextTab();
