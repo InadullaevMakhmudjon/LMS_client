@@ -120,19 +120,11 @@
     </vs-row>
 
     <p class="text-grey text-2xl text-center mt-5 mb-5">
-      5 results found in Book list
+      {{ books.length }} results found in Book list
     </p>
 
     <vs-row>
-      <vs-col
-        v-for="book in books"
-        :key="book.id"
-        vs-type="flex"
-        vs-justify="center"
-        vs-align="center"
-        vs-w="3"
-      >
-        <div
+      <!-- <div
           class="vx-col w-full sm:w-1/2 lg:w-full mb-base"
           @click="funct(book.id)"
         >
@@ -166,24 +158,68 @@
               <p class="text-black text-2xs">{{ `ISBN: ${book.ISBNCode}` }}</p>
             </div>
           </vx-card>
-        </div>
-      </vs-col>
+        </div> -->
+
+      <!-- <vx-card class="overlay-card h-100 overflow-hidden w-full">
+    <template slot="no-body">
+      <img :src="book.image" alt="user-profile-cover" class="responsive">
+      <div class="card-overlay text-white flex flex-col justify-between">
+        <h4 class="text-white mb-4">{{book.title}}</h4>
+        <p>{{`ISBN: ${book.ISBNCode}`}}</p>
+      </div>
+    </template>
+  </vx-card> -->
+
+      <main v-for="book in books" :key="book.id">
+        <vs-col>
+          <div class="book-card">
+            <div class="book-card__cover">
+              <div class="book-card__book">
+                <div class="book-card__book-front">
+                  <img class="book-card__img" :src="book.image" />
+                </div>
+                <div class="book-card__book-back"></div>
+                <div class="book-card__book-side"></div>
+              </div>
+            </div>
+            <div>
+              <div class="book-card__status">
+                {{ book.isBorrowable ? "Borrowable" : "Not Borrowable" }}
+              </div>
+              <div class="book-card__title">
+                {{
+                  book.title.length > 23
+                    ? book.title.slice(0, 23) + "..."
+                    : book.title
+                }}
+              </div>
+              <div class="book-card__s">
+                {{ `by ${book.authorName}` }}
+              </div>
+              <div class="book-card__author">
+                <span>{{ `ISBN: ${book.ISBNCode}` }}</span
+                ><span class="book_quantity">43</span>
+              </div>
+            </div>
+          </div>
+        </vs-col>
+      </main>
     </vs-row>
   </div>
 </template>
 
 <script>
-import Books from '@/services/Books';
+import Books from "@/services/Books";
 
 export default {
   data: () => ({
-    selectedCourse:'',
-    searchQuery:'',
-    selectedLanguage:'',
-    selectedCategory:'',
-    selectedSubject:'',
-    selectedBookType:'',
-    updateSearchQuery:'',
+    selectedCourse: "",
+    searchQuery: "",
+    selectedLanguage: "",
+    selectedCategory: "",
+    selectedSubject: "",
+    selectedBookType: "",
+    updateSearchQuery: "",
 
     year: [
       { text: "Freshman", value: "1" },
@@ -230,16 +266,16 @@ export default {
     books: [
       {
         id: 1,
-        title: '',
+        title: "",
         author: { name },
-        image: '',
-        ISBNCode: '',
+        image: "",
+        ISBNCode: ""
       }
     ]
   }),
   computed: {
     authors() {
-      return 
+      return;
     }
   },
   methods: {
@@ -247,7 +283,7 @@ export default {
       Books.getAll().then(books => {
         this.books = books;
         this.books.forEach(book => {
-          book.authorName = book.authors.map(({ name }) => name).join(', ');
+          book.authorName = book.authors.map(({ name }) => name).join(", ");
         });
       });
     },
@@ -261,7 +297,114 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
+main {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 15px;
+}
+
+.book-card {
+  width: 300px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+  .book-card__cover {
+    position: relative;
+    width: 200px;
+    height: 300px;
+    margin: 0 auto 8px auto;
+    perspective: 1000px;
+  }
+
+  .book-card__book {
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: all 250ms ease;
+  }
+
+  .book-card__book-front {
+    position: absolute;
+    height: 100%;
+  }
+
+  .book-card__book-back {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    transform: translateZ(-40px);
+  }
+
+  .book-card__book-side {
+    position: absolute;
+    top: 5px;
+    bottom: 2px;
+    right: -29px;
+    width: 40px;
+    background-size: 5px;
+    background-color: #e1e1e1;
+    background-image: linear-gradient(to right, #ccc 35%, #e1e1e1 35%);
+    opacity: 0;
+    transform: rotate3d(0, 1, 0, 90deg);
+  }
+
+  .book-card__img {
+    width: 100%;
+    height: 100%;
+    background-color: #e1e1e1;
+  }
+
+  .book-card__title {
+    font-size: 1.3em;
+    margin-bottom: 8px;
+  }
+  .book-card__s {
+    font-size: 1rem;
+    color: #2ca3f2;
+  }
+  .book_quantity {
+    background: #EDEDED;
+    color: rgb(26, 26, 26);
+    border-radius: 5px;
+    padding: 2px 10px;
+  }
+  .book-card__status {
+    background: rgb(104, 190, 54);
+    color: white;
+    width: 50%;
+    padding: 1%;
+    padding-left: 3%;
+    margin-bottom: 2px;
+    border-radius: 5px;
+  }
+
+  .book-card__author {
+    color: #757575;
+    font-size: 1em;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  // STATES
+  &:hover {
+    .book-card__book {
+      transform: rotate3d(0, -1, 0, 30deg) translate(-15px, -30px);
+    }
+
+    .book-card__book-back {
+      box-shadow: 5px 10px 15px rgba(0, 0, 0, 0.35);
+    }
+
+    .book-card__book-side {
+      opacity: 1;
+    }
+  }
+}
 .elevation {
   box-shadow: 0;
 }
