@@ -127,6 +127,7 @@
         v-model="selectedAuthors"
         taggable
         push-tags
+        :disabled="isValidIsbn"
         :options="bookAuthorList"
         :create-option=" item => ({ id: 0, name: item }) "
         label="name"
