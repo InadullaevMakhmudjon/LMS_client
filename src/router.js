@@ -71,6 +71,23 @@ const router = new Router({
                     }
                 },
                 {
+                    path: '/book/:id',
+                    name: 'book',
+                    props: true,
+                    component: () =>
+                        import ('./views/book/BookInfo.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Books', url: '/books' },
+                            { title: 'Book Info', active: true },
+                        ],
+                        parent: 'books',
+                        pageTitle: 'Book Info'
+
+                    }
+                },
+                {
                     path: '/book/create-book',
                     name: 'create_book',
                     component: () =>

@@ -169,9 +169,9 @@
       </div>
     </template>
   </vx-card> -->
-
-      <main v-for="book in books" :key="book.id">
-        <vs-col>
+<vs-col vs-justify="start" v-for="book in books" :key="book.id" vs-w="3">
+      <main @click="bookInfo(book.id)" >
+        
           <div class="book-card">
             <div class="book-card__cover">
               <div class="book-card__book">
@@ -202,8 +202,8 @@
               </div>
             </div>
           </div>
-        </vs-col>
       </main>
+       </vs-col>
     </vs-row>
   </div>
 </template>
@@ -279,6 +279,9 @@ export default {
     }
   },
   methods: {
+    bookInfo(id){
+      this.$router.push('/book/'+id)
+    },
     getAll() {
       Books.getAll().then(books => {
         this.books = books;
@@ -304,6 +307,7 @@ main {
   align-items: center;
   justify-content: center;
   margin: 15px;
+  cursor: pointer;
 }
 
 .book-card {
