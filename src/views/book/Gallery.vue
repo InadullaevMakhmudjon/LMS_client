@@ -204,7 +204,11 @@
           </div>
       </main>
        </vs-col>
+      
     </vs-row>
+     <vs-row class="mt-4 justify-end">
+       <vs-pagination :total="page" v-model="currentx"></vs-pagination>
+     </vs-row>
   </div>
 </template>
 
@@ -214,6 +218,8 @@ import Books from "@/services/Books";
 export default {
   data: () => ({
     selectedCourse: "",
+    currentx: 1,
+    page: 2,
     searchQuery: "",
     selectedLanguage: "",
     selectedCategory: "",
@@ -278,13 +284,20 @@ export default {
       return;
     }
   },
+  watch:{
+    currentx(val) {
+        this.getAll(val)
+        console.log(val)
+    }
+  },
   methods: {
     bookInfo(id){
       this.$router.push('/book/'+id)
     },
-    getAll() {
-      Books.getAll().then(books => {
+    getAll(val) {
+      Books.getAll(val,6).then(({ items: books, length }) => {
         this.books = books;
+        this.page = Math.ceil(length/12)
         this.books.forEach(book => {
           book.authorName = book.authors.map(({ name }) => name).join(", ");
         });
@@ -295,7 +308,7 @@ export default {
     }
   },
   mounted() {
-    this.getAll();
+    this.getAll(1,6);
   }
 };
 </script>
