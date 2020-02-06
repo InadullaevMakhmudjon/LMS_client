@@ -120,7 +120,7 @@
     </vs-row>
 
     <p class="text-grey text-2xl text-center mt-5 mb-5">
-      {{ books.length }} results found in Book list
+      {{ booksQuantity }} results found in Book list
     </p>
 
     <vs-row>
@@ -219,7 +219,8 @@ export default {
   data: () => ({
     selectedCourse: "",
     currentx: 1,
-    page: 2,
+    page: 1,
+    booksQuantity: 0,
     searchQuery: "",
     selectedLanguage: "",
     selectedCategory: "",
@@ -292,11 +293,12 @@ export default {
   },
   methods: {
     bookInfo(id){
-      this.$router.push('/book/'+id)
+      this.$router.push('/books/'+id)
     },
     getAll(val) {
-      Books.getAll(val,6).then(({ items: books, length }) => {
+      Books.getAll(val,12).then(({ items: books, length }) => {
         this.books = books;
+        this.booksQuantity = length
         this.page = Math.ceil(length/12)
         this.books.forEach(book => {
           book.authorName = book.authors.map(({ name }) => name).join(", ");
@@ -308,7 +310,7 @@ export default {
     }
   },
   mounted() {
-    this.getAll(1,6);
+    this.getAll(1,12);
   }
 };
 </script>

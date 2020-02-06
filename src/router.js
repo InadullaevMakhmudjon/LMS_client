@@ -71,7 +71,7 @@ const router = new Router({
                     }
                 },
                 {
-                    path: '/book/:id',
+                    path: '/books/:id',
                     name: 'book',
                     props: true,
                     component: () =>

@@ -10,37 +10,63 @@
 
       <vs-row class="justify-between">
         <!--book definition-->
-        <vs-col vs-type="flex" vs-justify="start" vs-align="center" vs-w="6">
+        <vs-col
+          vs-offset="0"
+          vs-type="flex"
+          vs-justify="start"
+          vs-align="center"
+          vs-w="7"
+        >
           <vx-card no-shadow>
-            <vs-row>
-              <vs-col
-                vs-type="flex"
-                vs-justify="center"
-                vs-align="center"
-                vs-w="4"
-              >
-                <img
-                  class="cover"
-                  src="https://cdn10.bigcommerce.com/s-g9n04qy/products/60099/images/60293/61cibLPhI8L._SL1200___17104.1430064174.500.500.jpg?c=2"
-                />
-              </vs-col>
-              <vs-col vs-justify="start" vs-align="center" vs-w="6">
-                <vs-list class="ml-3">
-                  <vs-list-header
-                    title="Detailed Charactertics"
-                  ></vs-list-header>
-                  <vs-list-item
-                    title="One text"
-                    v-for="i in 7"
-                    :key="i"
-                  ></vs-list-item>
+            <vs-col vs-type="flex" vs-justify="start" class="" vs-w="12">
+              <div>
+                <img class="cover" :src="bookInfo.image" />
+              </div>
+              <div class="mx-3">
+                <vs-list>
+                  <h6 class="item-name text-2xl font-semibold mb-1">
+                    {{ bookInfo.title }}
+                  </h6>
+                  <p class="text-lg mb-2 cursor-pointer">
+                    by <span class="text-primary ">{{ bookInfo.authors }}</span>
+                  </p>
+                  <p class=" text-lg mb-2">
+                    {{ `ISBN: ${bookInfo.ISBNCode}` }}
+                  </p>
+                  <p class=" text-lg mb-2">
+                    {{ `Published Year: ${bookInfo.publishedYear}` }}
+                  </p>
+                  <p class=" text-lg mb-2">
+                    {{ `Language: ${bookInfo.language}` }}
+                  </p>
+                  <p class=" text-lg mb-2">
+                    {{ `Duration: ${bookInfo.duration} days` }}
+                  </p>
+                  <p class=" text-lg mb-2">
+                    {{ `Available:  0 / 0` }}
+                  </p>
+                  <div class="book-card__status inline-flex mb-2">
+                    <span class="py-1 mr-1"
+                      >{{
+                        bookInfo.isBorrowable ? "Borrowable" : "Not Borrowable"
+                      }}
+                    </span>
+                    <feather-icon icon="CheckSquareIcon" />
+                  </div>
+
+                  <p class="text-lg mb-2 text-grey">
+                    Arabkhanova Mohina
+                  </p>
+                  <p class="font-medium text-2xl text-grey mt-4">
+                    Book Location: 23A
+                  </p>
                 </vs-list>
-              </vs-col>
-            </vs-row>
+              </div>
+            </vs-col>
           </vx-card>
         </vs-col>
         <!--book statistics-->
-        <vs-col vs-type="flex"  vs-align="center" vs-w="5">
+        <vs-col vs-type="flex" vs-align="center" vs-w="5">
           <vx-card class="elevation1" title="Browser Statistics">
             <div
               v-for="(browser, index) in 4"
@@ -49,15 +75,15 @@
             >
               <div class="flex justify-between">
                 <div class="flex flex-col">
-                  <span class="mb-1">hello world</span>
+                  <span class="mb-1">null</span>
                   <h4>{{ persentaging }}%</h4>
                 </div>
                 <div class="flex flex-col text-right">
                   <span class="flex -mr-1">
-                    <span class="mr-1">don't</span>
+                    <span class="mr-1">null</span>
                     <!-- <feather-icon :icon=" browser.comparedResult < 0 ? 'ArrowDownIcon' : 'ArrowUpIcon'" :svgClasses="[browser.comparedResult < 0 ? 'text-danger' : 'text-success'  ,'stroke-current h-4 w-4 mb-1 mr-1']"></feather-icon> -->
                   </span>
-                  <span class="text-grey">22:30</span>
+                  <span class="text-grey">null</span>
                 </div>
               </div>
               <vs-progress :percent="persentaging"></vs-progress>
@@ -65,83 +91,111 @@
           </vx-card>
         </vs-col>
       </vs-row>
-      <vs-tabs>
-        <vs-tab label="Books">
-          <div>
-            <vs-table
-              max-items="10"
-              pagination
-              :data="users"
-              maxHeight="600px"
-              search
-            >
-              <template slot="thead">
-                  <vs-th>
-                  Order
-                </vs-th>
-                <vs-th>
-                  Code
-                </vs-th>
-                <vs-th>
-                  Title
-                </vs-th>
-                <vs-th>
-                  Status
-                </vs-th>
-                <vs-th>
-                 Edit
-                </vs-th>
-                <vs-th>
-                 Archive
-                </vs-th>
-              </template>
+      <vs-row class="mt-5">
+        <vs-col vs-w="12">
+          <vs-tabs class="mt-5">
+            <vs-tab label="Books">
+              <div>
+                <vs-table
+                  max-items="10"
+                  pagination
+                  :data="users"
+                  maxHeight="600px"
+                  search
+                >
+                  <template slot="thead">
+                    <vs-th>
+                      Order
+                    </vs-th>
+                    <vs-th>
+                      Code
+                    </vs-th>
+                    <vs-th>
+                      Title
+                    </vs-th>
+                    <vs-th>
+                      Status
+                    </vs-th>
+                    <vs-th>
+                      Edit
+                    </vs-th>
+                    <vs-th>
+                      Archive
+                    </vs-th>
+                  </template>
 
-              <template slot-scope="{ data }">
-                <vs-tr :key="indextr" v-for="(tr, indextr) in data">
-                     <vs-td >
-                    {{indextr+1}}
-                  </vs-td>
-                  <vs-td :data="data[indextr].code">
-                    {{ data[indextr].code }}
-                  </vs-td>
+                  <template slot-scope="{ data }">
+                    <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                      <vs-td>
+                        {{ indextr + 1 }}
+                      </vs-td>
+                      <vs-td :data="data[indextr].code">
+                        {{ data[indextr].code }}
+                      </vs-td>
 
-                  <vs-td :data="data[indextr].title">
-                    {{ data[indextr].title }}
-                  </vs-td>
+                      <vs-td :data="data[indextr].title">
+                        {{ data[indextr].title }}
+                      </vs-td>
 
-                  <vs-td :data="data[indextr].status">
-                    {{ data[indextr].status }}
-                  </vs-td>
+                      <vs-td :data="data[indextr].status">
+                        {{ data[indextr].status }}
+                      </vs-td>
 
-                  <vs-td :data="data[indextr].id">
-                    <vs-icon class="cursor" icon="edit" size="medium" color="primary"></vs-icon>
-                  </vs-td>
-                  <vs-td v-if="data[indextr].action" :data="data[indextr].id" >
-                    <span><vs-icon class="cursor" size="medium" icon="archive" color="#99d6ff"></vs-icon></span>
-                  </vs-td>
-                  <vs-td v-else :data="data[indextr].id" >
-                    <span @click="doArchive(data)"><vs-icon class="cursor" size="medium" icon="archive" color="primary"></vs-icon></span>
-                  </vs-td>
-                </vs-tr>
-              </template>
-            </vs-table>
-          </div>
-        </vs-tab>
-        <vs-tab label="Borrowed books">
-          <div></div>
-        </vs-tab>
-      </vs-tabs>
+                      <vs-td :data="data[indextr].id">
+                        <vs-icon
+                          class="cursor"
+                          icon="edit"
+                          size="medium"
+                          color="primary"
+                        ></vs-icon>
+                      </vs-td>
+                      <vs-td
+                        v-if="data[indextr].action"
+                        :data="data[indextr].id"
+                      >
+                        <span
+                          ><vs-icon
+                            class="cursor"
+                            size="medium"
+                            icon="archive"
+                            color="#99d6ff"
+                          ></vs-icon
+                        ></span>
+                      </vs-td>
+                      <vs-td v-else :data="data[indextr].id">
+                        <span @click="doArchive(data)"
+                          ><vs-icon
+                            class="cursor"
+                            size="medium"
+                            icon="archive"
+                            color="primary"
+                          ></vs-icon
+                        ></span>
+                      </vs-td>
+                    </vs-tr>
+                  </template>
+                </vs-table>
+              </div>
+            </vs-tab>
+            <vs-tab label="Borrowed books">
+              <div></div>
+            </vs-tab>
+          </vs-tabs>
+        </vs-col>
+      </vs-row>
     </vx-card>
   </div>
 </template>
 
 <script>
+import Books from "@/services/Books";
 export default {
   props: ["id"],
   data() {
     return {
       selected: "",
       persentaging: Math.floor(Math.random() * 100),
+      bookInfo: [],
       users: [
         {
           id: 1,
@@ -150,31 +204,25 @@ export default {
           status: "borrowed",
           edit: "hildegard.org",
           action: true
-        },
-         {
-          id: 2,
-          code: "2344433",
-          title: "The Fundomental of Calculus",
-          status: "borrowed",
-          edit: "hildegard.org",
-          action: true
-        },
-         {
-          id: 3,
-          code: "2344478",
-          title: "The Fundomental of Calculus",
-          status: "lost",
-          edit: "hildegard.org",
-          action: false
         }
       ]
     };
   },
-  methods:{
-      doArchive(val) {
-          alert('dsfsa')
-          console.log(val)
-      }
+  methods: {
+    doArchive(val) {
+      alert("dsfsa");
+      console.log(val);
+    },
+    getBook(id) {
+      Books.getOnebook(id).then(book => {
+        this.bookInfo = book;
+        this.bookInfo.language = book.language.name;
+        this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
+      });
+    }
+  },
+  mounted() {
+    this.getBook(this.id);
   }
 };
 </script>
@@ -189,7 +237,16 @@ export default {
   max-width: 270px;
   max-height: 420px;
 }
-.cursor{
-    cursor: pointer;
+.cursor {
+  cursor: pointer;
+}
+.book-card__status {
+  background: rgb(104, 190, 54);
+  color: white;
+  width: 150px;
+  padding: 1%;
+  padding-left: 3%;
+  margin-bottom: 2px;
+  border-radius: 5px;
 }
 </style>
