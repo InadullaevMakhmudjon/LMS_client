@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h5>Filter books</h5>
     <div class="justify-center mt-4">
       <gallery />
     </div>

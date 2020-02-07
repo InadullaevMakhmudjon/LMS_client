@@ -1,47 +1,11 @@
 <template>
   <div>
-    <!-- <vs-col
-      v-for="(item, i) in types"
-      :key="i"
-      vs-type="flex"
-      vs-justify="center"
-      vs-w="3"
-    >
-      <vx-card>
-        <p>{{ item.text }}</p>
-        <vx-input-group class="mb-base">
-          <vs-input
-            type="text"
-            v-model="item.value"
-            @keyup.enter="addlist(item)"
-          />
-          <template slot="append">
-            <div class="append-text btn-addon">
-              <vs-button
-                color="primary"
-                type="border"
-                @click="addlist(item)"
-                icon-pack="feather"
-                icon="icon-plus"
-                >add</vs-button
-              >
-            </div>
-          </template>
-        </vx-input-group>
-
-          <vs-list >
-     <vs-list-item v-for="(n,i) in item.lists" :key="i"  :title="n">
-      <vs-button radius color="danger" size="size" @click="deleteShelf()" type="border" icon="delete_outline"></vs-button>
-    </vs-list-item>
-  </vs-list>
-      </vx-card>
-    </vs-col> -->
     <template>
       <div>
         <vs-tabs color="rgb(32, 201, 192)">
           <vs-tab label="Book config">
             <!-- left -->
-            <vs-tabs position="left" color="primary">
+            <vs-tabs  color="primary">
               <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
                 <vx-input-group class="mb-base w-full">
                   <vs-input
@@ -68,14 +32,15 @@
                     v-for="itemChild in item.lists"
                     :key="itemChild.id"
                     :title="itemChild.name">
-                    <vs-button
+                    <!-- <vs-button
                       radius
                       color="danger"
                       size="size"
                       @click="deleteItem(item.id, itemChild.id)"
                       type="border"
                       icon="delete_outline"
-                    ></vs-button>
+                    ></vs-button> -->
+                     <vs-switch color="success" v-model="switch2" icon-pack="feather" vs-icon="icon-check" />
                   </vs-list-item>
                 </vs-list>
               </vs-tab>

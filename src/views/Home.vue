@@ -50,11 +50,17 @@
         <report/>
       </vs-col>
     </vs-row>
+      <vs-row class="mt-5">
+      <vs-col>
+        <archive/>
+      </vs-col>
+    </vs-row>
   </div>
 </template>
 <script>
 import VxBreadcrumb from "../layouts/components/VxBreadcrumb.vue";
 import Report from '../components/LMS/Books/Report'
+import Archive from '../components/LMS/Books/Archive'
 export default {
   data() {
     return {
@@ -112,7 +118,8 @@ export default {
   },
   components: {
     VxBreadcrumb,
-    Report
+    Report,
+    Archive
   }
 };
 </script>

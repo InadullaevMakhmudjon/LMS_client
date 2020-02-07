@@ -1,122 +1,96 @@
 <template>
   <div>
     <vs-row>
-      <vs-col
-        vs-offset="1"
-        vs-type="flex"
-        vs-justify="center"
-        vs-align="center"
-        vs-w="10"
+      <vx-card
+      class="no-shadow"
+        collapse-action
+        title="Filtering books"
       >
-        <div class="mt-2">
-          <vs-button class="" color="#2ca3f2" to="/book/create-book" dark>
-            Create Book
-          </vs-button>
-        </div>
+        <vs-col
+          vs-offset="1"
+          vs-type="flex"
+          vs-justify="center"
+          vs-align="center"
+          vs-w="10"
+        >
+          <div class="mt-2">
+            <vs-button class="" color="#2ca3f2" to="/book/create-book" dark>
+              Create Book
+            </vs-button>
+          </div>
 
-        <!--Dropdown filters-->
-        <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
-          <vs-select
-            size="large"
-            v-model="selectedCourse"
-            class="w-full select-large"
-            label="Year"
-          >
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in year"
-              class="w-full"
-            />
-          </vs-select>
-        </div>
+          <!--Dropdown filters-->
+          <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
+            <p>Year</p>
+            <v-select
+              v-model="selectedCourse"
+              class="w-full select-large"
+              label="text"
+              :options="year"
+            ></v-select>
+          </div>
 
-        <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
-          <vs-select
-            size="large"
-            v-model="selectedBookType"
-            class="w-full select-large"
-            label="Books type"
-          >
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in bookTypes"
-              class="w-full"
-            />
-          </vs-select>
-        </div>
+          <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
+            <p>Book Type</p>
+            <v-select
+              v-model="selectedBookType"
+              class="w-full select-large"
+              label="text"
+              :options="bookTypes"
+            ></v-select>
+          </div>
 
-        <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
-          <vs-select
-            size="large"
-            v-model="selectedSubject"
-            class="w-full select-large"
-            label="Subjects"
-          >
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in subjects"
-              class="w-full"
-            />
-          </vs-select>
-        </div>
+          <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
+            <p>Subject</p>
+            <v-select
+              v-model="selectedSubject"
+              class="w-full select-large"
+              label="text"
+              :options="subjects"
+            ></v-select>
+          </div>
 
-        <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
-          <vs-select
-            size="large"
-            v-model="selectedCategory"
-            class="w-full select-large"
-            label="Category"
+          <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
+            <p>Category</p>
+            <v-select
+              v-model="selectedCategory"
+              class="w-full select-large"
+              label="text"
+              :options="category"
+            ></v-select>
+          </div>
+          <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
+            <p>Language</p>
+            <v-select
+              v-model="selectedLanguage"
+              class="w-full select-large"
+              label="text"
+              :options="language"
+            ></v-select>
+          </div>
+        </vs-col>
+        <vs-row>
+          <vs-col
+            vs-offset="1"
+            vs-type="flex"
+            vs-justify="center"
+            vs-align="center"
+            vs-w="10"
           >
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in category"
-              class="w-full"
+            <vs-input
+              class="mb-4 md:mb-0 mr-4  flex-1"
+              v-model="searchQuery"
+              @input="updateSearchQuery"
+              placeholder="Search..."
             />
-          </vs-select>
-        </div>
-
-        <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
-          <vs-select
-            size="large"
-            v-model="selectedLanguage"
-            class="w-full select-large"
-            label="Language"
-          >
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in language"
-              class="w-full"
-            />
-          </vs-select>
-        </div>
-      </vs-col>
-    </vs-row>
-    <vs-row>
-      <vs-col
-        vs-offset="1"
-        vs-type="flex"
-        vs-justify="center"
-        vs-align="center"
-        vs-w="10"
-      >
-        <vs-input
-          class="mb-4 md:mb-0 mr-4  flex-1"
-          v-model="searchQuery"
-          @input="updateSearchQuery"
-          placeholder="Search..."
-        />
-        <vs-button color="#2ca3f2" class="flex" v-text="'Search'"></vs-button>
-      </vs-col>
+            <vs-button
+              color="#2ca3f2"
+              class="flex"
+              v-text="'Search'"
+            ></vs-button>
+          </vs-col>
+        </vs-row>
+      </vx-card>
     </vs-row>
 
     <p class="text-grey text-2xl text-center mt-5 mb-5">
@@ -169,9 +143,8 @@
       </div>
     </template>
   </vx-card> -->
-<vs-col vs-justify="start" v-for="book in books" :key="book.id" vs-w="3">
-      <main @click="bookInfo(book.id)" >
-        
+      <vs-col vs-justify="start" v-for="book in books" :key="book.id" vs-w="3">
+        <main @click="bookInfo(book.id)">
           <div class="book-card">
             <div class="book-card__cover">
               <div class="book-card__book">
@@ -202,19 +175,18 @@
               </div>
             </div>
           </div>
-      </main>
-       </vs-col>
-      
+        </main>
+      </vs-col>
     </vs-row>
-     <vs-row class="mt-4 justify-end">
-       <vs-pagination :total="page" v-model="currentx"></vs-pagination>
-     </vs-row>
+    <vs-row class="mt-4 justify-end">
+      <vs-pagination :total="page" v-model="currentx"></vs-pagination>
+    </vs-row>
   </div>
 </template>
 
 <script>
 import Books from "@/services/Books";
-
+import vSelect from "vue-select";
 export default {
   data: () => ({
     selectedCourse: "",
@@ -280,26 +252,29 @@ export default {
       }
     ]
   }),
+  components: {
+    vSelect
+  },
   computed: {
     authors() {
       return;
     }
   },
-  watch:{
+  watch: {
     currentx(val) {
-        this.getAll(val)
-        console.log(val)
+      this.getAll(val);
+      console.log(val);
     }
   },
   methods: {
-    bookInfo(id){
-      this.$router.push('/books/'+id)
+    bookInfo(id) {
+      this.$router.push("/books/" + id);
     },
     getAll(val) {
-      Books.getAll(val,12).then(({ items: books, length }) => {
+      Books.getAll(val, 12).then(({ items: books, length }) => {
         this.books = books;
-        this.booksQuantity = length
-        this.page = Math.ceil(length/12)
+        this.booksQuantity = length;
+        this.page = Math.ceil(length / 12);
         this.books.forEach(book => {
           book.authorName = book.authors.map(({ name }) => name).join(", ");
         });
@@ -310,7 +285,7 @@ export default {
     }
   },
   mounted() {
-    this.getAll(1,12);
+    this.getAll(1, 12);
   }
 };
 </script>
@@ -387,7 +362,7 @@ main {
     color: #2ca3f2;
   }
   .book_quantity {
-    background: #EDEDED;
+    background: #ededed;
     color: rgb(26, 26, 26);
     border-radius: 5px;
     padding: 2px 10px;

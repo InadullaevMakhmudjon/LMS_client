@@ -54,14 +54,6 @@
           class="wizard-footer-right finish-button"
           :style="props.fillButtonStyle"
           >{{ props.isLastStep ? "Save" : "Next" }}</wizard-button>
-
-          <wizard-button
-         
-          @click.native="formSubmitted"
-          class="wizard-footer-right finish-button"
-          :style="props.fillButtonStyle"
-          >checking</wizard-button
-        >
       </div>
     </template>
   </form-wizard>
