@@ -1,77 +1,24 @@
-<!-- =========================================================================================
-    File Name: AgGridTable.vue
-    Description: Ag Grid table
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-    Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
   <div id="ag-grid-demo">
-    <vx-card>
+    <vx-card title="report">
       <!-- TABLE ACTION ROW -->
-      <vs-row vs-justify="center" class="justify-between">
-        <div class=" flex-wrap vx-col md:w-1/7 w-1/8 mt-10 pa-3">
-          <vs-button class="" color="primary" dark>Create Book</vs-button>
-        </div>
-
+      <vs-row vs-justify="start">
+<!-- 
         <div
-          v-for="i in 5"
+          v-for="i in 6"
           :key="i"
-          class="vx-col md:w-1/6 xs:w-1/4 w-full mt-5 mb-5"
+          class="md:w-1/6 xs:w-1/4 m-5"
         >
-          <vs-select class="w-full select-large" label="City">
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in year"
-              class="w-full"
-            />
-          </vs-select>
-        </div>
+            <v-select
+              v-model="selectedCourse"
+              class="w-full select-large"
+              label="text"
+              :options="year"
+            ></v-select>
+        </div> -->
       </vs-row>
 
       <div class="flex flex-wrap justify-between items-center">
-        <!-- ITEMS PER PAGE -->
-        <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
-          <vs-dropdown vs-trigger-click class="cursor-pointer">
-            <div
-              class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium"
-            >
-              <span class="mr-2"
-                >{{
-                  currentPage * paginationPageSize - (paginationPageSize - 1)
-                }}
-                -
-                {{
-                  contacts.length - currentPage * paginationPageSize > 0
-                    ? currentPage * paginationPageSize
-                    : contacts.length
-                }}
-                of {{ contacts.length }}</span
-              >
-              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-            </div>
-            <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
-            <vs-dropdown-menu>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(20)">
-                <span>20</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(50)">
-                <span>50</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(100)">
-                <span>100</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(150)">
-                <span>150</span>
-              </vs-dropdown-item>
-            </vs-dropdown-menu>
-          </vs-dropdown>
-        </div>
-
         <!-- TABLE ACTION COL-2: SEARCH & EXPORT AS CSV -->
         <div
           class="flex flex-wrap items-center justify-between ag-grid-table-actions-right"
@@ -112,6 +59,42 @@
         :suppressPaginationPanel="true"
       >
       </ag-grid-vue>
+      <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
+          <vs-dropdown vs-trigger-click class="cursor-pointer">
+            <div
+              class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium"
+            >
+              <span class="mr-2"
+                >{{
+                  currentPage * paginationPageSize - (paginationPageSize - 1)
+                }}
+                -
+                {{
+                  contacts.length - currentPage * paginationPageSize > 0
+                    ? currentPage * paginationPageSize
+                    : contacts.length
+                }}
+                of {{ contacts.length }}</span
+              >
+              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+            </div>
+            <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
+            <vs-dropdown-menu>
+              <vs-dropdown-item @click="gridApi.paginationSetPageSize(20)">
+                <span>20</span>
+              </vs-dropdown-item>
+              <vs-dropdown-item @click="gridApi.paginationSetPageSize(50)">
+                <span>50</span>
+              </vs-dropdown-item>
+              <vs-dropdown-item @click="gridApi.paginationSetPageSize(100)">
+                <span>100</span>
+              </vs-dropdown-item>
+              <vs-dropdown-item @click="gridApi.paginationSetPageSize(150)">
+                <span>150</span>
+              </vs-dropdown-item>
+            </vs-dropdown-menu>
+          </vs-dropdown>
+        </div>
       <vs-pagination
         :total="totalPages"
         :max="maxPageNumbers"
