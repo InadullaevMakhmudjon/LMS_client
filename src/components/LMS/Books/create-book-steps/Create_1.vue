@@ -123,7 +123,6 @@
       <p class="mt-4 text-small">Book Author</p>
       <v-select
         multiple
-        placeholder="choose..."
         v-model="selectedAuthors"
         taggable
         push-tags

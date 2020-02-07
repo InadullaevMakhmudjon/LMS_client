@@ -52,7 +52,10 @@
                       Author Name
                     </vs-th>
                     <vs-th sort-key="id">
-                      Edit
+                      Published Date
+                    </vs-th>
+                      <vs-th sort-key="id">
+                      Modified Date
                     </vs-th>
                     <vs-th sort-key="id">
                       Delete
@@ -73,11 +76,10 @@
                       </vs-td>
 
                       <vs-td :data="tr.id">
-                        {{ tr.id }}
-
-                        <template slot="edit">
-                          <vs-input-number v-model="tr.id" />
-                        </template>
+                        {{ new Date().getDate()-1 }} Feb, {{new Date().getFullYear()}}
+                      </vs-td>
+                       <vs-td :data="tr.id">
+                        {{ new Date().getDate() }} Feb, {{new Date().getFullYear()}}
                       </vs-td>
                       <vs-td :data="tr.id">
                         <vs-button

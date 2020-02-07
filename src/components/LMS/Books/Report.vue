@@ -24,7 +24,7 @@
             @input="updateSearchQuery"
             placeholder="Search..."
           />
-          <vs-button>SEARCH</vs-button>
+         <vs-button  type="border" size="medium" icon="search">Search</vs-button>
         </vs-col>
         <vs-col
           vs-type="flex"
