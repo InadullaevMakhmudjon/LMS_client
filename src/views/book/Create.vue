@@ -74,10 +74,10 @@ export default {
         title: "",
         typeId: 0,
         authors:[],
-        ISBNcode: "",
+        ISBNCode: "",
         courseYear: 0,
         subjectId: 0,
-        isborrowable: false,
+        isBorrowable: false,
         duration: 0,
         categoryId: 0,
         publishedYear: 0,
@@ -108,7 +108,7 @@ export default {
       Books.uploadImage(this.bookObj.imageFile)
       .then(({ imageUrl }) => {
         
-          this.bookObj.isborrowable = this.bookObj.isborrowable ? 1 : 0;
+          this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
           this.bookObj.image = imageUrl;
           Books.create(this.bookObj)
           .then(() => {
