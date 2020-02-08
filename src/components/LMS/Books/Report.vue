@@ -21,7 +21,7 @@
           <vs-input
             class="mb-4 md:mb-0 mr-4 w-full"
             v-model="searchQuery"
-            @input="updateSearchQuery"
+            @input="itemInSearch"
             placeholder="Search..."
           />
          <vs-button  type="border" size="medium" icon="search">Search</vs-button>
@@ -119,6 +119,11 @@ export default {
   },
   data() {
     return {
+    selectedLanguage: "",
+    selectedCategory: "",
+    selectedSubject: "",
+    selectedBookType: "",
+    itemInSearch: "",
       searchQuery: "",
       gridOptions: {},
       maxPageNumbers: 7,
@@ -129,6 +134,7 @@ export default {
         resizable: true,
         suppressMenu: true
       },
+      subjects:[],
       columnDefs: [
         {
           headerName: "Full name",
