@@ -1,105 +1,54 @@
-<!-- =========================================================================================
-    File Name: AgGridTable.vue
-    Description: Ag Grid table
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-    Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
   <div id="ag-grid-demo">
-    <vx-card>
-      <!-- TABLE ACTION ROW -->
-      <vs-row vs-justify="center" class="justify-between">
-        <div class=" flex-wrap vx-col md:w-1/7 w-1/8 mt-10 pa-3">
-          <vs-button class="" color="primary" dark>Create Book</vs-button>
-        </div>
-
-        <div
-          v-for="i in 5"
-          :key="i"
-          class="vx-col md:w-1/6 xs:w-1/4 w-full mt-5 mb-5"
-        >
-          <vs-select class="w-full select-large" label="City">
-            <vs-select-item
-              :key="index"
-              :value="item.value"
-              :text="item.text"
-              v-for="(item, index) in year"
-              class="w-full"
-            />
-          </vs-select>
-        </div>
-      </vs-row>
-
-      <div class="flex flex-wrap justify-between items-center">
-        <!-- ITEMS PER PAGE -->
-        <div class="mb-4 md:mb-0 mr-4 ag-grid-table-actions-left">
-          <vs-dropdown vs-trigger-click class="cursor-pointer">
-            <div
-              class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium"
-            >
-              <span class="mr-2"
-                >{{
-                  currentPage * paginationPageSize - (paginationPageSize - 1)
-                }}
-                -
-                {{
-                  contacts.length - currentPage * paginationPageSize > 0
-                    ? currentPage * paginationPageSize
-                    : contacts.length
-                }}
-                of {{ contacts.length }}</span
-              >
-              <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
-            </div>
-            <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
-            <vs-dropdown-menu>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(20)">
-                <span>20</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(50)">
-                <span>50</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(100)">
-                <span>100</span>
-              </vs-dropdown-item>
-              <vs-dropdown-item @click="gridApi.paginationSetPageSize(150)">
-                <span>150</span>
-              </vs-dropdown-item>
-            </vs-dropdown-menu>
-          </vs-dropdown>
-        </div>
-
-        <!-- TABLE ACTION COL-2: SEARCH & EXPORT AS CSV -->
-        <div
-          class="flex flex-wrap items-center justify-between ag-grid-table-actions-right"
-        >
+    <vx-card title="Report">
+    <vs-row
+  vs-align="center"
+  vs-type="flex" vs-justify="space-around" vs-w="12">
+  <vs-col  v-for="(col,index) in 6"  :key="index" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+      <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
+            <p>Subject</p>
+            <v-select
+              v-model="selectedSubject"
+              class="w-full select-large"
+              label="text"
+              :options="subjects"
+            ></v-select>
+          </div>
+  </vs-col>
+</vs-row>
+      <vs-row vs-type="flex" >
+        <vs-col vs-type="flex" vs-justify="center" class="justify-between" vs-align="center" vs-w="6">
           <vs-input
-            class="mb-4 md:mb-0 mr-4 w-1/2"
+            class="mb-4 md:mb-0 mr-4 w-full"
             v-model="searchQuery"
-            @input="updateSearchQuery"
+            @input="itemInSearch"
             placeholder="Search..."
           />
-          <vs-button
-            class="mb-4 md:mb-0 w-1/4 text-center"
-            @click="gridApi.exportDataAsCsv()"
-            v-text="'CSV'"
-          ></vs-button>
+         <vs-button  type="border" size="medium" icon="search">Search</vs-button>
+        </vs-col>
+        <vs-col
+          vs-type="flex"
+          vs-justify="flex-end"
+          class="space-around"
+          vs-align="center"
+          vs-w="6"
+        >
+          <vs-button color="primary" type="flat" icon="vertical_align_bottom"
+            >Excel</vs-button
+          >
           <vs-button
             type="border"
             icon="print"
             radius
-            class="w-1/3"
+            class="w-full ml-2"
             size="large"
             @click="gridApi.exportDataAsCsv()"
           ></vs-button>
-        </div>
-      </div>
+        </vs-col>
+      </vs-row>
       <ag-grid-vue
         :gridOptions="gridOptions"
-        class="ag-theme-material w-100 my-4 ag-grid-table"
+        class="ag-theme-material w-120 my-4 ag-grid-table"
         :columnDefs="columnDefs"
         :defaultColDef="defaultColDef"
         :rowData="contacts"
@@ -112,11 +61,46 @@
         :suppressPaginationPanel="true"
       >
       </ag-grid-vue>
-      <vs-pagination
-        :total="totalPages"
-        :max="maxPageNumbers"
-        v-model="currentPage"
-      />
+
+      <div class=" flex justify-between mt-3">
+        <vs-dropdown vs-trigger-click class="cursor-pointer">
+          <div
+            class="p-4 border border-solid d-theme-border-grey-light rounded-full d-theme-dark-bg cursor-pointer flex items-center justify-between font-medium"
+          >
+            <span class="mr-2"
+              >{{ currentPage * paginationPageSize - (paginationPageSize - 1) }}
+              -
+              {{
+                contacts.length - currentPage * paginationPageSize > 0
+                  ? currentPage * paginationPageSize
+                  : contacts.length
+              }}
+              of {{ contacts.length }}</span
+            >
+            <feather-icon icon="ChevronDownIcon" svgClasses="h-4 w-4" />
+          </div>
+          <!-- <vs-button class="btn-drop" type="line" color="primary" icon-pack="feather" icon="icon-chevron-down"></vs-button> -->
+          <vs-dropdown-menu>
+            <vs-dropdown-item @click="gridApi.paginationSetPageSize(20)">
+              <span>20</span>
+            </vs-dropdown-item>
+            <vs-dropdown-item @click="gridApi.paginationSetPageSize(50)">
+              <span>50</span>
+            </vs-dropdown-item>
+            <vs-dropdown-item @click="gridApi.paginationSetPageSize(100)">
+              <span>100</span>
+            </vs-dropdown-item>
+            <vs-dropdown-item @click="gridApi.paginationSetPageSize(150)">
+              <span>150</span>
+            </vs-dropdown-item>
+          </vs-dropdown-menu>
+        </vs-dropdown>
+        <vs-pagination
+          :total="totalPages"
+          :max="maxPageNumbers"
+          v-model="currentPage"
+        />
+      </div>
       <!-- <VuePerfectScrollbar ref="agGridTablePs" class="scroll-area" :settings="psSettings" />  -->
     </vx-card>
   </div>
@@ -128,7 +112,6 @@ import contacts from "./data.json";
 // import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 
 import "@/assets/scss/vuesax/extraComponents/agGridStyleOverride.scss";
-
 export default {
   components: {
     AgGridVue
@@ -136,6 +119,11 @@ export default {
   },
   data() {
     return {
+    selectedLanguage: "",
+    selectedCategory: "",
+    selectedSubject: "",
+    selectedBookType: "",
+    itemInSearch: "",
       searchQuery: "",
       gridOptions: {},
       maxPageNumbers: 7,
@@ -146,9 +134,10 @@ export default {
         resizable: true,
         suppressMenu: true
       },
+      subjects:[],
       columnDefs: [
         {
-          headerName: "First Name",
+          headerName: "Full name",
           field: "firstname",
           width: 175,
           filter: true,
@@ -157,32 +146,32 @@ export default {
           headerCheckboxSelection: true
         },
         {
-          headerName: "Last Name",
+          headerName: "Course",
           field: "lastname",
           filter: true,
           width: 175
         },
         {
-          headerName: "Email",
+          headerName: "Student ID",
           field: "email",
           filter: true,
           width: 250,
           pinned: "left"
         },
         {
-          headerName: "Company",
+          headerName: "Issued Date",
           field: "company",
           filter: true,
           width: 250
         },
         {
-          headerName: "City",
+          headerName: "Due Date",
           field: "city",
           filter: true,
           width: 150
         },
         {
-          headerName: "Country",
+          headerName: "Book Code",
           field: "country",
           filter: true,
           width: 150

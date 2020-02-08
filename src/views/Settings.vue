@@ -5,7 +5,7 @@
         <vs-tabs color="rgb(32, 201, 192)">
           <vs-tab label="Book config">
             <!-- left -->
-            <vs-tabs  color="primary">
+            <vs-tabs color="primary">
               <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
                 <vx-input-group class="mb-base w-full">
                   <vs-input
@@ -27,22 +27,73 @@
                   </template>
                 </vx-input-group>
 
-                <vs-list>
+                <!-- <vs-list>
                   <vs-list-item
                     v-for="itemChild in item.lists"
                     :key="itemChild.id"
                     :title="itemChild.name">
-                    <!-- <vs-button
+                <vs-button
                       radius
                       color="danger"
                       size="size"
                       @click="deleteItem(item.id, itemChild.id)"
                       type="border"
                       icon="delete_outline"
-                    ></vs-button> -->
+                    ></vs-button> 
                      <vs-switch color="success" v-model="switch2" icon-pack="feather" vs-icon="icon-check" />
                   </vs-list-item>
-                </vs-list>
+                </vs-list> -->
+                <vs-table :data="item.lists" pagination max-items="5" search>
+                  <template slot="thead">
+                    <vs-th sort-key="id">
+                      Order
+                    </vs-th>
+                    <vs-th sort-key="name">
+                      Author Name
+                    </vs-th>
+                    <vs-th sort-key="id">
+                      Published Date
+                    </vs-th>
+                      <vs-th sort-key="id">
+                      Modified Date
+                    </vs-th>
+                    <vs-th sort-key="id">
+                      Delete
+                    </vs-th>
+                  </template>
+
+                  <template slot-scope="{ data }">
+                    <vs-tr :key="indextr" v-for="(tr, indextr) in data">
+                      <vs-td>
+                        {{ indextr + 1 }}
+                      </vs-td>
+                      <vs-td :data="tr.name">
+                        {{ tr.name }}
+
+                        <template slot="edit">
+                          <vs-input v-model="tr.name" class="inputx" />
+                        </template>
+                      </vs-td>
+
+                      <vs-td :data="tr.id">
+                        {{ new Date().getDate()-1 }} Feb, {{new Date().getFullYear()}}
+                      </vs-td>
+                       <vs-td :data="tr.id">
+                        {{ new Date().getDate() }} Feb, {{new Date().getFullYear()}}
+                      </vs-td>
+                      <vs-td :data="tr.id">
+                        <vs-button
+                          radius
+                          color="danger"
+                          size="size"
+                          @click="deleteItem(item.id, tr.id)"
+                          type="border"
+                          icon="delete_outline"
+                        ></vs-button>
+                      </vs-td>
+                    </vs-tr>
+                  </template>
+                </vs-table>
               </vs-tab>
             </vs-tabs>
           </vs-tab>
@@ -55,16 +106,16 @@
   </div>
 </template>
 <script>
-import Categories from '@/services/Categories';
-import Subjects from '@/services/Subjects';
-import Authors from '@/services/Authors';
+import Categories from "@/services/Categories";
+import Subjects from "@/services/Subjects";
+import Authors from "@/services/Authors";
 
 export default {
   data: () => ({
     types: [
       { id: 1, text: "Add category", value: "", lists: [] },
-      { id: 2, text: "Add subject", value: "",lists: [] },
-      { id: 3, text: "Add author", value: "", lists: [] },
+      { id: 2, text: "Add subject", value: "", lists: [] },
+      { id: 3, text: "Add author", value: "", lists: [] }
       /* { text: "Add shelf", value: "", lists: [] } */
     ]
   }),
@@ -73,7 +124,7 @@ export default {
       Promise.all([
         Categories.getAll(),
         Authors.getAll(),
-        Subjects.getAll(),
+        Subjects.getAll()
       ]).then(result => {
         const [categories, authors, subjects] = result;
         this.types[0].lists = categories;
@@ -81,46 +132,69 @@ export default {
         this.types[2].lists = authors;
       });
     },
+    notify(val, type) {
+      this.$vs.notify({
+        title: val,
+        text: `${type} has been created successfully`,
+        color: "success",
+        icon: "verified_user"
+      });
+    },
     addlist(item) {
-      switch(item.id) {
+      switch (item.id) {
         case 1:
           Categories.create(item.value)
-            .then(() => this.getAll())
+            .then(() => {
+              this.getAll();
+              this.notify(item.value, "Category");
+            })
             .catch(err => console.error(err))
-            .finally(() => { item.value = "" });
+            .finally(() => {
+              item.value = "";
+            });
           return;
         case 2:
           Subjects.create(item.value)
-            .then(() => this.getAll())
+            .then(() => {
+              this.getAll();
+              this.notify(item.value, "Subject");
+            })
             .catch(err => console.error(err))
-            .finally(() => { item.value = "" });
+            .finally(() => {
+              item.value = "";
+            });
           return;
         case 3:
           Authors.create(item.value)
-          .then(() => this.getAll())
-          .catch(err => console.error(err))
-          .finally(() => { item.value = "" });
+            .then(() => {
+              this.getAll();
+              this.notify(item.value, "Author");
+            })
+            .catch(err => console.error(err))
+            .finally(() => {
+              item.value = "";
+            });
           return;
         default:
           return;
       }
     },
     deleteItem(id, itemId) {
-      switch(id) {
+      switch (id) {
         case 1:
           Categories.delete(itemId)
-          .then(() => this.getAll())
-          .catch(error => console.error(error))
+            .then(() => this.getAll())
+            .catch(error => console.error(error));
           return;
         case 2:
           Subjects.delete(itemId)
-          .then(() => this.getAll())
-          .catch(error => console.error(error))
+            .then(() => this.getAll())
+            .catch(error => console.error(error));
           return;
         case 3:
           Authors.delete(itemId)
-          .then(() => this.getAll())
-          .catch(error => console.error(error))
+            .then(() => this.getAll())
+            .catch(error => console.error(error));
           return;
         default:
           return;
@@ -129,6 +203,6 @@ export default {
   },
   mounted() {
     this.getAll();
-  },
+  }
 };
 </script>
