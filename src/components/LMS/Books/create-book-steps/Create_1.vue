@@ -5,12 +5,12 @@
       <!--check Isbn-->
       <p>Check ISBN: (example: 2-266-11156-6)</p>
       <vx-input-group class="">
-        <vs-input v-model="bookObj.ISBNcode" />
+        <vs-input v-model="bookObj.ISBNCode" />
 
         <template slot="append">
           <div class="append-text btn-addon">
             <vs-button
-              @click="checkISBN(bookObj.ISBNcode)"
+              @click="checkISBN(bookObj.ISBNCode)"
               :color="isValidIsbn ? '#2ca3f2' : 'success'"
               >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
             >
@@ -29,7 +29,7 @@
       <vs-input
         disabled
         label="Book ISBN"
-        v-model="bookObj.ISBNcode"
+        v-model="bookObj.ISBNCode"
         class="w-full mt-5"
       />
       <!--book category-->
@@ -152,11 +152,11 @@
         <vs-checkbox
           :disabled="isValidIsbn"
           class=""
-          v-model="bookObj.isborrowable"
+          v-model="bookObj.isBorrowable"
           >Is borrowable</vs-checkbox
         >
         <vs-input-number
-          v-if="bookObj.isborrowable"
+          v-if="bookObj.isBorrowable"
           label="Duration:"
           class="flex-1 w-1/6"
           v-model="bookObj.duration"
@@ -301,7 +301,6 @@ export default {
     },
     selectedAuthors(val){
  this.bookObj.authors = val
- console.log(this.bookObj.authors)
     }
   },
   components: {

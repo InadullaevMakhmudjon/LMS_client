@@ -5,7 +5,7 @@
         <vs-button color="primary" class="mr-4" type="filled"
           >Add book item</vs-button
         >
-        <vs-button color="primary" type="filled">Edit</vs-button>
+        <vs-button color="primary" type="filled"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
       </vs-row>
 
       <vs-row class="justify-between">
