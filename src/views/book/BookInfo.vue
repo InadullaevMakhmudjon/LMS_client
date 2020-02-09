@@ -2,10 +2,13 @@
   <div>
     <vx-card>
       <vs-row>
-        <vs-button color="primary" class="mr-4" type="filled"
-          >Add book item</vs-button
+          <vs-button type="flat"  size="small" icon="keyboard_arrow_left" class="mr-2" @click="backHistory">
+            back
+        </vs-button>
+        <vs-button color="primary" class="mr-4" type="filled" icon="add"
+          >Add</vs-button
         >
-        <vs-button color="primary" type="filled"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
+        <vs-button color="primary" type="filled"  icon="edit"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
       </vs-row>
 
       <vs-row class="justify-between">
@@ -209,6 +212,10 @@ export default {
     };
   },
   methods: {
+    backHistory(){
+ window.history.back();
+    },
+
     doArchive(val) {
       alert("dsfsa");
       console.log(val);

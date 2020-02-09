@@ -1,11 +1,7 @@
 <template>
-  <div>
+  <div id="div-with-loading" class="vs-con-loading__container">
     <vs-row>
-      <vx-card
-      class="no-shadow"
-        collapse-action
-        title="Filtering books"
-      >
+      <vx-card class="no-shadow" collapse-action title="Filtering books">
         <vs-col
           vs-offset="1"
           vs-type="flex"
@@ -37,7 +33,7 @@
               v-model="filterList.typeId"
               class="w-full select-large"
               label="text"
-               :reduce="({ value }) => value"
+              :reduce="({ value }) => value"
               :options="bookTypes"
             ></v-select>
           </div>
@@ -48,7 +44,7 @@
               v-model="filterList.subjectId"
               class="w-full select-large"
               label="text"
-               :reduce="({ value }) => value"
+              :reduce="({ value }) => value"
               :options="subjects"
             ></v-select>
           </div>
@@ -59,7 +55,7 @@
               v-model="filterList.categoryId"
               class="w-full select-large"
               label="text"
-               :reduce="({ value }) => value"
+              :reduce="({ value }) => value"
               :options="category"
             ></v-select>
           </div>
@@ -69,7 +65,7 @@
               v-model="filterList.languageId"
               class="w-full select-large"
               label="text"
-               :reduce="({ value }) => value"
+              :reduce="({ value }) => value"
               :options="language"
             ></v-select>
           </div>
@@ -82,17 +78,19 @@
             vs-align="center"
             vs-w="10"
           >
-            <vs-input
-              class="mb-4 md:mb-0 mr-4  flex-1"
-              v-model="filterList.title"
-              placeholder="Search..."
-            />
-            <vs-button
-            @click="getResult"
-              color="#2ca3f2"
-              class="flex"
-              v-text="'Search'"
-            ></vs-button>
+              <vs-input
+                class="mb-4 md:mb-0 mr-4  flex-1"
+                v-model="filterList.title"
+                placeholder="Search..."
+                v-on:keyup.enter="getResult"
+              />
+              <vs-button
+                @click="getResult"
+                color="#2ca3f2"
+                class="flex"
+                v-text="'Search'"
+              ></vs-button>
+       
           </vs-col>
         </vs-row>
       </vx-card>
@@ -108,8 +106,8 @@
           <div class="book-card">
             <div class="book-card__cover">
               <div class="book-card__book">
-                <div class="book-card__book-front">
-                  <img class="book-card__img" :src="book.image" />
+                <div class="book-card__book-front "  slot="media">
+                  <img class="book-card__img" :src="book.image" :alt="book.image" />
                 </div>
                 <div class="book-card__book-back"></div>
                 <div class="book-card__book-side"></div>
@@ -139,7 +137,11 @@
       </vs-col>
     </vs-row>
     <vs-row class="mt-4 justify-end">
-      <vs-pagination :total="page" v-model="currentx"></vs-pagination>
+      <vs-pagination
+        v-if="booksQuantity > 5"
+        :total="page"
+        v-model="currentx"
+      ></vs-pagination>
     </vs-row>
   </div>
 </template>
@@ -147,19 +149,22 @@
 <script>
 import Books from "@/services/Books";
 import vSelect from "vue-select";
+import { Validator } from "vee-validate";
+
 export default {
   data: () => ({
     selectedCourse: "",
     currentx: 1,
     page: 1,
     booksQuantity: 0,
+    required: "THE FIELD IS REQUIRED",
     filterList: {
-        title:  null,
-        courseYear: null,
-        languageId:  null,
-        categoryId:  null,
-        subjectId:  null,
-        typeId:  null,
+      title: "",
+      courseYear: "",
+      languageId: "",
+      categoryId: "",
+      subjectId: "",
+      typeId: ""
     },
 
     year: [
@@ -229,24 +234,29 @@ export default {
   },
   methods: {
     getResult() {
-     const url = Object.keys(this.filterList).map(key => `${key}=${this.filterList[key]}`).join('&');
-     console.log(url)
-     console.log(encodeURI(url))
-     // title=dasdas&coursda=3&sda
-   // let url = `title=${this.filterList.searchQuery}&courseYear=${this.filterList.selectedSubject.value}&languageId=${this.filterList.selectedLanguage.value}`
-    // url = encodeURI(url)
-    // console.log(url)
-//     for (const property in this.filterList) {
-//   console.log(`${property}: ${this.filterList[property].text}`);
-// }
-      // Books.getSearchedBooks(url, 12).then( ({ items: books, length}) => {
-      //   this.books = result;
-      //   this.booksQuantity = length;
-      //   this.page = Math.ceil(length / 12);
-      //   this.books.forEach(book => {
-      //     book.authorName = book.authors.map(({ name }) => name).join(", ");
-      //   });
-      // });
+      // this.$validator.validateAll().then(result => {
+      //   if (result) {
+          this.loading(true);
+          const url = Object.keys(this.filterList)
+            .map(key => `${key}=${this.filterList[key]}`)
+            .join("&");
+            console.log(url)
+          Books.getSearchedBooks(url).then(({ items: books, length }) => {
+            this.books = books;
+            this.booksQuantity = length;
+            this.page = Math.ceil(length / 12);
+            this.books.forEach(book => {
+              book.authorName = book.authors.map(({ name }) => name).join(", ");
+            })
+               this.loading(false);
+              }).catch( error => {
+              console.log(error)
+            this.loading(false);
+        //   });
+        // } else {
+        //    alert('ERROR')
+        // }
+      });
     },
     bookInfo(id) {
       this.$router.push("/books/" + id);
@@ -263,6 +273,17 @@ export default {
     },
     funct(parm) {
       // console.log(parm);
+    },
+    //ui loadings
+    loading(con) {
+      if (con == true) {
+        this.$vs.loading({
+          container: "#div-with-loading",
+          scale: 0.9
+        });
+      } else if (con == false) {
+        this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+      }
     }
   },
   mounted() {
