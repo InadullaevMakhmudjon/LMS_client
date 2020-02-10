@@ -25,10 +25,10 @@
         </div>      
 
       <vs-spacer></vs-spacer>
-      <h5 class="">english</h5> 
+      <h5 class="mr-3">english</h5> 
 
       <!-- NOTIFICATIONS -->
-      <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
+      <!-- <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
         <feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadNotifications.length"></feather-icon>
         <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
@@ -71,7 +71,7 @@
                         <span>View All Notifications</span>
                     </div>
         </vs-dropdown-menu>
-      </vs-dropdown>
+      </vs-dropdown> -->
 
       <!-- USER META -->
       <div class="the-navbar__user-meta flex items-center">
