@@ -19,12 +19,12 @@
             :title="item.title"
             icon="mood"
           >
-            <template slot="actions">
+            <!-- <template slot="actions">
               <feather-icon
                 icon="DownloadIcon"
                 svgClasses="w-6 h-6 text-grey"
               ></feather-icon>
-            </template>
+            </template> -->
 
             <div class="mt-10 mb-10 text-center p-1">
               <h2 class="text-5xl primary " v-text="item.totalQuantity"></h2>
