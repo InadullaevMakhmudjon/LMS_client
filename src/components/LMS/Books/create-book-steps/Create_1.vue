@@ -5,11 +5,12 @@
       <!--check Isbn-->
       <p>Check ISBN: (example: 2-266-11156-6)</p>
       <vx-input-group class="">
-        <vs-input v-model="bookObj.ISBNCode" />
+        <vs-input  :disabled="point" v-model="bookObj.ISBNCode" />
 
         <template slot="append">
           <div class="append-text btn-addon">
             <vs-button
+              :disabled="point"
               @click="checkISBN(bookObj.ISBNCode)"
               :color="isValidIsbn ? '#2ca3f2' : 'success'"
               >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
@@ -105,21 +106,6 @@
           class="w-full"
         />
       </vs-select>
-      <!--book author-->
-      <!-- <vs-select
-        :disabled="isValidIsbn"
-        v-model="bookObj.authorId"
-        class="w-full select-large mt-4"
-        label="Book Author"
-      >
-        <vs-select-item
-          v-for="item in bookAuthorList"
-          :key="item.id"
-          :value="item.id"
-          :text="item.name"
-          class="w-full"
-        />
-      </vs-select> -->
       <p class="mt-4 text-small">Book Author</p>
       <v-select
         multiple
@@ -148,7 +134,7 @@
         />
       </vs-select>
       <!--book is borrawable and duration in days-->
-      <vs-row class="mt-5" vs-align="center" vs-justify="between">
+      <!-- <vs-row class="mt-5" vs-align="center" vs-justify="between">
         <vs-checkbox
           :disabled="isValidIsbn"
           class=""
@@ -161,7 +147,7 @@
           class="flex-1 w-1/6"
           v-model="bookObj.duration"
         />
-      </vs-row>
+      </vs-row> -->
       <!--appended courses for the book-->
       <vs-select
         :disabled="isValidIsbn"
@@ -211,7 +197,7 @@
         accept="image/*"
         @change="onfilepicked"
       />
-      <template v-if="imageUrl">
+      <template v-if="imageUrl ">
         <img
           class="zooming"
           height="300"
@@ -220,7 +206,15 @@
           :src="imageUrl"
         />
       </template>
-    </div>
+       <template v-if="point">
+        <img
+          class="zooming"
+          height="300"
+          v-if="!popupActivo"
+          @click="popupActivo = true"
+          :src="this.bookObj.image"
+        />
+      </template>
     <vs-popup
       background-color="rgba(0, 0, 0, 0.8)"
       :title="bookObj.title + ' ( Cover )'"
@@ -228,6 +222,7 @@
     >
       <img class="center" :src="imageUrl" />
     </vs-popup>
+  </div>
   </div>
 </template>
 <script>
@@ -257,6 +252,7 @@ export default {
         { code: "CA", country: "Canada" },
         { code: "USA", country: "America" }
       ],
+      point: false,
       publishedYear: 2,
       selectedAuthors:[],
       popupActivo: false,
@@ -266,24 +262,12 @@ export default {
       isUploadable: true,
       isValidIsbn: true,
       bookResponsiblePerson: "",
-      resPersonList: [{ text: "Aliev Azam", value: "aliev-azam" }],
+      resPersonList: [],
       bookTypeList: [],
       bookAuthorList: [],
       bookSubjectList: [],
       courseList: [],
-      subjects: [
-        { text: "Comxorithm", value: "1" },
-        { text: "System Analysis", value: "2" },
-        { text: "Calculus", value: "3" },
-        { text: "Physics", value: "4" },
-        { text: "Academic English 1", value: "5" },
-        { text: "Academic English 2", value: "6" },
-        { text: "Korean 1", value: "7" },
-        { text: "Korean 2", value: "8" },
-        { text: "Data Stucture", value: "9" },
-        { text: "Discrete Mathematics", value: "10" },
-        { text: "Signal and Systems", value: "11" }
-      ],
+      subjects: [],
       categoryList: [],
       languageList: []
     };
@@ -300,7 +284,7 @@ export default {
       this.bookObj.publishedYear = value.getFullYear();
     },
     selectedAuthors(val){
- this.bookObj.authors = val
+        this.bookObj.authors = val
     }
   },
   components: {
@@ -310,6 +294,13 @@ export default {
   },
   methods: {
     getAll() {
+      console.log(this.$route.name)
+       if(this.$route.name=='update_book'){
+         this.isValidIsbn = false
+         this.image = this.bookObj.image
+         this.point = true
+         this.selectedAuthors = this.bookObj.authors
+       }
       this.loading = true;
       Promise.all([
         Authors.getAll(),
@@ -342,6 +333,7 @@ export default {
         .finally(() => (this.loading = false));
     },
     onfilepicked(event) {
+      this.point = false
       const files = event.target.files;
       let filename = files[0].name;
       if (filename.lastIndexOf(".") <= 0) {
@@ -354,6 +346,7 @@ export default {
       fileReader.readAsDataURL(files[0]);
       this.image = files[0].name;
       this.bookObj.imageFile.append("image", files[0]);
+      console.log(this.bookObj)
     },
     onPickFile() {
       this.$refs.fileInput.click();
@@ -369,7 +362,8 @@ export default {
       Books.checkISBN(isbn)
         .then(() => (this.isValidIsbn = false))
         .catch(() => (this.isValidIsbn = true));
-    }
+    },
+    
   },
   mounted() {
     this.getAll();

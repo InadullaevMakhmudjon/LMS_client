@@ -69,17 +69,17 @@
                       </vs-td>
                       <vs-td :data="tr.name">
                         {{ tr.name }}
-
+<!-- 
                         <template slot="edit">
                           <vs-input v-model="tr.name" class="inputx" />
-                        </template>
+                        </template> -->
                       </vs-td>
 
                       <vs-td :data="tr.id">
-                        {{ new Date().getDate()-1 }} Feb, {{new Date().getFullYear()}}
+                        {{tr.createdAt.split('T')[0]}}
                       </vs-td>
                        <vs-td :data="tr.id">
-                        {{ new Date().getDate() }} Feb, {{new Date().getFullYear()}}
+                        {{tr.updatedAt.split('T')[0]}}
                       </vs-td>
                       <vs-td :data="tr.id">
                         <vs-button
