@@ -69,10 +69,10 @@
                       </vs-td>
                       <vs-td :data="tr.name">
                         {{ tr.name }}
-
+<!-- 
                         <template slot="edit">
                           <vs-input v-model="tr.name" class="inputx" />
-                        </template>
+                        </template> -->
                       </vs-td>
 
                       <vs-td :data="tr.id">

@@ -5,11 +5,12 @@
       <!--check Isbn-->
       <p>Check ISBN: (example: 2-266-11156-6)</p>
       <vx-input-group class="">
-        <vs-input v-model="bookObj.ISBNCode" />
+        <vs-input  :disabled="point" v-model="bookObj.ISBNCode" />
 
         <template slot="append">
           <div class="append-text btn-addon">
             <vs-button
+              :disabled="point"
               @click="checkISBN(bookObj.ISBNCode)"
               :color="isValidIsbn ? '#2ca3f2' : 'success'"
               >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
@@ -133,7 +134,7 @@
         />
       </vs-select>
       <!--book is borrawable and duration in days-->
-      <vs-row class="mt-5" vs-align="center" vs-justify="between">
+      <!-- <vs-row class="mt-5" vs-align="center" vs-justify="between">
         <vs-checkbox
           :disabled="isValidIsbn"
           class=""
@@ -146,7 +147,7 @@
           class="flex-1 w-1/6"
           v-model="bookObj.duration"
         />
-      </vs-row>
+      </vs-row> -->
       <!--appended courses for the book-->
       <vs-select
         :disabled="isValidIsbn"
@@ -283,7 +284,7 @@ export default {
       this.bookObj.publishedYear = value.getFullYear();
     },
     selectedAuthors(val){
- this.bookObj.authors = val
+        this.bookObj.authors = val
     }
   },
   components: {
@@ -298,6 +299,7 @@ export default {
          this.isValidIsbn = false
          this.image = this.bookObj.image
          this.point = true
+         this.selectedAuthors = this.bookObj.authors
        }
       this.loading = true;
       Promise.all([

@@ -1,11 +1,13 @@
 <template>
   <div>
+    <vx-card>
     <update-book :bookObj="bookInfo" />
     <vs-row>
       <vs-col vs-type="flex" vs-justify="flex-end" vs-align="center" vs-w="12">
         <vs-button @click="submitData" imageFile>Save changes</vs-button>
       </vs-col>
     </vs-row>
+    </vx-card>
   </div>
 </template>
 
