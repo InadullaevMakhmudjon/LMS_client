@@ -63,6 +63,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Books', url: '/books' },
+                            { title: 'Books', url: '/books' },
                             { title: 'book item', active: true },
                         ],
                         parent: 'books',
@@ -100,6 +101,22 @@ const router = new Router({
                         ],
                         parent: 'books',
                         pageTitle: 'Create Book'
+                    }
+                },
+                {
+                    path: '/book/update-book/:id',
+                    props: true,
+                    name: 'update_book',
+                    component: () =>
+                        import ('./components/LMS/Books/update-book-steps/UpdateBook.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Update', url: '/' },
+                            { title: 'All books', url: '/books' },
+                            { title: 'Create New Book', active: true },
+                        ],
+                        parent: 'books',
+                        pageTitle: 'Update Book'
                     }
                 },
 

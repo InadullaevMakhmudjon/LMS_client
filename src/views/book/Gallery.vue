@@ -1,11 +1,7 @@
 <template>
-  <div>
+  <div id="div-with-loading" class="vs-con-loading__container">
     <vs-row>
-      <vx-card
-      class="no-shadow"
-        collapse-action
-        title="Filtering books"
-      >
+      <vx-card class="no-shadow" collapse-action title="Filtering books">
         <vs-col
           vs-offset="1"
           vs-type="flex"
@@ -23,9 +19,10 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Year</p>
             <v-select
-              v-model="selectedCourse"
+              v-model="filterList.courseYear"
               class="w-full select-large"
               label="text"
+              :reduce="({ value }) => value"
               :options="year"
             ></v-select>
           </div>
@@ -33,9 +30,10 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Book Type</p>
             <v-select
-              v-model="selectedBookType"
+              v-model="filterList.typeId"
               class="w-full select-large"
               label="text"
+              :reduce="({ value }) => value"
               :options="bookTypes"
             ></v-select>
           </div>
@@ -43,9 +41,10 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Subject</p>
             <v-select
-              v-model="selectedSubject"
+              v-model="filterList.subjectId"
               class="w-full select-large"
               label="text"
+              :reduce="({ value }) => value"
               :options="subjects"
             ></v-select>
           </div>
@@ -53,18 +52,20 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Category</p>
             <v-select
-              v-model="selectedCategory"
+              v-model="filterList.categoryId"
               class="w-full select-large"
               label="text"
+              :reduce="({ value }) => value"
               :options="category"
             ></v-select>
           </div>
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Language</p>
             <v-select
-              v-model="selectedLanguage"
+              v-model="filterList.languageId"
               class="w-full select-large"
               label="text"
+              :reduce="({ value }) => value"
               :options="language"
             ></v-select>
           </div>
@@ -77,17 +78,19 @@
             vs-align="center"
             vs-w="10"
           >
-            <vs-input
-              class="mb-4 md:mb-0 mr-4  flex-1"
-              v-model="searchQuery"
-              @input="updateSearchQuery"
-              placeholder="Search..."
-            />
-            <vs-button
-              color="#2ca3f2"
-              class="flex"
-              v-text="'Search'"
-            ></vs-button>
+              <vs-input
+                class="mb-4 md:mb-0 mr-4  flex-1"
+                v-model="filterList.title"
+                placeholder="Search..."
+                v-on:keyup.enter="getResult"
+              />
+              <vs-button
+                @click="getResult"
+                color="#2ca3f2"
+                class="flex"
+                v-text="'Search'"
+              ></vs-button>
+       
           </vs-col>
         </vs-row>
       </vx-card>
@@ -98,58 +101,13 @@
     </p>
 
     <vs-row>
-      <!-- <div
-          class="vx-col w-full sm:w-1/2 lg:w-full mb-base"
-          @click="funct(book.id)"
-        >
-          <vx-card class="m-1">
-            <img
-              :src="book.image"
-              alt="content-img"
-              class="responsive"
-            />
-
-            <div class="my-6 justify-center">
-              <vs-row class="justify-between">
-                <vs-alert
-                  class="w-1/2 md:w-1/3 lg:w-1/2 xs:w-full p-0 mb-2 text-center align-center"
-                  color="success"
-                  active="true"
-                >
-                  <span class="text-1xs align-center"> (borrowable)! </span
-                  ><feather-icon icon="CheckCircleIcon" svgClasses="h-4 w-4" />
-                </vs-alert>
-
-                <vs-alert
-                  class="w-1/4 p-0 mb-2 text-center align-center"
-                  active="true"
-                  >(22 / 300)!</vs-alert
-                >
-              </vs-row>
-
-              <h3 class="mb-2">{{ book.title }}</h3>
-              <p class="text-primary">{{ `by ${book.authorName}` }}</p>
-              <p class="text-black text-2xs">{{ `ISBN: ${book.ISBNCode}` }}</p>
-            </div>
-          </vx-card>
-        </div> -->
-
-      <!-- <vx-card class="overlay-card h-100 overflow-hidden w-full">
-    <template slot="no-body">
-      <img :src="book.image" alt="user-profile-cover" class="responsive">
-      <div class="card-overlay text-white flex flex-col justify-between">
-        <h4 class="text-white mb-4">{{book.title}}</h4>
-        <p>{{`ISBN: ${book.ISBNCode}`}}</p>
-      </div>
-    </template>
-  </vx-card> -->
       <vs-col vs-justify="start" v-for="book in books" :key="book.id" vs-w="3">
         <main @click="bookInfo(book.id)">
           <div class="book-card">
             <div class="book-card__cover">
               <div class="book-card__book">
-                <div class="book-card__book-front">
-                  <img class="book-card__img" :src="book.image" />
+                <div class="book-card__book-front "  slot="media">
+                  <img class="book-card__img" :src="book.image" :alt="book.image" />
                 </div>
                 <div class="book-card__book-back"></div>
                 <div class="book-card__book-side"></div>
@@ -179,7 +137,11 @@
       </vs-col>
     </vs-row>
     <vs-row class="mt-4 justify-end">
-      <vs-pagination :total="page" v-model="currentx"></vs-pagination>
+      <vs-pagination
+        v-if="booksQuantity > 5"
+        :total="page"
+        v-model="currentx"
+      ></vs-pagination>
     </vs-row>
   </div>
 </template>
@@ -187,18 +149,23 @@
 <script>
 import Books from "@/services/Books";
 import vSelect from "vue-select";
+import { Validator } from "vee-validate";
+
 export default {
   data: () => ({
     selectedCourse: "",
     currentx: 1,
     page: 1,
     booksQuantity: 0,
-    searchQuery: "",
-    selectedLanguage: "",
-    selectedCategory: "",
-    selectedSubject: "",
-    selectedBookType: "",
-    updateSearchQuery: "",
+    required: "THE FIELD IS REQUIRED",
+    filterList: {
+      title: "",
+      courseYear: "",
+      languageId: "",
+      categoryId: "",
+      subjectId: "",
+      typeId: ""
+    },
 
     year: [
       { text: "Freshman", value: "1" },
@@ -263,10 +230,34 @@ export default {
   watch: {
     currentx(val) {
       this.getAll(val);
-      console.log(val);
     }
   },
   methods: {
+    getResult() {
+      // this.$validator.validateAll().then(result => {
+      //   if (result) {
+          this.loading(true);
+          const url = Object.keys(this.filterList)
+            .map(key => `${key}=${this.filterList[key]}`)
+            .join("&");
+            console.log(url)
+          Books.getSearchedBooks(url).then(({ items: books, length }) => {
+            this.books = books;
+            this.booksQuantity = length;
+            this.page = Math.ceil(length / 12);
+            this.books.forEach(book => {
+              book.authorName = book.authors.map(({ name }) => name).join(", ");
+            })
+               this.loading(false);
+              }).catch( error => {
+              console.log(error)
+            this.loading(false);
+        //   });
+        // } else {
+        //    alert('ERROR')
+        // }
+      });
+    },
     bookInfo(id) {
       this.$router.push("/books/" + id);
     },
@@ -282,6 +273,17 @@ export default {
     },
     funct(parm) {
       // console.log(parm);
+    },
+    //ui loadings
+    loading(con) {
+      if (con == true) {
+        this.$vs.loading({
+          container: "#div-with-loading",
+          scale: 0.9
+        });
+      } else if (con == false) {
+        this.$vs.loading.close("#div-with-loading > .con-vs-loading");
+      }
     }
   },
   mounted() {

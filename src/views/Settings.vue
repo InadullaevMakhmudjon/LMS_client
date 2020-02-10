@@ -69,25 +69,26 @@
                       </vs-td>
                       <vs-td :data="tr.name">
                         {{ tr.name }}
-
+<!-- 
                         <template slot="edit">
                           <vs-input v-model="tr.name" class="inputx" />
-                        </template>
+                        </template> -->
                       </vs-td>
 
                       <vs-td :data="tr.id">
-                        {{ new Date().getDate()-1 }} Feb, {{new Date().getFullYear()}}
+                        {{tr.createdAt.split('T')[0]}}
                       </vs-td>
                        <vs-td :data="tr.id">
-                        {{ new Date().getDate() }} Feb, {{new Date().getFullYear()}}
+                        {{tr.updatedAt.split('T')[0]}}
                       </vs-td>
                       <vs-td :data="tr.id">
                         <vs-button
+                           :disabled="tr.books.length > 0"
                           radius
                           color="danger"
                           size="size"
-                          @click="deleteItem(item.id, tr.id)"
-                          type="border"
+                          @click="deleteItem(item.id, tr.id ,tr)"
+                          type="filled"
                           icon="delete_outline"
                         ></vs-button>
                       </vs-td>
@@ -179,12 +180,14 @@ export default {
           return;
       }
     },
-    deleteItem(id, itemId) {
+    deleteItem(id, itemId, tr) {
+      console.log(tr)
       switch (id) {
         case 1:
           Categories.delete(itemId)
             .then(() => this.getAll())
-            .catch(error => console.error(error));
+            .catch(error => {
+              console.error(error)});
           return;
         case 2:
           Subjects.delete(itemId)
