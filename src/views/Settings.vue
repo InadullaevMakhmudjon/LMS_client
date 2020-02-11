@@ -83,12 +83,14 @@
                       </vs-td>
                       <vs-td :data="tr.id">
                         {{ tr.updatedAt.split("T")[0] }}
-                      </vs-td>
+                      </vs-td> 
                       <vs-td :data="tr.id">
                       <vs-button type="filled" @click="editName(tr)" color="primary" icon="edit" radius></vs-button>
                       </vs-td>
                       <vs-td :data="tr.id">
+                        <vx-tooltip :color="tr.books.length>0 ?'danger':''" position="right" :title="tr.books.length>0 ? 'Cannot be Deleted': 'Click to delete'" :text="tr.books.length>0? 'this items has already assigned to the book so that it cannot be deleted':'No book item is assigned'">
                         <vs-button
+                        
                           :disabled="tr.books.length > 0"
                           radius
                           color="danger"
@@ -97,6 +99,7 @@
                           type="filled"
                           icon="delete_outline"
                         ></vs-button>
+                        </vx-tooltip>
                       </vs-td>
                     </vs-tr>
                   </template>
@@ -116,7 +119,7 @@
            <vs-button class="w-1/3" v-model="data.id" @click="updateData(data)">Save changes</vs-button>
            </div>
         </vs-popup>
-    </vs-popup>
+ 
   </div>
 </template>
 <script>

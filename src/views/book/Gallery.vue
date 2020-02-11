@@ -92,14 +92,6 @@
               v-on:keyup.enter="getResult"
             />
            </vx-tooltip>
-            <vs-button
-            type="border"
-              @click="getResult"
-              color="primary"
-              class="flex mr-3"
-              v-text="'Search'"
-            ></vs-button>
-
             <vs-input
               :disabled="disableAllfields"
               class="mb-4 md:mb-0 mr-2  flex-1"
@@ -109,7 +101,6 @@
               v-on:keyup.enter="getResult"
             />
             <vs-button
-              :disabled="disableAllfields"
               @click="getResult"
               color="primary"
               class="flex"
