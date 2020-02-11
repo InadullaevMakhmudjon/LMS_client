@@ -1,48 +1,125 @@
-
 <template>
   <div>
-  <div class="vx-row">
-    <div class="vx-col sm:w-1/2 w-full mb-2">
-      <vs-input class="w-full" label-placeholder="First Name" v-model="input25" />
+    <vx-card title="Filter">
+        <vs-col  vs-type="flex"  vs-justify="center" vs-align="center" vs-w="2">
+    <div class="w-full">
+    <vs-button to="/user-create">New user</vs-button>
     </div>
-    <div class="vx-col sm:w-1/2 w-full mb-2">
-      <vs-input class="w-full" label-placeholder="Last Name" v-model="input26" />
+  </vs-col>
+    <vs-row vs-justify="center">
+    
+  <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+    <div class="w-full">
+    <span>Role</span>
+    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
     </div>
+  </vs-col>
+   <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+    <div class="w-full">
+    <span>Status</span>
+    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
+    </div>
+  </vs-col>
+   <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+    <div class="w-full">
+    <span>Somefilter</span>
+    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
+    </div>
+  </vs-col>
+   <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+    <div class="w-full">
+    <span>Role</span>
+    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
+    </div>
+  </vs-col>
+</vs-row>
+</vx-card>
+<vx-card class="mt-5">
+<vs-row>
+  <vs-col>
+    <vs-table multiple v-model="selected" pagination max-items="3" search :data="users">
+
+    <template slot="thead">
+      <vs-th sort-key="username">ID</vs-th>
+      <vs-th sort-key="email">Name</vs-th>
+      <vs-th sort-key="website">address</vs-th>
+      <vs-th sort-key="id">Role</vs-th>
+        <vs-th sort-key="id">Status</vs-th>
+         <vs-th sort-key="id">Action
+         </vs-th>
+    </template>
+
+    <template slot-scope="{data}">
+      <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+
+        <vs-td :data="data[indextr].email">
+          {{ data[indextr].email }}
+        </vs-td>
+
+        <vs-td :data="data[indextr].username">
+          {{ data[indextr].username }}
+        </vs-td>
+
+        <vs-td :data="data[indextr].id">
+          {{ data[indextr].website }}
+        </vs-td>
+
+        <vs-td :data="data[indextr].id">
+          admin
+        </vs-td>
+        <vs-td :data="data[indextr].id">
+          <vs-chip color="danger">blocked</vs-chip> 
+        </vs-td>
+        <vs-td :data="data[indextr].id">
+          {{ data[indextr].id }}
+        </vs-td>
+      </vs-tr>
+    </template>
+  </vs-table>
+    
+  
+  </vs-col>
+</vs-row>
+</vx-card>
   </div>
-  <div class="vx-row">
-    <div class="vx-col sm:w-1/2 w-full mb-2">
-      <vs-input class="w-full" label-placeholder="City" v-model="input27" />
-    </div>
-    <div class="vx-col sm:w-1/2 w-full mb-2">
-      <vs-input class="w-full" label-placeholder="Country" v-model="input28" />
-    </div>
-  </div>
-  <div class="vx-row">
-    <div class="vx-col sm:w-1/2 w-full mb-2">
-      <vs-input class="w-full" label-placeholder="Company" v-model="input29" />
-    </div>
-    <div class="vx-col sm:w-1/2 w-full mb-6">
-      <vs-input type="email" class="w-full" label-placeholder="Email" v-model="input30" />
-    </div>
-  </div>
-  <div class="vx-row">
-    <div class="vx-col w-full mb-6">
-      <vs-checkbox class="inline-flex" v-model="check7">Remember Me</vs-checkbox>
-    </div>
-  </div>
-  <div class="vx-row">
-    <div class="vx-col w-full">
-      <vs-button class="mr-3 mb-2">Submit</vs-button>
-      <vs-button color="warning" type="border" class="mb-2" @click="input25 = input26 = input27 = input28 = input29 = input30 = ''; check7 = false;">Reset</vs-button>
-    </div>
-  </div>
-</div>
 </template>
+
 <script>
 export default {
-	
+  data() {
+    return {
+      selected: [],
+      'tableList': [
+        'vs-th: Component',
+        'vs-tr: Component',
+        'vs-td: Component',
+        'thread: Slot',
+        'tbody: Slot',
+        'header: Slot'
+      ],
+      users: [
+        {
+          "id": 1,
+          "name": "Arabkhanova Mohira",
+          "username": "mohina932",
+          "email": "blocked",
+          "status": "active",
+          "Role": "librarian",
+          "phone": "+45949493"
+        },
+        {
+          "id": 2,
+          "name": "Ervin Howell",
+          "username": "Antonette",
+          "email": "Shanna@melissa.tv",
+          "website": "anastasia.net",
+        }
+      ]
+    }
+  },
 }
 </script>
-<style scoped>
+
+<style>
 
 </style>

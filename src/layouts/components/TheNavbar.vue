@@ -26,7 +26,7 @@
         <!-- Quick access buttons-->
         <div class="flex">
           <vx-tooltip
-            title="Add you book"
+            title="New book"
             color="success"
             position="bottom"
             text="You can add new book from here"

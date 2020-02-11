@@ -124,7 +124,53 @@ const router = new Router({
                     path: '/users',
                     name: 'Users',
                     component: () =>
-                        import ('./views/Users.vue')
+                        import ('./views/Users.vue'),
+                        meta: {
+                            breadcrumb: [
+                                { title: 'Home', url: '/' },
+                                { title: 'Users List', active: false },
+                                { title: 'book item', active: false },
+                            ],
+                            pageTitle: 'Users'
+    
+                        }
+                        
+                },
+                {
+                    path: '/user-edit/:id',
+                    props: true,
+                    name: 'UserUpdate',
+                    component: () =>
+                        import ('./views/User/Update.vue'),
+                        meta: {
+                            breadcrumb: [
+                                { title: 'Home', url: '/' },
+                                { title: 'Users List', active: false },
+                                { title: 'User Edit', active: false },
+                                { title: 'book item', active: false },
+                            ],
+                            pageTitle: 'Users'
+    
+                        }
+                        
+                },
+                {
+                    path: '/user-create/',
+                    name: 'UserCreate',
+                    component: () =>
+                        import ('./views/User/Create.vue'),
+                        meta: {
+                            breadcrumb: [
+                                { title: 'Home', url: '/' },
+                                { title: 'Users', url: '/users' },
+                                { title: 'User Create', url: '/users' },
+                                { title: '', active: false },
+                               
+                            ],
+                            pageTitle: 'User create'
+    
+                        }
+                        
                 },
                 {
                     path: '/settings',

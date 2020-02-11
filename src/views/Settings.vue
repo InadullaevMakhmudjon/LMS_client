@@ -88,7 +88,7 @@
                       <vs-button type="filled" @click="editName(tr)" color="primary" icon="edit" radius></vs-button>
                       </vs-td>
                       <vs-td :data="tr.id">
-                        <vx-tooltip :color="tr.books.length>0 ?'danger':''" position="right" :title="tr.books.length>0 ? 'Cannot be Deleted': 'Click to delete'" :text="tr.books.length>0? 'this items has already assigned to the book so that it cannot be deleted':'No book item is assigned'">
+                        <vx-tooltip :color="tr.books.length>0 ?'danger':''" position="right" :title="tr.books.length>0 ? 'Cannot be Deleted': 'Click to delete'" :text="tr.books.length>0? 'This item has already been assigned to a book so that it cannot be deleted':'No book item is assigned'">
                         <vs-button
                         
                           :disabled="tr.books.length > 0"
