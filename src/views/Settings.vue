@@ -49,13 +49,16 @@
                       Order
                     </vs-th>
                     <vs-th sort-key="name">
-                      Author Name
+                      Name
                     </vs-th>
                     <vs-th sort-key="id">
                       Published Date
                     </vs-th>
-                      <vs-th sort-key="id">
+                    <vs-th sort-key="id">
                       Modified Date
+                    </vs-th>
+                     <vs-th sort-key="editing">
+                      Edit
                     </vs-th>
                     <vs-th sort-key="id">
                       Delete
@@ -69,25 +72,28 @@
                       </vs-td>
                       <vs-td :data="tr.name">
                         {{ tr.name }}
-<!-- 
-                        <template slot="edit">
+
+                        <!-- <template slot="edit">
                           <vs-input v-model="tr.name" class="inputx" />
                         </template> -->
                       </vs-td>
 
                       <vs-td :data="tr.id">
-                        {{tr.createdAt.split('T')[0]}}
+                        {{ tr.createdAt.split("T")[0] }}
                       </vs-td>
-                       <vs-td :data="tr.id">
-                        {{tr.updatedAt.split('T')[0]}}
+                      <vs-td :data="tr.id">
+                        {{ tr.updatedAt.split("T")[0] }}
+                      </vs-td>
+                      <vs-td :data="tr.id">
+                      <vs-button type="filled" @click="editName(tr)" color="primary" icon="edit" radius></vs-button>
                       </vs-td>
                       <vs-td :data="tr.id">
                         <vs-button
-                           :disabled="tr.books.length > 0"
+                          :disabled="tr.books.length > 0"
                           radius
                           color="danger"
-                          size="size"
-                          @click="deleteItem(item.id, tr.id ,tr)"
+                          size="medium"
+                          @click="deleteItem(item.id, tr.id, tr)"
                           type="filled"
                           icon="delete_outline"
                         ></vs-button>
@@ -104,6 +110,13 @@
         </vs-tabs>
       </div>
     </template>
+      <vs-popup title="Update Content" :active.sync="toggle">
+        <div class="vx-row justify-center justify-between p-4">
+           <vs-input class="w-1/2" icon="edit" v-model="data.name"></vs-input>
+           <vs-button class="w-1/3" v-model="data.id" @click="updateData(data)">Save changes</vs-button>
+           </div>
+        </vs-popup>
+    </vs-popup>
   </div>
 </template>
 <script>
@@ -113,6 +126,11 @@ import Authors from "@/services/Authors";
 
 export default {
   data: () => ({
+    toggle: false,
+    data:{
+        name: '',
+        id: ''
+    },
     types: [
       { id: 1, text: "Add category", value: "", lists: [] },
       { id: 2, text: "Add subject", value: "", lists: [] },
@@ -181,13 +199,14 @@ export default {
       }
     },
     deleteItem(id, itemId, tr) {
-      console.log(tr)
+      console.log(tr);
       switch (id) {
         case 1:
           Categories.delete(itemId)
             .then(() => this.getAll())
             .catch(error => {
-              console.error(error)});
+              console.error(error);
+            });
           return;
         case 2:
           Subjects.delete(itemId)
@@ -202,6 +221,14 @@ export default {
         default:
           return;
       }
+    },
+    editName (val) {
+      console.log(val)
+      this.toggle = true
+      this.data = val
+    },
+    updateData() {
+      //category handle query
     }
   },
   mounted() {
