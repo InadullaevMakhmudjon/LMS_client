@@ -83,15 +83,15 @@
             vs-align="center"
             vs-w="10"
           >
-           <vx-tooltip text="Use only ISBN format here">
-            <vs-input
-              placeholder="isbn"
-              class="mb-4 md:mb-0 mr-2  flex-1"
-              v-model="filterList.isbn"
-              @input="searchByIsbn"
-              v-on:keyup.enter="getResult"
-            />
-           </vx-tooltip>
+            <vx-tooltip text="Use only ISBN format here">
+              <vs-input
+                placeholder="isbn"
+                class="mb-4 md:mb-0 mr-2  flex-1"
+                v-model="filterList.isbn"
+                @input="searchByIsbn"
+                v-on:keyup.enter="getResult"
+              />
+            </vx-tooltip>
             <vs-input
               :disabled="disableAllfields"
               class="mb-4 md:mb-0 mr-2  flex-1"
@@ -167,11 +167,11 @@
 
 <script>
 import Books from "@/services/Books";
-import Categories from "@/services/Categories"
-import Languages from "@/services/Languages"
-import Courses from "@/services/Courses"
-import Subjects from "@/services/Subjects"
-import BookTypes from "@/services/BookTypes"
+import Categories from "@/services/Categories";
+import Languages from "@/services/Languages";
+import Courses from "@/services/Courses";
+import Subjects from "@/services/Subjects";
+import BookTypes from "@/services/BookTypes";
 import vSelect from "vue-select";
 import { Validator } from "vee-validate";
 
@@ -220,9 +220,9 @@ export default {
   watch: {
     filterList: {
       handler(value) {
-        Object.keys(value).forEach((key) =>{
-          if(value[key] === null) {
-            this.filterList[key] = '';
+        Object.keys(value).forEach(key => {
+          if (value[key] === null) {
+            this.filterList[key] = "";
           }
         });
       },
@@ -234,31 +234,47 @@ export default {
   },
   methods: {
     getResult() {
-      // this.$validator.validateAll().then(result => {
-      //   if (result) {
       this.loading(true);
-      // const url = Object.keys(this.filterList)
-      //   .map(key => `${key}=${this.filterList[key]}`)
-      //   .join("&");
-      const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=&typeId=${this.filterList.typeId}`;
-      Books.getSearchedBooks(url)
-        .then(({ items: books, length }) => {
+      if (this.disableAllfields && this.disableAllfields) {
+        Books.getISBN(this.filterList.isbn).then(({ items: books, length }) => {
           this.books = books;
           this.booksQuantity = length;
           this.page = Math.ceil(length / 12);
+          this.loading(false);
           this.books.forEach(book => {
-            book.authorName = book.authors.map(({ name }) => name).join(", ");
+              book.authorName = book.authors.map(({ name }) => name).join(", ");
+            });
+        }).catch(error => {
+            console.log(error);
+            this.loading(false);})
+
+      } else {
+        // this.$validator.validateAll().then(result => {
+        //   if (result) {
+
+        // const url = Object.keys(this.filterList)
+        //   .map(key => `${key}=${this.filterList[key]}`)
+        //   .join("&");
+        const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=&typeId=${this.filterList.typeId}`;
+        Books.getSearchedBooks(url)
+          .then(({ items: books, length }) => {
+            this.books = books;
+            this.booksQuantity = length;
+            this.page = Math.ceil(length / 12);
+            this.books.forEach(book => {
+              book.authorName = book.authors.map(({ name }) => name).join(", ");
+            });
+            this.loading(false);
+          })
+          .catch(error => {
+            console.log(error);
+            this.loading(false);
+            //   });
+            // } else {
+            //    alert('ERROR')
+            // }
           });
-          this.loading(false);
-        })
-        .catch(error => {
-          console.log(error);
-          this.loading(false);
-          //   });
-          // } else {
-          //    alert('ERROR')
-          // }
-        });
+      }
     },
     bookInfo(id) {
       this.$router.push("/books/" + id);
@@ -280,7 +296,7 @@ export default {
     // },
 
     getFilters() {
-       Promise.all([
+      Promise.all([
         Categories.getAll(),
         BookTypes.getAll(),
         Subjects.getAll(),
@@ -292,7 +308,7 @@ export default {
         this.subjects = subjects;
         this.bookTypes = booktypes;
         this.courses = courses;
-         this.languages = languages;
+        this.languages = languages;
       });
     },
     getAll(val) {

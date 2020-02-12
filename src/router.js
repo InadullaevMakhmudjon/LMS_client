@@ -203,6 +203,20 @@ const router = new Router({
 
                     }
                 },
+                {
+                    path: '/profile',
+                    name: 'Profile',
+                    component: () =>
+                        import ('./components/LMS/Profile/Profile.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/books' },
+                            { title: 'book item', active: true },
+                        ],
+                        rule: '',
+                        pageTitle: 'Profile info'
+                    }
+                },
             ],
         },
         // =============================================================================

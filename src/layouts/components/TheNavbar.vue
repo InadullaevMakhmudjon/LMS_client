@@ -145,6 +145,7 @@
             <vs-dropdown-menu class="vx-navbar-dropdown">
               <ul style="min-width: 9rem">
                 <li
+                 @click="$router.push('/profile')"
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                 >
                   <feather-icon
@@ -299,6 +300,9 @@ export default {
     }
   },
   methods: {
+    pushing(){
+      this.$router.push('/profile')
+    },
     alerting() {
       alert("sd");
     },
