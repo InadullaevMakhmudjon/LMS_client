@@ -1,47 +1,49 @@
 <template>
   <div>
-    <vx-card title="Filter">
-        <vs-col  vs-type="flex"  vs-justify="center" vs-align="center" vs-w="2">
+    <!-- <vx-card title="Filter" collapseAction>
+     
+</vx-card> -->
+<vx-card class="mt-5">
+     <vs-col  vs-type="flex"  vs-justify="center" vs-align="center" vs-w="2">
     <div class="w-full">
     <vs-button to="/user-create">New user</vs-button>
     </div>
   </vs-col>
-    <vs-row vs-justify="center">
+    <vs-row  vs-justify="start">
     
-  <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-    <div class="w-full">
-    <span>Role</span>
-    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
+  <vs-col class="mt-4"  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+    <div class=" w-full">
+     <vs-select
+      class="selectExample"
+      label="Role"
+      v-model="selectRole"
+      >
+      <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in role"  :key="index"/>
+    </vs-select>
     </div>
   </vs-col>
-   <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+   <vs-col  class="mt-4" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
     <div class="w-full">
-    <span>Status</span>
-    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
-    </div>
-  </vs-col>
-   <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-    <div class="w-full">
-    <span>Somefilter</span>
-    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
-    </div>
-  </vs-col>
-   <vs-col  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-    <div class="w-full">
-    <span>Role</span>
-    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select>
+    <!-- <span>Status</span>
+    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select> -->
+     <vs-select
+      class="selectExample"
+      label="Status"
+      v-model="selectStatus"
+      >
+      <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in status"  :key="index"/>
+    </vs-select>
     </div>
   </vs-col>
 </vs-row>
-</vx-card>
-<vx-card class="mt-5">
 <vs-row>
   <vs-col>
-    <vs-table multiple v-model="selected" pagination max-items="3" search :data="users">
+    <vs-table v-model="selected" pagination max-items="3" search :data="users">
 
     <template slot="thead">
-      <vs-th sort-key="username">ID</vs-th>
-      <vs-th sort-key="email">Name</vs-th>
+       <vs-th sort-key="sorting">Order</vs-th>
+      <vs-th sort-key="username">Full name</vs-th>
+      <vs-th sort-key="email">ID</vs-th>
       <vs-th sort-key="website">address</vs-th>
       <vs-th sort-key="id">Role</vs-th>
         <vs-th sort-key="id">Status</vs-th>
@@ -52,26 +54,30 @@
     <template slot-scope="{data}">
       <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 
-        <vs-td :data="data[indextr].email">
-          {{ data[indextr].email }}
+           <vs-td :data="data[indextr].name">
+          {{indextr+1 }}
+        </vs-td>
+        <vs-td :data="data[indextr].name">
+          {{ data[indextr].name }}
         </vs-td>
 
         <vs-td :data="data[indextr].username">
           {{ data[indextr].username }}
         </vs-td>
 
-        <vs-td :data="data[indextr].id">
-          {{ data[indextr].website }}
+        <vs-td :data="data[indextr].email">
+          {{ data[indextr].email }}
         </vs-td>
 
-        <vs-td :data="data[indextr].id">
-          admin
+        <vs-td :data="data[indextr].role">
+          {{data[indextr].role}}
+        </vs-td>
+        <vs-td :data="data[indextr].status">
+          <vs-chip :color="data[indextr].status==1 ? 'success':'danger'">{{data[indextr].status==1 ? 'active' : 'blocked'}}</vs-chip> 
         </vs-td>
         <vs-td :data="data[indextr].id">
-          <vs-chip color="danger">blocked</vs-chip> 
-        </vs-td>
-        <vs-td :data="data[indextr].id">
-          {{ data[indextr].id }}
+          <!-- <div @click="routing(data[indextr].id)"> <vs-icon class="hover" icon="visibility" size="medium" color="#424242" ></vs-icon></div> -->
+          <vs-button @click="routing(data[indextr].id)" icon="visibility" size="small" type="border">View</vs-button>
         </vs-td>
       </vs-tr>
     </template>
@@ -89,6 +95,8 @@ export default {
   data() {
     return {
       selected: [],
+      selectRole:'',
+      selectStatus:'',
       'tableList': [
         'vs-th: Component',
         'vs-tr: Component',
@@ -101,22 +109,79 @@ export default {
         {
           "id": 1,
           "name": "Arabkhanova Mohira",
-          "username": "mohina932",
-          "email": "blocked",
-          "status": "active",
-          "Role": "librarian",
-          "phone": "+45949493"
+          "username": "L001",
+          "email": "m.arabxonova@inha.uz",
+          "status": 0,
+          "role": "Librarian",
+          "phone": "+459494933232"
         },
-        {
+          {
           "id": 2,
-          "name": "Ervin Howell",
-          "username": "Antonette",
-          "email": "Shanna@melissa.tv",
-          "website": "anastasia.net",
-        }
+          "name": "Makhmudkhujaev Saidakbar",
+          "username": "A001",
+          "email": "s.makhmudkhujaev@student.inha.uz",
+          "status": 1,
+          "role": "Admin",
+          "phone": "+998998005598"
+        },
+         {
+          "id": 2,
+          "name": "Makhmudkhujaev Saidakbar",
+          "username": "A001",
+          "email": "s.makhmudkhujaev@student.inha.uz",
+          "status": 1,
+          "role": "Admin",
+          "phone": "+998998005598"
+        },
+      
+      ],
+      activeUsers:[
+  {
+          "id": 2,
+          "name": "Makhmudkhujaev Saidakbar",
+          "username": "A001",
+          "email": "s.makhmudkhujaev@student.inha.uz",
+          "status": 1,
+          "role": "Admin",
+          "phone": "+998998005598"
+        },
+         {
+          "id": 2,
+          "name": "Makhmudkhujaev Saidakbar",
+          "username": "A001",
+          "email": "s.makhmudkhujaev@student.inha.uz",
+          "status": 1,
+          "role": "Admin",
+          "phone": "+998998005598"
+        },
+      ],
+      role: [
+        { label:'Admin', value: '1',},
+        { label:'Librarian', value: '2',},
+        { label:'Student', value: '3',}
+      ],
+      status: [
+        { label:'active', value: '1',},
+        { label:'blocked', value: '2',},
+        { label:'diactivated', value: '3',}
       ]
+    
     }
   },
+  watch:{
+    selectRole(val) {
+      console.log(val)
+    },
+    selectStatus(val) {
+      if (val == 1)
+      this.users = this.activeUsers
+    }
+  },
+  methods:{
+    routing( params ) {
+      this.$router.push('/user-view/'+params)
+    }
+  }
 }
 </script>
 

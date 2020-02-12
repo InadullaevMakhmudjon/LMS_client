@@ -125,16 +125,33 @@ const router = new Router({
                     name: 'Users',
                     component: () =>
                         import ('./views/Users.vue'),
-                        meta: {
-                            breadcrumb: [
-                                { title: 'Home', url: '/' },
-                                { title: 'Users List', active: false },
-                                { title: 'book item', active: false },
-                            ],
-                            pageTitle: 'Users'
-    
-                        }
-                        
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users List', active: false },
+                            { title: 'book item', active: false },
+                        ],
+                        pageTitle: 'Users'
+
+                    }
+
+                },
+                {
+                    path: '/user-view/:id',
+                    props: true,
+                    name: 'Userinfo',
+                    component: () =>
+                        import ('./views/User/View.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users List', url: '/users' },
+                            { title: 'book item', active: false },
+                        ],
+                        pageTitle: 'User Info'
+
+                    }
+
                 },
                 {
                     path: '/user-edit/:id',
@@ -142,35 +159,35 @@ const router = new Router({
                     name: 'UserUpdate',
                     component: () =>
                         import ('./views/User/Update.vue'),
-                        meta: {
-                            breadcrumb: [
-                                { title: 'Home', url: '/' },
-                                { title: 'Users List', active: false },
-                                { title: 'User Edit', active: false },
-                                { title: 'book item', active: false },
-                            ],
-                            pageTitle: 'Users'
-    
-                        }
-                        
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users List', active: false },
+                            { title: 'User Edit', active: false },
+                            { title: 'book item', active: false },
+                        ],
+                        pageTitle: 'Users'
+
+                    }
+
                 },
                 {
                     path: '/user-create/',
                     name: 'UserCreate',
                     component: () =>
                         import ('./views/User/Create.vue'),
-                        meta: {
-                            breadcrumb: [
-                                { title: 'Home', url: '/' },
-                                { title: 'Users', url: '/users' },
-                                { title: 'User Create', url: '/users' },
-                                { title: '', active: false },
-                               
-                            ],
-                            pageTitle: 'User create'
-    
-                        }
-                        
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users', url: '/users' },
+                            { title: 'User Create', url: '/users' },
+                            { title: '', active: false },
+
+                        ],
+                        pageTitle: 'User create'
+
+                    }
+
                 },
                 {
                     path: '/settings',
