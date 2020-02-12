@@ -22,9 +22,9 @@
               :disabled="disableField"
               v-model="filterList.courseYear"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
-              :options="year"
+              label="name"
+              :reduce="({ id }) => id"
+              :options="courses"
             ></v-select>
           </div>
 
@@ -34,8 +34,8 @@
               :disabled="disableField"
               v-model="filterList.typeId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
+              label="name"
+              :reduce="({ id }) => id"
               :options="bookTypes"
             ></v-select>
           </div>
@@ -46,8 +46,8 @@
               :disabled="disableField"
               v-model="filterList.subjectId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
+              label="name"
+              :reduce="({ id }) => id"
               :options="subjects"
             ></v-select>
           </div>
@@ -58,9 +58,9 @@
               :disabled="disableField"
               v-model="filterList.categoryId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
-              :options="category"
+              label="name"
+              :reduce="({ id }) => id"
+              :options="categories"
             ></v-select>
           </div>
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
@@ -69,9 +69,9 @@
               :disabled="disableField"
               v-model="filterList.languageId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
-              :options="language"
+              label="name"
+              :reduce="({ id }) => id"
+              :options="languages"
             ></v-select>
           </div>
         </vs-col>
@@ -167,6 +167,11 @@
 
 <script>
 import Books from "@/services/Books";
+import Categories from "@/services/Categories"
+import Languages from "@/services/Languages"
+import Courses from "@/services/Courses"
+import Subjects from "@/services/Subjects"
+import BookTypes from "@/services/BookTypes"
 import vSelect from "vue-select";
 import { Validator } from "vee-validate";
 
@@ -189,48 +194,11 @@ export default {
       typeId: ""
     },
 
-    year: [
-      { text: "Freshman", value: "1" },
-      { text: "Sophomore", value: "2" },
-      { text: "Senior", value: "3" },
-      { text: "Junior", value: "4" },
-      { text: "staff", value: "5" }
-    ],
-    bookTypes: [
-      { text: "borrowable", value: "2" },
-      { text: "Not borrowable", value: "1" }
-    ],
-    subjects: [
-      { text: "Computer Algorithm", value: "1" },
-      { text: "System Analysis", value: "2" },
-      { text: "Calculus", value: "3" },
-      { text: "Physics", value: "4" },
-      { text: "Academic English 1", value: "5" },
-      { text: "Academic English 2", value: "6" },
-      { text: "Korean 1", value: "7" },
-      { text: "Korean 2", value: "8" },
-      { text: "Data Stucture", value: "9" },
-      { text: "Discrete Mathematics", value: "10" },
-      { text: "Signal and Systems", value: "11" }
-    ],
-    category: [
-      { text: "Computer Science", value: "1" },
-      { text: "Data Science", value: "2" },
-      { text: "Biology", value: "3" },
-      { text: "Chemistry", value: "4" },
-      { text: "Lingustics", value: "5" },
-      { text: "Algorithms", value: "6" },
-      { text: "Phylosophy", value: "7" }
-    ],
-    language: [
-      { text: "Uzbek", value: "1" },
-      { text: "English", value: "2" },
-      { text: "Russian", value: "3" },
-      { text: "Korean", value: "4" },
-      { text: "Italian", value: "5" },
-      { text: "Spain", value: "6" },
-      { text: "Chinese", value: "7" }
-    ],
+    courses: [],
+    bookTypes: [],
+    subjects: [],
+    categories: [],
+    languages: [],
     books: [
       {
         id: 1,
@@ -250,6 +218,16 @@ export default {
     }
   },
   watch: {
+    filterList: {
+      handler(value) {
+        Object.keys(value).forEach((key) =>{
+          if(value[key] === null) {
+            this.filterList[key] = '';
+          }
+        });
+      },
+      deep: true
+    },
     currentx(val) {
       this.getAll(val);
     }
@@ -284,6 +262,38 @@ export default {
     },
     bookInfo(id) {
       this.$router.push("/books/" + id);
+    },
+    //   languages() {
+    //     Languages.getAll().then((languages) => {
+    //     this.languages = languages;
+    //   });
+    // },
+    //   courses() {
+    //     Courses.getAll().then((courses) => {
+    //     this.courses = courses;
+    //   });
+    // },
+    //   courses() {
+    //     Courses.getAll().then((courses) => {
+    //     this.courses = courses;
+    //   });
+    // },
+
+    getFilters() {
+       Promise.all([
+        Categories.getAll(),
+        BookTypes.getAll(),
+        Subjects.getAll(),
+        Courses.getAll(),
+        Languages.getAll()
+      ]).then(result => {
+        const [categories, booktypes, subjects, courses, languages] = result;
+        this.categories = categories;
+        this.subjects = subjects;
+        this.bookTypes = booktypes;
+        this.courses = courses;
+         this.languages = languages;
+      });
     },
     getAll(val) {
       Books.getAll(val, 12).then(({ items: books, length }) => {
@@ -325,6 +335,7 @@ export default {
   },
   mounted() {
     this.getAll(1, 12);
+    this.getFilters();
   }
 };
 </script>
