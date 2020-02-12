@@ -57,7 +57,7 @@
                     <vs-th sort-key="id">
                       Modified Date
                     </vs-th>
-                     <vs-th sort-key="editing">
+                    <vs-th sort-key="editing">
                       Edit
                     </vs-th>
                     <vs-th sort-key="id">
@@ -83,22 +83,40 @@
                       </vs-td>
                       <vs-td :data="tr.id">
                         {{ tr.updatedAt.split("T")[0] }}
-                      </vs-td> 
-                      <vs-td :data="tr.id">
-                      <vs-button type="filled" @click="editName(tr)" color="primary" icon="edit" radius></vs-button>
                       </vs-td>
                       <vs-td :data="tr.id">
-                        <vx-tooltip :color="tr.books.length>0 ?'danger':''" position="right" :title="tr.books.length>0 ? 'Cannot be Deleted': 'Click to delete'" :text="tr.books.length>0? 'This item has already been assigned to a book so that it cannot be deleted':'No book item is assigned'">
                         <vs-button
-                        
-                          :disabled="tr.books.length > 0"
-                          radius
-                          color="danger"
-                          size="medium"
-                          @click="deleteItem(item.id, tr.id, tr)"
                           type="filled"
-                          icon="delete_outline"
+                          @click="editName(item.id, tr.id, tr)"
+                          color="primary"
+                          icon="edit"
+                          radius
                         ></vs-button>
+                      </vs-td>
+                      <vs-td :data="tr.id">
+                        <vx-tooltip
+                          :color="tr.books.length > 0 ? 'danger' : ''"
+                          position="right"
+                          :title="
+                            tr.books.length > 0
+                              ? 'Cannot be Deleted'
+                              : 'Click to delete'
+                          "
+                          :text="
+                            tr.books.length > 0
+                              ? 'This item has already been assigned to a book so that it cannot be deleted'
+                              : 'No book item is assigned'
+                          "
+                        >
+                          <vs-button
+                            :disabled="tr.books.length > 0"
+                            radius
+                            color="danger"
+                            size="medium"
+                            @click="deleteItem(item.id, tr.id, tr)"
+                            type="filled"
+                            icon="delete_outline"
+                          ></vs-button>
                         </vx-tooltip>
                       </vs-td>
                     </vs-tr>
@@ -113,13 +131,14 @@
         </vs-tabs>
       </div>
     </template>
-      <vs-popup title="Update Content" :active.sync="toggle">
-        <div class="vx-row justify-center justify-between p-4">
-           <vs-input class="w-1/2" icon="edit" v-model="data.name"></vs-input>
-           <vs-button class="w-1/3" v-model="data.id" @click="updateData(data)">Save changes</vs-button>
-           </div>
-        </vs-popup>
- 
+    <vs-popup title="Update Content" :active.sync="toggle">
+      <div class="vx-row justify-center justify-between p-4">
+        <vs-input class="w-1/2" icon="edit" v-model="data.name"></vs-input>
+        <vs-button class="w-1/3" v-model="data.id" @click="updateData(data)"
+          >Save changes</vs-button
+        >
+      </div>
+    </vs-popup>
   </div>
 </template>
 <script>
@@ -130,9 +149,9 @@ import Authors from "@/services/Authors";
 export default {
   data: () => ({
     toggle: false,
-    data:{
-        name: '',
-        id: ''
+    data: {
+      name: "",
+      id: "",
     },
     types: [
       { id: 1, text: "Add category", value: "", lists: [] },
@@ -154,10 +173,10 @@ export default {
         this.types[2].lists = authors;
       });
     },
-    notify(val, type) {
+    notify(val, type, action) {
       this.$vs.notify({
         title: val,
-        text: `${type} has been created successfully`,
+        text: `${type} has been ${action} successfully`,
         color: "success",
         icon: "verified_user"
       });
@@ -168,7 +187,7 @@ export default {
           Categories.create(item.value)
             .then(() => {
               this.getAll();
-              this.notify(item.value, "Category");
+              this.notify(item.value, "Category", 'created');
             })
             .catch(err => console.error(err))
             .finally(() => {
@@ -179,7 +198,7 @@ export default {
           Subjects.create(item.value)
             .then(() => {
               this.getAll();
-              this.notify(item.value, "Subject");
+              this.notify(item.value, "Subject", 'created');
             })
             .catch(err => console.error(err))
             .finally(() => {
@@ -190,7 +209,7 @@ export default {
           Authors.create(item.value)
             .then(() => {
               this.getAll();
-              this.notify(item.value, "Author");
+              this.notify(item.value, "Author", 'created');
             })
             .catch(err => console.error(err))
             .finally(() => {
@@ -225,13 +244,38 @@ export default {
           return;
       }
     },
-    editName (val) {
-      console.log(val)
-      this.toggle = true
-      this.data = val
+    editName(chosen, trId, obj) {
+      this.toggle = true;
+      this.data = { ...obj, criteria: chosen}
     },
-    updateData() {
+    updateData(obj) {
       //category handle query
+      switch (obj.criteria) {
+        case 1:
+          Categories.update(obj.id, obj.name)
+            .then(() => {
+              
+              this.getAll();
+              this.toggle= false
+              this.notify(obj.name, "Category",'updated');
+            })
+            .catch(err => console.error(err));
+          return;
+        case 2:
+          Subjects.update(obj.id, obj.name).then(() => {
+            this.getAll();
+             this.toggle= false
+            this.notify(obj.name, "Subjects",'updated');
+          });
+          return;
+        case 3:
+          Authors.update(obj.id, obj.name).then(() => {
+            this.getAll();
+             this.toggle= false
+            this.notify(obj.name, "Authors", 'updated');
+          });
+          return;
+      }
     }
   },
   mounted() {
