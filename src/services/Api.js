@@ -21,6 +21,6 @@ const API = axios.create({
 });
 
 export default () => {
-    axios.defaults.headers.common.Authorization = `Bearer ${localStorage('token')}`;
+    axios.defaults.headers.common.Authorization = `Bearer ${window.localStorage.getItem('access_token')}`;
     return API;
 }

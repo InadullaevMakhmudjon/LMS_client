@@ -76,7 +76,7 @@ export default {
     login() {
       // console.log(this.$store.getters.isLogIn)
       this.$store.dispatch("recieveToken", this.auth);
-      this.$router.push("/dashboard");
+      this.$router.push("/");
     }
   }
 };

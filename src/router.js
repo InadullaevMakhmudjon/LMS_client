@@ -19,6 +19,7 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
+import store from './store/store'
 
 Vue.use(Router)
 
@@ -253,11 +254,23 @@ const router = new Router({
 })
 
 router.afterEach(() => {
-    // Remove initial loading
-    const appLoading = document.getElementById('loading-bg')
-    if (appLoading) {
-        appLoading.style.display = "none";
-    }
-})
+        // Remove initial loading
+        const appLoading = document.getElementById('loading-bg')
+        if (appLoading) {
+            appLoading.style.display = "none";
+        }
+    })
+    // router.beforeEach((to, _, next) => {
+    //     const isAuthenticated = store.state.token;
+    //     if (!isAuthenticated.length > 0) next('/pages/login')
+    //     else next('/')
+    //         // if (isAuthenticated.length > 0) {
+    //         //     console.log(to.meta.rule)
+    //         //     console.log(next('/'))
+    //         // } else
+
+
+// });
+
 
 export default router
