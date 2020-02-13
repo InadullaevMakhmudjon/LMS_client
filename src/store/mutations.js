@@ -39,7 +39,7 @@ const mutations = {
         state.themePrimaryColor = val;
     },
     UPDATE_WINDOW_WIDTH(state, width) {
-      state.windowWidth = width;
+        state.windowWidth = width;
     },
 
 
@@ -51,16 +51,16 @@ const mutations = {
     UPDATE_STARRED_PAGE(state, payload) {
         // find item index in search list state
         const index = state.navbarSearchAndPinList.data.findIndex((item) => item.index == payload.index)
-        // update the main list
+            // update the main list
         state.navbarSearchAndPinList.data[index].highlightAction = payload.val;
 
         // if val is true add it to starred else remove
-        if(payload.val) {
+        if (payload.val) {
             state.starredPages.push(state.navbarSearchAndPinList.data[index])
-        }else {
+        } else {
             // find item index from starred pages
             const index = state.starredPages.findIndex((item) => item.index == payload.index)
-            // remove item using index
+                // remove item using index
             state.starredPages.splice(index, 1);
         }
     },
@@ -76,12 +76,24 @@ const mutations = {
         const starredPagesLimited = state.starredPages.slice(0, 10);
         state.starredPages = starredPagesLimited.concat(list);
 
-        state.starredPages.slice(0,10).map((i) => {
-            if(list.indexOf(i) > -1) downToUp = true
+        state.starredPages.slice(0, 10).map((i) => {
+            if (list.indexOf(i) > -1) downToUp = true
         })
-        if(!downToUp) {
+        if (!downToUp) {
             state.starredPages.splice(10, 0, lastItemInStarredLimited);
         }
+    },
+
+    //Customized area
+
+    // logout(state) {
+    //     state.token = null
+    // },
+    recieveToken(state, token, user) {
+        state.token = token
+    },
+    logout(state) {
+        state.token = null
     },
 }
 

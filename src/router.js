@@ -260,8 +260,4 @@ router.afterEach(() => {
     }
 })
 
-// router.beforeEach((to, from, next) => {
-//     if (to.path === "/pages/login" || to.path === "/pages/error-404") return next();
-//     router.push({ path: '/pages/login', query: { to: to.path } })
-// })
 export default router

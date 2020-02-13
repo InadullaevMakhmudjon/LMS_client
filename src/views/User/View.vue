@@ -43,9 +43,7 @@
         </vs-col>
 
         <vs-col vs-type="flex" vs-justify="start" vs-align="start" vs-w="6">
-          <vs-row vs-justify="start">
-           
-          </vs-row>
+          <vs-row vs-justify="start"> </vs-row>
         </vs-col>
         <vs-row>
           <div class="flex text-center">
@@ -61,15 +59,34 @@
     </vx-card>
     <vx-card class="mt-5">
       <div class="flex ">
-    <feather-icon class="px-3" icon="LockIcon" svgClasses="h-7 w-7" />
-    <h3>Permissions</h3>
-    </div>
-        <vs-divider></vs-divider>
-        <vs-row>
-            <vx-col>
-
-            </vx-col>
-        </vs-row>
+        <feather-icon class="px-3" icon="LockIcon" svgClasses="h-7 w-7" />
+        <h3>Permissions</h3>
+      </div>
+      <vs-divider></vs-divider>
+      <vs-row class="w-full">
+        <vs-col class="w-1/2">
+          <table disabled>
+            <tr>
+              <th>Field</th>
+              <th>Create</th>
+              <th>Read</th>
+              <th>Update</th>
+              <th>Delete</th>
+            </tr>
+            <tr v-for="(item,i) in datalist" :key="i">
+              <td>{{item.type}}</td>
+              <td><vs-checkbox  v-model="item.create"></vs-checkbox></td>
+              <td><vs-checkbox  v-model="item.read"></vs-checkbox></td>
+              <td><vs-checkbox  v-model="item.update"></vs-checkbox></td>
+              <td><vs-checkbox  v-model="item.delete"></vs-checkbox></td>
+            </tr>
+          </table>
+          <div>
+              <vs-button class="my-base" @click="submitData">Save Changes</vs-button>
+             <vs-button class="my-base mx-2" type="border" @click="revertData" color="warning">Discard</vs-button>
+          </div>
+        </vs-col>
+      </vs-row>
     </vx-card>
   </div>
 </template>
@@ -79,8 +96,65 @@ export default {
   props: ["id"],
   data() {
     return {
-      datalist: [{ text: "" }]
+      datalist: [
+        {
+          type: "Librarian",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+          prop: true,
+          store: []
+        },
+        {
+          type: "Books",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        },
+        {
+          type: "Book Items",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        },
+        {
+          type: "Settings",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        },
+        {
+          type: "Members",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+          prop: false,
+          store: []
+        }
+      ],
     };
+  },
+  methods: {
+    submitData() {
+      this.datalist.forEach(el => {
+        el.store.push(el.read, el.create, el.update, el.delete)
+        console.log(el.store)
+      })
+    },
+    revertData() {
+      this.datalist.forEach( el => el.store = [])
+    }
   }
 };
 </script>
@@ -90,5 +164,20 @@ export default {
   width: 200px;
   height: 200px;
   object-fit: cover;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid rgb(243, 243, 243);
+}
+
+tr:hover {
+  background-color: #f5f5f5;
 }
 </style>
