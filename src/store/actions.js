@@ -63,7 +63,6 @@ const actions = {
                 console.log(error)
                 alert('Access denied, Please try it again')
                 localStorage.removeItem('access_token')
-                location.reload()
                 reject(error)
             })
         })

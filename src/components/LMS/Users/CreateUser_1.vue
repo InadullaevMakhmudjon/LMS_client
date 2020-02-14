@@ -5,12 +5,13 @@
     
         <div class="vs-col justify-start w-1/2">
             <h3 class="mb-4  regform"><feather-icon icon="Edit3Icon" color="red" size="40px" ></feather-icon> Registration form</h3>
+            
            <div class="vx-row mb-6">
     <div class="vx-col sm:w-1/6 w-full">
       <span>First Name</span>
     </div>
     <div class="vx-col sm:w-2/3 w-full">
-      <vs-input class="w-full" icon-pack="feather" icon="icon-user" icon-no-border v-model="input5" />
+      <vs-input class="w-full" icon-pack="feather" icon="icon-user" icon-no-border v-model="userData.firstName" />
     </div>
   </div>
    <div class="vx-row mb-6">
@@ -18,7 +19,7 @@
       <span>Last Name</span>
     </div>
     <div class="vx-col sm:w-2/3 w-full">
-      <vs-input class="w-full" icon-pack="feather" icon="icon-user" icon-no-border v-model="input5" />
+      <vs-input class="w-full" icon-pack="feather" icon="icon-user" icon-no-border v-model="userData.lastName" />
     </div>
   </div>
   <div class="vx-row mb-6">
@@ -26,23 +27,16 @@
       <span>Email</span>
     </div>
     <div class="vx-col sm:w-2/3 w-full">
-      <vs-input type="email" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border v-model="input6" />
+      <vs-input type="email" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border v-model="userData.email" />
     </div>
   </div>
-  <div class="vx-row mb-6">
-    <div class="vx-col sm:w-1/6 w-full">
-      <span>Mobile</span>
-    </div>
-    <div class="vx-col sm:w-2/3 w-full">
-      <vs-input class="w-full" icon-pack="feather" icon="icon-smartphone" icon-no-border v-model="input7" />
-    </div>
-  </div>
+
   <div class="vx-row mb-6">
     <div class="vx-col sm:w-1/6 w-full">
       <span>Password</span>
     </div>
     <div class="vx-col sm:w-2/3 w-full">
-      <vs-input type="password" class="w-full" icon-pack="feather" icon="icon-lock" icon-no-border v-model="input8" />
+      <vs-input type="password" class="w-full" icon-pack="feather" icon="icon-lock" icon-no-border v-model="userData.password" />
     </div>
   </div>
 
@@ -53,22 +47,34 @@
      <vs-radio class="m-2" color="success" v-model="radios2" vs-value="primary">Female</vs-radio>
         </div> -->
          <div class="vx-row">
-    <div class="vx-col  w-full">
-         <h3 class="mb-base  regform"><feather-icon icon="LockIcon" color="red" size="40px" ></feather-icon>Permission</h3>
-      <span>Gender</span>
-    </div>
-    <div class="vx-col sm:w-1/3 w-full">
-      <vs-radio class="m-2" v-model="radios2" vs-value="primary">Male</vs-radio>   
-     <vs-radio class="m-2" color="success" v-model="radios2" vs-value="primary">Female</vs-radio>
-    </div>
+    <div class="flex mb-base">
+        <feather-icon class="px-3" icon="LockIcon" svgClasses="h-6 w-6" />
+        <h3>Permissions</h3>
+      </div>
+    <table disabled>
+            <tr>
+              <th>Field</th>
+              <th>Create</th>
+              <th>Read</th>
+              <th>Update</th>
+              <th>Delete</th>
+            </tr>
+            <tr v-for="(item,i) in datalist" :key="i">
+              <td>{{item.type}}</td>
+              <td><vs-checkbox  v-model="item.create"></vs-checkbox></td>
+              <td><vs-checkbox  v-model="item.read"></vs-checkbox></td>
+              <td><vs-checkbox  v-model="item.update"></vs-checkbox></td>
+              <td><vs-checkbox  v-model="item.delete"></vs-checkbox></td>
+            </tr>
+          </table>
   </div>
         </div>  
 </vs-row>
 <vs-row>
    
-    <div class="vx-col w-1/8 ml-auto">
-      <vs-button class="mr-3 ">Save</vs-button>
-      <vs-button color="warning" type="border"  @click="input5 = input6 = input7 = input8 = ''; check2 = false;">Discard</vs-button>
+    <div class="vx-col w-1/8 ml-auto mt-5">
+      <vs-button class="mr-3 " @click="submitData">Save</vs-button>
+      <vs-button color="danger" type="border" >Discard</vs-button>
   </div>
 </vs-row>
  </vx-card>
@@ -77,7 +83,70 @@
 
 <script>
 export default {
+data() {
+   return {
+     userData:{
+       firstName:'',
+       lastName: '',
+       email:'',
+       phone:'',
+       password:''
+     },
 
+      datalist: [
+        {
+          type: "Librarian",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+          prop: true,
+          store: []
+        },
+        {
+          type: "Books",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        },
+        {
+          type: "Book Items",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        },
+        {
+          type: "Settings",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        },
+        {
+          type: "Members",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+          prop: false,
+          store: []
+        }
+      ],
+   }
+},
+methods:{
+  submitData() {
+    console.log(this.userData)
+  }
+}
 }
 </script>
 
@@ -85,5 +154,20 @@ export default {
 
 .regform{
   color: rgb(65, 65, 65);   
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid rgb(243, 243, 243);
+}
+
+tr:hover {
+  background-color: #f5f5f5;
 }
 </style>
