@@ -4,35 +4,30 @@
      
 </vx-card> -->
 <vx-card class="mt-5">
-     <vs-col  vs-type="flex"  vs-justify="center" vs-align="center" vs-w="2">
-    <div class="w-full">
-    <vs-button to="/user-create">New user</vs-button>
-    </div>
-  </vs-col>
-    <vs-row  vs-justify="start">
-    
-  <vs-col class="mt-4"  vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-    <div class=" w-full">
-     <vs-select
-      class="selectExample"
-      label="Role"
-      v-model="selectRole"
+ 
+  <div class="flex">
+      <vs-button class="my-auto mt-5 m-5" to="/user-create">New user</vs-button>
+       <vs-select
+      class="my-auto"
+      label="Status"
+      v-model="selectStatus"
       >
-      <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in role"  :key="index"/>
+      <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in status"  :key="index"/>
     </vs-select>
-    </div>
-  </vs-col>
-   <vs-col  class="mt-4" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-    <div class="w-full">
-    <!-- <span>Status</span>
-    <v-select class="w-full" :options="[{label: 'Foo', value: 'foo'}]"></v-select> -->
-     <vs-select
+  </div>
+    <!-- <vs-col  vs-type="flex" vs-justify="start" vs-align="center" vs-w="2">
+      <vs-select
       class="selectExample"
       label="Status"
       v-model="selectStatus"
       >
       <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in status"  :key="index"/>
     </vs-select>
+  </vs-col> -->
+
+    <vs-row  vs-justify="start">
+   <vs-col  class="mt-4" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+    <div class="w-full">
     </div>
   </vs-col>
 </vs-row>
@@ -73,7 +68,7 @@
           {{data[indextr].role}}
         </vs-td>
         <vs-td :data="data[indextr].status">
-          <vs-chip :color="data[indextr].status==1 ? 'success':'danger'">{{data[indextr].status==1 ? 'active' : 'blocked'}}</vs-chip> 
+          <vs-chip :color="data[indextr].status==1 ? 'success':'danger'">{{data[indextr].status==1 ? 'active' : 'Disactivated'}}</vs-chip> 
         </vs-td>
         <vs-td :data="data[indextr].id">
           <!-- <div @click="routing(data[indextr].id)"> <vs-icon class="hover" icon="visibility" size="medium" color="#424242" ></vs-icon></div> -->
@@ -155,15 +150,9 @@ export default {
           "phone": "+998998005598"
         },
       ],
-      role: [
-        { label:'Admin', value: '1',},
-        { label:'Librarian', value: '2',},
-        { label:'Student', value: '3',}
-      ],
       status: [
         { label:'active', value: '1',},
-        { label:'blocked', value: '2',},
-        { label:'diactivated', value: '3',}
+        { label:'diactivated', value: '2',}
       ]
     
     }
@@ -185,6 +174,6 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

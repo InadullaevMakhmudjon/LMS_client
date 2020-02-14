@@ -75,8 +75,10 @@ export default {
   methods: {
     login() {
       // console.log(this.$store.getters.isLogIn)
-      this.$store.dispatch("recieveToken", this.auth);
-      this.$router.push("/");
+     this.$store.dispatch("recieveToken", this.auth).then(() => {
+       this.$router.push('/');
+     })
+     
     }
   }
 };

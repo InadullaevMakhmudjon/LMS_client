@@ -12,8 +12,8 @@ const getters = {
     isLogIn(state) {
         return state.token !== null && state.token !== undefined
     },
-    arrtoken(state) {
-        return state.token
+    hasToken(state) {
+        return state.token.lengh > 0
     },
     // COMPONENT
     // vx-autosuggest

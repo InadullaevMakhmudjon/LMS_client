@@ -157,7 +157,7 @@
                 <vs-divider class="m-1"></vs-divider>
                 <li
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
-                  @click="$router.push('/pages/login')"
+                  @click="logout"
                 >
                   <feather-icon
                     icon="LogOutIcon"
@@ -300,6 +300,13 @@ export default {
     }
   },
   methods: {
+      logout() {
+      // console.log(this.$store.getters.isLogIn)
+     this.$store.dispatch("logout").then(() => {
+       this.$router.push('/pages/login');
+     })
+     
+    },
     pushing(){
       this.$router.push('/profile')
     },

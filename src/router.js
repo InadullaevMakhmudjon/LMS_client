@@ -20,7 +20,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store/store'
-
+import AuthGuard from './utils/router-guard'
 Vue.use(Router)
 
 const router = new Router({
@@ -38,6 +38,7 @@ const router = new Router({
             path: '',
             component: () =>
                 import ('./layouts/main/Main.vue'),
+            // beforeEnter: AuthGuard,
             children: [
                 // =============================================================================
                 // Theme Routes
@@ -47,13 +48,15 @@ const router = new Router({
                     name: 'home',
                     component: () =>
                         import ('./views/Home.vue'),
+
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
                             { title: 'book item', active: true },
                         ],
                         rule: 'editor',
-                        pageTitle: 'Home'
+                        pageTitle: 'Home',
+                        requiresAuth: true
                     }
                 },
                 {
@@ -132,7 +135,7 @@ const router = new Router({
                             { title: 'Users List', active: false },
                             { title: 'book item', active: false },
                         ],
-                        pageTitle: 'Users'
+                        pageTitle: 'users'
 
                     }
 
@@ -149,7 +152,8 @@ const router = new Router({
                             { title: 'Users List', url: '/users' },
                             { title: 'book item', active: false },
                         ],
-                        pageTitle: 'User Info'
+                        pageTitle: 'User Info',
+                        parent: 'users',
 
                     }
 
@@ -167,7 +171,9 @@ const router = new Router({
                             { title: 'User Edit', active: false },
                             { title: 'book item', active: false },
                         ],
-                        pageTitle: 'Users'
+                        pageTitle: 'Users',
+                        parent: 'users',
+
 
                     }
 
@@ -185,7 +191,9 @@ const router = new Router({
                             { title: '', active: false },
 
                         ],
-                        pageTitle: 'User create'
+                        pageTitle: 'User create',
+                        parent: 'users',
+
 
                     }
 
@@ -254,23 +262,33 @@ const router = new Router({
 })
 
 router.afterEach(() => {
-        // Remove initial loading
-        const appLoading = document.getElementById('loading-bg')
-        if (appLoading) {
-            appLoading.style.display = "none";
+    // Remove initial loading
+    const appLoading = document.getElementById('loading-bg')
+    if (appLoading) {
+        appLoading.style.display = "none";
+    }
+})
+
+// router.beforeEach((to, from, next) => {
+//     if (store.getters.hasToken) next('/pages/login')
+//     else {
+//         next()
+//     }
+// })
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        if (!(store.state.token.length > 0)) {
+            next('/pages/login')
+        } else {
+            next();
         }
-    })
-    // router.beforeEach((to, _, next) => {
-    //     const isAuthenticated = store.state.token;
-    //     if (!isAuthenticated.length > 0) next('/pages/login')
-    //     else next('/')
-    //         // if (isAuthenticated.length > 0) {
-    //         //     console.log(to.meta.rule)
-    //         //     console.log(next('/'))
-    //         // } else
+    } else {
+        next() // make sure to always call next()!
+    }
+})
 
-
-// });
 
 
 export default router

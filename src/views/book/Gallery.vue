@@ -10,7 +10,7 @@
           vs-w="10"
         >
           <div class="mt-2">
-            <vs-button v-if="$hasPermission(5)" class="" color="#2ca3f2" to="/book/create-book" dark>
+            <vs-button class="" color="#2ca3f2" to="/book/create-book" dark>
               Create Book
             </vs-button>
           </div>
@@ -229,14 +229,14 @@ export default {
       deep: true
     },
     currentx(val) {
-      this.getAll(val);
+      this.getAll(val,12);
     }
   },
   methods: {
     getResult() {
       this.loading(true);
       if (this.disableAllfields && this.disableAllfields) {
-        Books.getISBN(this.filterList.isbn).then(({ items: books, length }) => {
+        Books.getISBN(this.filterList.isbn,this.currentx, 12).then(({ items: books, length }) => {
           this.books = books;
           this.booksQuantity = length;
           this.page = Math.ceil(length / 12);
@@ -256,7 +256,7 @@ export default {
         //   .map(key => `${key}=${this.filterList[key]}`)
         //   .join("&");
         const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=&typeId=${this.filterList.typeId}`;
-        Books.getSearchedBooks(url)
+        Books.getSearchedBooks(url,this.currentx,12)
           .then(({ items: books, length }) => {
             this.books = books;
             this.booksQuantity = length;

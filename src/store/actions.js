@@ -7,7 +7,6 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 import axios from 'axios'
-
 const actions = {
 
     // ////////////////////////////////////////////
@@ -49,17 +48,15 @@ const actions = {
 
     recieveToken(context, payload) {
         return new Promise((resolve, reject) => {
-            axios.post('http://localhost:3030/api/auth/login', {
+            axios.post(`${process.env.VUE_APP_BASE_URL}auth/login`, {
                 username: payload.username,
                 password: payload.password
 
             }).then(res => {
                 const token = res.data.token
-                console.log(token)
-                const user = 'some data'
                 localStorage.setItem('access_token', token)
                 axios.defaults.headers.common['Authorization'] = token
-                context.commit('recieveToken', token, user)
+                context.commit('recieveToken', token)
 
                 resolve(context)
             }).catch(error => {
