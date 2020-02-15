@@ -93,8 +93,19 @@ const mutations = {
         state.token = token
     },
     logout(state) {
+        state.userInfo = {
+            name: "",
+            role: {
+                id: "",
+                name: ""
+            },
+            permissions: []
+        }
         state.token = null
     },
+    setUserInfo(state, payload) {
+        state.userInfo = payload
+    }
 }
 
 export default mutations

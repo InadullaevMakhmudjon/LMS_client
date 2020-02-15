@@ -49,7 +49,7 @@
         />
       </vs-select>
       <!--book responsible person-->
-      <vs-select
+      <!-- <vs-select
         :disabled="isValidIsbn"
         v-model="bookResponsiblePerson"
         class="w-full select-large mt-5"
@@ -62,7 +62,13 @@
           :text="item.name"
           class="w-full"
         />
-      </vs-select>
+      </vs-select> -->
+         <vs-input
+        disabled
+        label="Responsible Person"
+        v-model="this.$store.state.userInfo.name"
+        class="w-full mt-5"
+      />
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.typeId"
@@ -234,7 +240,7 @@ import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import Authors from "@/services/Authors";
 import Categories from "@/services/Categories";
 import Languages from "@/services/Languages";
-import Users from "@/services/Users";
+
 import Courses from "@/services/Courses";
 import Subjects from "@/services/Subjects";
 import BookTypes from "@/services/BookTypes";
@@ -306,7 +312,6 @@ export default {
         Authors.getAll(),
         Categories.getAll(),
         Languages.getAll(),
-        Users.getAll(),
         Courses.getAll(),
         Subjects.getAll(),
         BookTypes.getAll()
@@ -316,7 +321,6 @@ export default {
             authors,
             categories,
             languages,
-            users,
             courses,
             subjects,
             bookTypes
@@ -324,7 +328,6 @@ export default {
           this.bookAuthorList = authors;
           this.categoryList = categories;
           this.languageList = languages;
-          this.resPersonList = users;
           this.courseList = courses;
           this.bookSubjectList = subjects;
           this.bookTypeList = bookTypes;

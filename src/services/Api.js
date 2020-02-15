@@ -17,10 +17,12 @@ export function execute(promise) {
 }
 
 const API = axios.create({
-    baseURL: process.env.VUE_APP_BASE_URL
+    baseURL: process.env.VUE_APP_BASE_URL,
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`
+    }
 });
 
 export default () => {
-    axios.defaults.headers.common.Authorization = `Bearer ${window.localStorage.getItem('access_token')}`;
     return API;
 }

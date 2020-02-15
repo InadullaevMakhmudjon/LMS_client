@@ -15,6 +15,9 @@ const getters = {
     hasToken(state) {
         return state.token.lengh > 0
     },
+    // getUserInfo(state) {
+    //     return state.userInfo
+    // },
     // COMPONENT
     // vx-autosuggest
     // starredPages: state => state.navbarSearchAndPinList.data.filter((page) => page.highlightAction),

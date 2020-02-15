@@ -112,8 +112,8 @@
         <!-- USER META -->
         <div class="the-navbar__user-meta flex items-center">
           <div class="text-right leading-tight hidden sm:block">
-            <p class="font-semibold">{{ user_displayName }}</p>
-            <small>Librarian</small>
+            <p class="font-semibold">{{ userDetail.name }}</p>
+            <small>{{ userDetail.role.name }}</small>
           </div>
           <vs-dropdown
             vs-custom-content
@@ -145,7 +145,7 @@
             <vs-dropdown-menu class="vx-navbar-dropdown">
               <ul style="min-width: 9rem">
                 <li
-                 @click="$router.push('/profile')"
+                  @click="$router.push('/profile')"
                   class="flex py-2 px-4 cursor-pointer hover:bg-primary hover:text-white"
                 >
                   <feather-icon
@@ -178,6 +178,8 @@
 import VxAutoSuggest from "@/components/vx-auto-suggest/VxAutoSuggest.vue";
 import VuePerfectScrollbar from "vue-perfect-scrollbar";
 import draggable from "vuedraggable";
+import Profile from "../../services/Profile";
+import Users from "../../services/Users";
 
 export default {
   name: "the-navbar",
@@ -191,6 +193,13 @@ export default {
     return {
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: "",
+      userDetail: {
+        name: "",
+        role: {
+          id: "",
+          name: ""
+        }
+      },
       showFullSearch: false,
       unreadNotifications: [
         {
@@ -250,7 +259,13 @@ export default {
     }
   },
   computed: {
+    //  getUserInfo () {
+    //    return this.$store.getters.userInfo
+    // },
     // HELPER
+    //  userDetail(){
+    //    return this.$store.state.userInfo
+    //  },
     sidebarWidth() {
       return this.$store.state.sidebarWidth;
     },
@@ -290,25 +305,30 @@ export default {
     },
 
     // PROFILE
-    user_displayName() {
-      return "Arabkhonova Mokhina";
-      // return JSON.parse(localStorage.getItem('userInfo')).displayName
-    },
+
     activeUserImg() {
       return this.$store.state.AppActiveUser.img;
       // return JSON.parse(localStorage.getItem('userInfo')).photoURL || this.$store.state.AppActiveUser.img;
     }
   },
   methods: {
-      logout() {
-      // console.log(this.$store.getters.isLogIn)
-     this.$store.dispatch("logout").then(() => {
-       this.$router.push('/pages/login');
-     })
-     
+    getUserInfo() {
+      Profile.getAll()
+        .then(userInfo => {
+          this.userDetail = userInfo
+          this.$store.dispatch("storeData", userInfo);
+        })
+        .catch(error => console.log(error));
     },
-    pushing(){
-      this.$router.push('/profile')
+    logout() {
+      // console.log(this.$store.getters.isLogIn)
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push("/pages/login");
+      });
+    },
+
+    pushing() {
+      this.$router.push("/profile");
     },
     alerting() {
       alert("sd");
@@ -404,6 +424,9 @@ export default {
     VxAutoSuggest,
     VuePerfectScrollbar,
     draggable
+  },
+  mounted() {
+    this.getUserInfo();
   }
 };
 </script>

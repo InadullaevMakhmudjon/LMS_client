@@ -32,6 +32,14 @@ const state = {
         status: 'active',
         role: 'admin'
     },
+    userInfo: {
+        name: "",
+        role: {
+            id: "",
+            name: ""
+        },
+        permissions: []
+    },
 
     themePrimaryColor: colors.primary,
 

@@ -121,5 +121,6 @@ export default {
     Report,
     Archive
   },
+
 };
 </script>

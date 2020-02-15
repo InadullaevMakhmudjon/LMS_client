@@ -1,12 +1,12 @@
 <template>
   <div>
     <vx-card class="">
-      <vs-tabs :color="colorx" position="top">
-        <vs-tab @click="colorx = 'success'" label="Profile info">
-          <vx-row vs-justify="center" vs-w="6">
+      <vs-tabs color="warning" position="top">
+        <vs-tab  label="Profile info">
+          <vs-col vs-justify="start" vs-w="12">
             <div class="w-1/4">
               <vs-list>
-                <vs-list-item title="Arabkhonova Mokhina" subtitle="Librarian">
+                <vs-list-item :title="userInfo.firstName+' '+userInfo.lastName" :subtitle="userInfo.role.name">
                   <vs-avatar size="70px" src="/img/avatar-s-11.68ff1200.png" />
                 </vs-list-item>
               </vs-list>
@@ -21,7 +21,19 @@
                       icon="icon-user"
                       icon-no-border
                       label="First Name"
-                      v-model="input13"
+                      v-model="userInfo.firstName"
+                    />
+                  </div>
+                </div>
+                <div class="vx-row mb-6">
+                  <div class="vx-col w-full">
+                    <vs-input
+                      class="w-full"
+                      icon-pack="feather"
+                      icon="icon-user"
+                      icon-no-border
+                      label="Last Name"
+                      v-model="userInfo.lastName"
                     />
                   </div>
                 </div>
@@ -34,7 +46,7 @@
                       icon="icon-mail"
                       icon-no-border
                       label="Email"
-                      v-model="input14"
+                      v-model="userInfo.email"
                     />
                   </div>
                 </div>
@@ -46,28 +58,12 @@
                       icon="icon-smartphone"
                       icon-no-border
                       label="Mobile"
-                      v-model="input15"
+                      v-model="userInfo.phoneNumber"
                     />
                   </div>
                 </div>
                 <div class="vx-row mb-6">
                   <div class="vx-col w-full">
-                    <vs-input
-                      type="password"
-                      class="w-full"
-                      icon-pack="feather"
-                      icon="icon-lock"
-                      icon-no-border
-                      label="Password"
-                      v-model="input16"
-                    />
-                  </div>
-                </div>
-                <div class="vx-row mb-6">
-                  <div class="vx-col w-full">
-                    <vs-checkbox class="inline-flex" v-model="check4"
-                      >Remember Me</vs-checkbox
-                    >
                   </div>
                 </div>
                 <div class="vx-row">
@@ -77,20 +73,17 @@
                       color="warning"
                       type="border"
                       class="mb-2"
-                      @click="
-                        input13 = input14 = input15 = input16 = '';
-                        check4 = false;
-                      "
-                      >Cancle</vs-button
+                
+                      >Cancel</vs-button
                     >
                   </div>
                 </div>
               </template>
             </div>
-          </vx-row>
+          </vs-col>
         </vs-tab>
 
-        <vs-tab @click="colorx = 'warning'" label="Password settings">
+        <vs-tab label="Password settings">
           <div class="con-tab-ejemplo w-1/4">
             <div class="vx-row mb-6">
               <div class="vx-col w-full">
@@ -100,12 +93,12 @@
                   icon-pack="feather"
                   icon="icon-lock"
                   icon-no-border
-                  label="Password"
-                  v-model="input16"
+                  label="Old password"
+                  v-model="userPwd.currentPassword"
                 />
               </div>
             </div>
-            <div class="vx-row mb-6">
+              <div class="vx-row mb-6">
               <div class="vx-col w-full">
                 <vs-input
                   type="password"
@@ -113,21 +106,21 @@
                   icon-pack="feather"
                   icon="icon-lock"
                   icon-no-border
-                  label="Password"
-                  v-model="input16"
+                  label="New password"
+                  v-model="userPwd.newPassword"
                 />
               </div>
             </div>
             <div class="vx-row mb-6">
               <div class="vx-col w-full">
                 <vs-input
-                  type="password"
+                  type="Confirm new password"
                   class="w-full"
                   icon-pack="feather"
                   icon="icon-lock"
                   icon-no-border
                   label="Password"
-                  v-model="input16"
+                  v-model="userPwd.confirm"
                 />
               </div>
             </div>
@@ -138,9 +131,6 @@
                   color="warning"
                   type="border"
                   class="mb-2"
-                  @click="
-                    input5 = input6 = input7 = input8 = '';
-                    check2 = false;"
                   >Reset</vs-button
                 >
               </div>
@@ -153,7 +143,34 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+   return {
+      userInfo: {
+      id: '',
+      lastName: '',
+      firstName: '',
+      phoneNumber:'',
+      role: {},
+      permissions: []
+    },
+    userPwd:{
+      currentPassword: '',
+      newPassword: '',
+      confirm:''
+    }
+   }
+  },
+methods: {
+  getUserInfo () {
+    console.log(this.$store.state.userInfo)
+    this.userInfo = this.$store.state.userInfo
+  }
+},
+mounted() {
+  this.getUserInfo()
+},
+}
 </script>
 
 <style></style>
