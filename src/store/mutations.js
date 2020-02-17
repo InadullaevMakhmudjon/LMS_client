@@ -94,14 +94,15 @@ const mutations = {
     },
     logout(state) {
         state.userInfo = {
-            name: "",
+            firstName: "",
+            lastName: "",
             role: {
                 id: "",
                 name: ""
             },
             permissions: []
         }
-        state.token = null
+        // state.token = null
     },
     setUserInfo(state, payload) {
         state.userInfo = payload

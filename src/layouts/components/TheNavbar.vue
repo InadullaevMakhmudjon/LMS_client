@@ -112,7 +112,7 @@
         <!-- USER META -->
         <div class="the-navbar__user-meta flex items-center">
           <div class="text-right leading-tight hidden sm:block">
-            <p class="font-semibold">{{ userDetail.name }}</p>
+            <p class="font-semibold">{{ userDetail.firstName+' '+ userDetail.lastName }}</p>
             <small>{{ userDetail.role.name }}</small>
           </div>
           <vs-dropdown
@@ -193,13 +193,13 @@ export default {
     return {
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: "",
-      userDetail: {
-        name: "",
-        role: {
-          id: "",
-          name: ""
-        }
-      },
+      // userDetail: {
+      //   name: "",
+      //   role: {
+      //     id: "",
+      //     name: ""
+      //   }
+      // },
       showFullSearch: false,
       unreadNotifications: [
         {
@@ -263,9 +263,7 @@ export default {
     //    return this.$store.getters.userInfo
     // },
     // HELPER
-    //  userDetail(){
-    //    return this.$store.state.userInfo
-    //  },
+
     sidebarWidth() {
       return this.$store.state.sidebarWidth;
     },
@@ -309,13 +307,16 @@ export default {
     activeUserImg() {
       return this.$store.state.AppActiveUser.img;
       // return JSON.parse(localStorage.getItem('userInfo')).photoURL || this.$store.state.AppActiveUser.img;
-    }
+    },
+    userDetail(){
+       return this.$store.getters.userInfo
+     },
   },
   methods: {
     getUserInfo() {
       Profile.getAll()
         .then(userInfo => {
-          this.userDetail = userInfo
+          // this.userDetail = userInfo
           this.$store.dispatch("storeData", userInfo);
         })
         .catch(error => console.log(error));

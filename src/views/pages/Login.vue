@@ -36,9 +36,11 @@
                   label-placeholder="Username"
                   v-model="auth.username"
                   class="w-full no-icon-border"
+                  v-on:keyup.enter="login"
                 />
 
                 <vs-input
+                v-on:keyup.enter="login"
                   type="password"
                   icon="icon icon-lock"
                   icon-pack="feather"
@@ -48,7 +50,7 @@
                 />
 
                 <div class="flex flex-wrap justify-between my-5">
-                  <vs-button @click="login()" class="float-right"
+                  <vs-button @click="login()"  class="float-right"
                     >Login</vs-button
                   >
                 </div>
@@ -77,6 +79,7 @@ export default {
       // console.log(this.$store.getters.isLogIn)
      this.$store.dispatch("recieveToken", this.auth).then(() => {
        this.$router.push('/');
+       
      })
      
     }

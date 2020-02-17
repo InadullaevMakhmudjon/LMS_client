@@ -66,7 +66,7 @@
          <vs-input
         disabled
         label="Responsible Person"
-        v-model="this.$store.state.userInfo.name"
+        v-model="this.$store.state.userInfo.lastName"
         class="w-full mt-5"
       />
       <vs-select

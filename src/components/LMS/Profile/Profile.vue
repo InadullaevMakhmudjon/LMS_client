@@ -3,15 +3,16 @@
     <vx-card class="">
       <vs-tabs color="warning" position="top">
         <vs-tab  label="Profile info">
-          <vs-col vs-justify="start" vs-w="12">
-            <div class="w-1/4">
+          <vs-row>
+          <vs-col vs-justify="start" vs-w="6">
+            <div class="w-2/3">
               <vs-list>
                 <vs-list-item :title="userInfo.firstName+' '+userInfo.lastName" :subtitle="userInfo.role.name">
                   <vs-avatar size="70px" src="/img/avatar-s-11.68ff1200.png" />
                 </vs-list-item>
               </vs-list>
             </div>
-            <div class="vx-col w-1/4">
+            <div class="vx-col w-2/3">
               <template>
                 <div class="vx-row mb-6">
                   <div class="vx-col w-full">
@@ -81,6 +82,32 @@
               </template>
             </div>
           </vs-col>
+          <vs-col vs-justify="center" vs-w="6">
+                <div class="vx-row">
+    <div class="flex my-3">
+        <feather-icon class="px-3" icon="LockIcon" svgClasses="h-6 w-6" />
+        <h3>Permissions</h3>
+      </div>
+      <vs-divider></vs-divider>
+    <table disabled>
+            <tr>
+              <th>Field</th>
+              <th>Create</th>
+              <th>Read</th>
+              <th>Update</th>
+              <th>Delete</th>
+            </tr>
+            <tr v-for="(item,i) in datalist" :key="i">
+              <td>{{item.name}}</td>
+              <td><vs-checkbox disabled  v-model="item.create"></vs-checkbox></td>
+              <td><vs-checkbox disabled  v-model="item.read"></vs-checkbox></td>
+              <td><vs-checkbox disabled  v-model="item.update"></vs-checkbox></td>
+              <td><vs-checkbox disabled  v-model="item.delete"></vs-checkbox></td>
+            </tr>
+          </table>
+  </div>
+          </vs-col>
+          </vs-row>
         </vs-tab>
 
         <vs-tab label="Password settings">
@@ -126,7 +153,7 @@
             </div>
             <div class="vx-row">
               <div class="vx-col sm:w-2/3 w-full ml-auto">
-                <vs-button class="mr-3 mb-2">Submit</vs-button>
+                <vs-button class="mr-3 mb-2">Save</vs-button>
                 <vs-button
                   color="warning"
                   type="border"
@@ -158,12 +185,36 @@ export default {
       currentPassword: '',
       newPassword: '',
       confirm:''
-    }
+    },
+      datalist: [
+      {
+       id: 2,
+       name: 'Settings',
+       permission: {
+            read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+           store: []
+        
+       }
+      },
+        {
+          type: "Books",
+          read: false,
+          create: false,
+          update: false,
+          delete: false,
+            prop: true,
+          store: []
+        }
+        ]
    }
   },
 methods: {
   getUserInfo () {
-    console.log(this.$store.state.userInfo)
+   this.datalist = this.$store.state.userInfo.permissions
     this.userInfo = this.$store.state.userInfo
   }
 },
@@ -173,4 +224,23 @@ mounted() {
 }
 </script>
 
-<style></style>
+<style>
+.regform{
+  color: rgb(65, 65, 65);   
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th,
+td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid rgb(243, 243, 243);
+}
+
+tr:hover {
+  background-color: #f5f5f5;
+}
+</style>

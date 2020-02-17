@@ -15,6 +15,9 @@ const getters = {
     hasToken(state) {
         return state.token.lengh > 0
     },
+    userInfo(state) {
+        return state.userInfo
+    },
     // getUserInfo(state) {
     //     return state.userInfo
     // },
