@@ -33,7 +33,8 @@ const state = {
         role: 'admin'
     },
     userInfo: {
-        name: "",
+        firstName: "",
+        lastName: "",
         role: {
             id: "",
             name: ""

@@ -314,7 +314,15 @@ export default {
   },
   methods: {
     getUserInfo() {
-      Profile.getAll()
+      // setTimeout(() => {
+      //   Profile.getOne()
+      //   .then(userInfo => {
+      //     // this.userDetail = userInfo
+      //     this.$store.dispatch("storeData", userInfo);
+      //   })
+      //   .catch(error => console.log(error));
+      // }, 3000);
+      Profile.getOne()
         .then(userInfo => {
           // this.userDetail = userInfo
           this.$store.dispatch("storeData", userInfo);

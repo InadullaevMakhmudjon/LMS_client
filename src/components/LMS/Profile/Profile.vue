@@ -92,17 +92,12 @@
     <table disabled>
             <tr>
               <th>Field</th>
-              <th>Create</th>
-              <th>Read</th>
-              <th>Update</th>
-              <th>Delete</th>
+              <th>Enabled</th>
             </tr>
             <tr v-for="(item,i) in datalist" :key="i">
               <td>{{item.name}}</td>
-              <td><vs-checkbox disabled  v-model="item.create"></vs-checkbox></td>
-              <td><vs-checkbox disabled  v-model="item.read"></vs-checkbox></td>
-              <td><vs-checkbox disabled  v-model="item.update"></vs-checkbox></td>
-              <td><vs-checkbox disabled  v-model="item.delete"></vs-checkbox></td>
+              <td><vs-checkbox disabled  v-model="item.has"></vs-checkbox></td>
+    
             </tr>
           </table>
   </div>
@@ -214,11 +209,14 @@ export default {
   },
 methods: {
   getUserInfo () {
-   this.datalist = this.$store.state.userInfo.permissions
+setTimeout(() => {
+     this.datalist = this.$store.state.userInfo.permissions
+       console.log(this.datalist)
     this.userInfo = this.$store.state.userInfo
+}, 500);
   }
 },
-mounted() {
+created() {
   this.getUserInfo()
 },
 }
