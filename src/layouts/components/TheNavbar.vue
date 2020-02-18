@@ -310,34 +310,23 @@ export default {
 
   methods: {
     getUserInfo() {
-      console.log('comes from begin', this.userDetail)
       this.checker= false
-      // setTimeout(() => {
-      //   Profile.getOne()
-      //   .then(userInfo => {
-      //     // this.userDetail = userInfo
-      //     this.$store.dispatch("storeData", userInfo);
-      //   })
-      //   .catch(error => console.log(error));
-      // }, 3000);
-   
+      
         Profile.getOne()
         .then(userInfo => {
           this.userDetail = userInfo
           console.log( userInfo.firstName)
           this.checker = true
-          //this.$store.dispatch("storeData", userInfo);
+          this.$store.dispatch("storeData", userInfo);
         }).catch(error => console.log(error));
 
 
     },
     logout() {
       this.checker =false
-      // console.log(this.$store.getters.isLogIn)
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/pages/login");
         this.userDetail = {}
-        console.log(this.userDetail)
       });
     },
 

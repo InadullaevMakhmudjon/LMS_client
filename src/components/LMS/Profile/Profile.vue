@@ -69,7 +69,7 @@
                 </div>
                 <div class="vx-row">
                   <div class="vx-col w-full">
-                    <vs-button class="mr-3 mb-2">Submit</vs-button>
+                    <vs-button @click="submitting" class="mr-3 mb-2">Save</vs-button>
                     <vs-button
                       color="warning"
                       type="border"
@@ -181,44 +181,58 @@ export default {
       newPassword: '',
       confirm:''
     },
-      datalist: [
-      {
-       id: 2,
-       name: 'Settings',
-       permission: {
-            read: false,
-          create: false,
-          update: false,
-          delete: false,
-            prop: true,
-           store: []
+      // datalist: [
+      // {
+      //  id: 2,
+      //  name: 'Settings',
+      //  permission: {
+      //       read: false,
+      //     create: false,
+      //     update: false,
+      //     delete: false,
+      //       prop: true,
+      //      store: []
         
-       }
-      },
-        {
-          type: "Books",
-          read: false,
-          create: false,
-          update: false,
-          delete: false,
-            prop: true,
-          store: []
-        }
-        ]
+      //  }
+      // },
+      //   {
+      //     type: "Books",
+      //     read: false,
+      //     create: false,
+      //     update: false,
+      //     delete: false,
+      //       prop: true,
+      //     store: []
+      //   }
+      //   ]
    }
   },
-methods: {
-  getUserInfo () {
-setTimeout(() => {
-     this.datalist = this.$store.state.userInfo.permissions
-       console.log(this.datalist)
-    this.userInfo = this.$store.state.userInfo
-}, 500);
+  computed:{
+datalist() {
+  const a =this.$store.state.userInfo.permissions
+  a.map(el=> el.name.split(':'))
+  return this.$store.state.userInfo.permissions
+},
+
+  },
+  methods : {
+     userInfos() {
+    this.userInfo = JSON.parse(localStorage.getItem('profileInfo'))
+},
+    submitting() {
+      console.log({
+        id:this.userInfo.id,
+        firstName: this.userInfo.firstName,
+        lastName: this.userInfo.lastName, 
+        phoneNumber: this.userInfo.phoneNumber,
+        email: this.userInfo.email
+      })
+    }
+  },
+  mounted() {
+    this.userInfos()
   }
-},
-mounted() {
-  this.getUserInfo()
-},
+
 }
 </script>
 

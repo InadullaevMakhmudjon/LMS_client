@@ -103,6 +103,7 @@ const mutations = {
             permissions: []
         }
         state.token = null;
+        localStorage.removeItem('profileInfo')
     },
     setUserInfo(state, payload) {
         state.userInfo = payload

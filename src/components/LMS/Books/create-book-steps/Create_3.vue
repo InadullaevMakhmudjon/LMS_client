@@ -26,7 +26,7 @@
             vs-sm="4"
             vs-xs="12"
           >
-            <vs-list color="red">
+            <!-- <vs-list color="red">
               <vs-list-header
                 icon="chrome_reader_mode"
                 title="Gathered Book Info"
@@ -38,7 +38,7 @@
                 :title="item.text"
                 :subtitle="item.value"
               ></vs-list-item>
-            </vs-list>
+            </vs-list> -->
           </vs-col>
           <vs-col
            class="pl-5 ml-5"

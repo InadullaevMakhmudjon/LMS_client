@@ -48,25 +48,10 @@
           class="w-full"
         />
       </vs-select>
-      <!--book responsible person-->
-      <!-- <vs-select
-        :disabled="isValidIsbn"
-        v-model="bookResponsiblePerson"
-        class="w-full select-large mt-5"
-        label="Responsible Person"
-      >
-        <vs-select-item
-          v-for="item in resPersonList"
-          :key="item.id"
-          :value="item.id"
-          :text="item.name"
-          class="w-full"
-        />
-      </vs-select> -->
          <vs-input
         disabled
         label="Responsible Person"
-        v-model="this.$store.state.userInfo.lastName"
+        v-model="bookObj.userId"
         class="w-full mt-5"
       />
       <vs-select
@@ -267,15 +252,14 @@ export default {
       loading: false,
       isUploadable: true,
       isValidIsbn: true,
-      bookResponsiblePerson: "",
-      resPersonList: [],
       bookTypeList: [],
       bookAuthorList: [],
       bookSubjectList: [],
       courseList: [],
       subjects: [],
       categoryList: [],
-      languageList: []
+      languageList: [],
+      responsible: this.$store.state.userInfo.lastName
     };
   },
   computed: {
@@ -300,7 +284,6 @@ export default {
   },
   methods: {
     getAll() {
-      console.log(this.$route.name)
        if(this.$route.name=='update_book'){
          this.isValidIsbn = false
          this.image = this.bookObj.image
@@ -349,7 +332,6 @@ export default {
       fileReader.readAsDataURL(files[0]);
       this.image = files[0].name;
       this.bookObj.imageFile.append("image", files[0]);
-      console.log(this.bookObj)
     },
     onPickFile() {
       this.$refs.fileInput.click();

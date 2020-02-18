@@ -83,7 +83,7 @@ export default {
         publishedYear: 0,
         languageId: 0,
         description: "",
-        userId: this.$store.state.userInfo.id,
+        userId: parseInt(JSON.parse(localStorage.getItem('profileInfo')).id), 
         image: "https://images.assetsdelivery.com/compings_v2/sabelskaya/sabelskaya1906/sabelskaya190600770.jpg",
         imageFile: new FormData(),
       },
@@ -111,6 +111,7 @@ export default {
         
           this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
           this.bookObj.image = imageUrl;
+          console.log(this.bookObj)
           Books.create(this.bookObj)
           .then(() => {
             this.$vs.notify({
@@ -133,6 +134,11 @@ export default {
             });
         })
       });
+    }
+  },
+  computed: {
+    userIdNum () {
+      return this.$store.state.userInfo
     }
   },
   components: {

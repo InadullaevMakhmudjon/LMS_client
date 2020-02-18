@@ -7,7 +7,6 @@
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
 import axios from 'axios'
-import Profile from '../services/Profile'
 const actions = {
 
     // ////////////////////////////////////////////
@@ -57,16 +56,9 @@ const actions = {
         commit('logout')
     },
     storeData(context, payload) {
-        localStorage.setItem('profileInfo', payload)
+        localStorage.setItem('profileInfo', JSON.stringify(payload))
         context.commit('setUserInfo', payload)
     }
-    // getUserInfo(context, payload) {
-    //     console.log('hello')
-    //     Profile.getAll().then((el) => {
-    //         console.log(el)
-    //         context.commit('setUserData', el)
-    //     }).catch(error => console.log(error))
-    // }
 }
 
 
