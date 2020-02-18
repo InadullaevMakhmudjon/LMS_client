@@ -111,7 +111,7 @@
 
         <!-- USER META -->
         <div class="the-navbar__user-meta flex items-center">
-          <div class="text-right leading-tight hidden sm:block">
+          <div v-if="checker" class="text-right leading-tight hidden sm:block">
             <p class="font-semibold">{{ userDetail.firstName+' '+ userDetail.lastName }}</p>
             <small>{{ userDetail.role.name }}</small>
           </div>
@@ -163,7 +163,7 @@
                     icon="LogOutIcon"
                     svgClasses="w-4 h-4"
                   ></feather-icon>
-                  <span class="ml-2">Logout</span>
+                  <span class="ml-2">Loagout</span>
                 </li>
               </ul>
             </vs-dropdown-menu>
@@ -193,13 +193,6 @@ export default {
     return {
       navbarSearchAndPinList: this.$store.state.navbarSearchAndPinList,
       searchQuery: "",
-      // userDetail: {
-      //   name: "",
-      //   role: {
-      //     id: "",
-      //     name: ""
-      //   }
-      // },
       showFullSearch: false,
       unreadNotifications: [
         {
@@ -243,6 +236,8 @@ export default {
           category: "primary"
         }
       ],
+      userDetail:{},
+      checker: false,
       settings: {
         // perfectscrollbar settings
         maxScrollbarLength: 60,
@@ -308,12 +303,15 @@ export default {
       return this.$store.state.AppActiveUser.img;
       // return JSON.parse(localStorage.getItem('userInfo')).photoURL || this.$store.state.AppActiveUser.img;
     },
-    userDetail(){
-       return this.$store.getters.userInfo
-     },
+    // userDetail(){
+    //  return this.$store.state.userInfo
+    //  },
   },
+
   methods: {
     getUserInfo() {
+      console.log('comes from begin', this.userDetail)
+      this.checker= false
       // setTimeout(() => {
       //   Profile.getOne()
       //   .then(userInfo => {
@@ -322,17 +320,24 @@ export default {
       //   })
       //   .catch(error => console.log(error));
       // }, 3000);
-      Profile.getOne()
+    setTimeout(() => {
+        Profile.getOne()
         .then(userInfo => {
-          // this.userDetail = userInfo
-          this.$store.dispatch("storeData", userInfo);
-        })
-        .catch(error => console.log(error));
+          this.userDetail = userInfo
+          console.log( userInfo.firstName)
+          this.checker = true
+          //this.$store.dispatch("storeData", userInfo);
+        }).catch(error => console.log(error));
+    }, 1000);
+
     },
     logout() {
+      this.checker =false
       // console.log(this.$store.getters.isLogIn)
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/pages/login");
+        this.userDetail = {}
+        console.log(this.userDetail)
       });
     },
 
@@ -434,7 +439,7 @@ export default {
     VuePerfectScrollbar,
     draggable
   },
-  mounted() {
+ mounted() {
     this.getUserInfo();
   }
 };

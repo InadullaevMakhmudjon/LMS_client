@@ -64,6 +64,7 @@
 </template>
 
 <script>
+import Auth from '../../services/Auth'
 export default {
   data() {
     return {
@@ -76,10 +77,16 @@ export default {
   },
   methods: {
     login() {
+      Auth.getToken(this.auth).then((res)=>{
+        console.log(res.token)
+        this.$store.dispatch("recieveToken", res.token).then(() => {
+       this.$router.push('/'); 
+       });
+      }).catch(error=> console.log(error))
       // console.log(this.$store.getters.isLogIn)
-     this.$store.dispatch("recieveToken", this.auth).then(() => {
-       this.$router.push('/');
-     });
+    //  this.$store.dispatch("recieveToken", this.auth).then(() => {
+    //    this.$router.push('/');
+    //  });
     }
   }
 };

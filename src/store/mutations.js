@@ -89,7 +89,7 @@ const mutations = {
     // logout(state) {
     //     state.token = null
     // },
-    recieveToken(state, token, user) {
+    recieveToken(state, token) {
         state.token = token
     },
     logout(state) {

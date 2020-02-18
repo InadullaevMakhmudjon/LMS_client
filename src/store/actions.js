@@ -48,35 +48,19 @@ const actions = {
 
 
     recieveToken(context, payload) {
-        return new Promise((resolve, reject) => {
-            axios.post(`${process.env.VUE_APP_BASE_URL}auth/login`, {
-                username: payload.username,
-                password: payload.password
+        localStorage.setItem('access_token', payload)
+        context.commit('recieveToken', payload)
+        axios.defaults.headers.common['Authorization'] = payload
+        console.log(axios.defaults.headers.common['Authorization'])
 
-            }).then(res => {
-                const token = res.data.token
-                localStorage.setItem('access_token', token)
-                axios.defaults.headers.common['Authorization'] = token
-                context.commit('recieveToken', token)
-
-                resolve(context)
-            }).catch(error => {
-                console.log(error)
-                alert('Access denied, Please try it again')
-                localStorage.removeItem('access_token')
-                reject(error)
-            })
-        })
     },
     logout({ commit }) {
-        return new Promise((resolve, reject) => {
-            commit('logout')
             localStorage.removeItem('access_token')
-            delete axios.defaults.headers.common['Authorization']
-            resolve()
-        })
+            delete axios.defaults.headers.common["Authorization"]
+            commit('logout')
     },
     storeData(context, payload) {
+        localStorage.setItem('profileInfo',payload)
         context.commit('setUserInfo', payload)
     }
     // getUserInfo(context, payload) {

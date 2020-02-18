@@ -216,7 +216,7 @@ setTimeout(() => {
 }, 500);
   }
 },
-created() {
+mounted() {
   this.getUserInfo()
 },
 }
