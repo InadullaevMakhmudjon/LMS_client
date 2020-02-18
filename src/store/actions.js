@@ -50,17 +50,14 @@ const actions = {
     recieveToken(context, payload) {
         localStorage.setItem('access_token', payload)
         context.commit('recieveToken', payload)
-        axios.defaults.headers.common['Authorization'] = payload
-        console.log(axios.defaults.headers.common['Authorization'])
-
     },
     logout({ commit }) {
-            localStorage.removeItem('access_token')
-            delete axios.defaults.headers.common["Authorization"]
-            commit('logout')
+        localStorage.removeItem('access_token')
+        delete axios.defaults.headers.common["Authorization"]
+        commit('logout')
     },
     storeData(context, payload) {
-        localStorage.setItem('profileInfo',payload)
+        localStorage.setItem('profileInfo', payload)
         context.commit('setUserInfo', payload)
     }
     // getUserInfo(context, payload) {

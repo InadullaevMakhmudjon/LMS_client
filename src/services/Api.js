@@ -24,5 +24,10 @@ const API = axios.create({
 });
 
 export default () => {
-    return API;
+    return axios.create({
+        baseURL: process.env.VUE_APP_BASE_URL,
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+    })
 }

@@ -320,7 +320,7 @@ export default {
       //   })
       //   .catch(error => console.log(error));
       // }, 3000);
-    setTimeout(() => {
+   
         Profile.getOne()
         .then(userInfo => {
           this.userDetail = userInfo
@@ -328,7 +328,7 @@ export default {
           this.checker = true
           //this.$store.dispatch("storeData", userInfo);
         }).catch(error => console.log(error));
-    }, 1000);
+
 
     },
     logout() {
