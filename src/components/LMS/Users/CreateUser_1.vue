@@ -24,10 +24,37 @@
   </div>
   <div class="vx-row mb-6">
     <div class="vx-col sm:w-1/6 w-full">
+      <span>Username</span>
+    </div>
+    <div class="vx-col sm:w-2/3 w-full">
+      <vs-input type="email" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border v-model="userData.username" />
+    </div>
+  </div>
+    <div class="vx-row mb-6">
+    <div class="vx-col sm:w-1/6 w-full">
       <span>Email</span>
     </div>
     <div class="vx-col sm:w-2/3 w-full">
       <vs-input type="email" class="w-full" icon-pack="feather" icon="icon-mail" icon-no-border v-model="userData.email" />
+    </div>
+  </div>
+   <div class="vx-row mb-6">
+    <div class="vx-col sm:w-1/6 w-full">
+      <span>Role</span>
+    </div>
+    <div class="vx-col sm:w-2/3 w-full">
+      <vs-select
+        v-model="userData.roleId"
+        class="w-full select-large mt-5"
+      >
+        <vs-select-item
+          v-for="item in roles"
+          :key="item.id"
+          :value="item.id"
+          :text="item.name"
+          class="w-full"
+        />
+      </vs-select>
     </div>
   </div>
 
@@ -37,6 +64,15 @@
     </div>
     <div class="vx-col sm:w-2/3 w-full">
       <vs-input type="password" class="w-full" icon-pack="feather" icon="icon-lock" icon-no-border v-model="userData.password" />
+    </div>
+  </div>
+  <div class="vx-row mb-6">
+    <div class="vx-col sm:w-1/6 w-full">
+      <span>Re-enter password</span>
+    </div>
+    <div class="vx-col sm:w-2/3 w-full">
+      <vs-input :danger="confirmingPwd ? false : true"
+        :danger-text="confirmingPwd ?  '' : 'Password doesnt match'" type="password" class="w-full" icon-pack="feather" icon="icon-lock" icon-no-border v-model="pwd" />
     </div>
   </div>
 
@@ -53,18 +89,14 @@
       </div>
     <table disabled>
             <tr>
+              <th>Order</th>
               <th>Field</th>
-              <th>Create</th>
-              <th>Read</th>
-              <th>Update</th>
-              <th>Delete</th>
+              <th>Access</th>
             </tr>
             <tr v-for="(item,i) in datalist" :key="i">
-              <td>{{item.type}}</td>
-              <td><vs-checkbox  v-model="item.create"></vs-checkbox></td>
-              <td><vs-checkbox  v-model="item.read"></vs-checkbox></td>
-              <td><vs-checkbox  v-model="item.update"></vs-checkbox></td>
-              <td><vs-checkbox  v-model="item.delete"></vs-checkbox></td>
+              <td>{{i+1}}</td>
+              <td>{{item.name}}</td>
+              <td><vs-checkbox  v-model="item.has"></vs-checkbox></td>
             </tr>
           </table>
   </div>
@@ -82,70 +114,57 @@
 </template>
 
 <script>
+import Permissions from '../../../services/Permissions'
+import Users from '../../../services/Users'
+import Roles from '../../../services/Roles'
 export default {
 data() {
    return {
+     pwd: '',
      userData:{
        firstName:'',
        lastName: '',
+       username: '',
+       roleId: 0,
        email:'',
-       phone:'',
        password:''
-     },
-
-      datalist: [
-        {
-          type: "Librarian",
-          read: false,
-          create: false,
-          update: false,
-          delete: false,
-          prop: true,
-          store: []
-        },
-        {
-          type: "Books",
-          read: false,
-          create: false,
-          update: false,
-          delete: false,
-            prop: true,
-          store: []
-        },
-        {
-          type: "Book Items",
-          read: false,
-          create: false,
-          update: false,
-          delete: false,
-            prop: true,
-          store: []
-        },
-        {
-          type: "Settings",
-          read: false,
-          create: false,
-          update: false,
-          delete: false,
-            prop: true,
-          store: []
-        },
-        {
-          type: "Members",
-          read: false,
-          create: false,
-          update: false,
-          delete: false,
-          prop: false,
-          store: []
-        }
-      ],
+       },
+       roles:[],
+      datalist: [],
    }
 },
-methods:{
-  submitData() {
-    console.log(this.userData)
+computed: {
+  confirmingPwd() {
+    console.log(this.userData.password == this.pwd)
+    return this.pwd == this.userData.password
   }
+},
+methods:{
+  getRoles () {
+    Roles.getAll().then (res => {
+      this.roles = res
+    })
+  },
+  submitData() {
+    Users.create1(this.userData).then (( res )=> {
+      console.log(res)
+      Users.create2(res.user.id, {permissions:[{id: 1},{id:2}, {id:3}]}).then ((res) => {
+          console.log(res)
+      }).catch( error => console.log(error))
+     // Users.create2(this)
+    }).catch(error => console.log(error))
+    console.log(this.userData)
+  },
+  getPermissionList() {
+    Permissions.getAll().then( permissions => {
+      this.datalist = permissions
+    }).catch( error => console.log( error ))
+  },
+
+},
+mounted () {
+  this.getPermissionList()
+  this.getRoles()
 }
 }
 </script>
