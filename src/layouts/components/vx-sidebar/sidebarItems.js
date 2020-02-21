@@ -17,39 +17,36 @@
 //   Author: Pixinvent
 //   Author URL: http://www.themeforest.net/user/pixinvent
 // ==========================================================================================*/
-import Vue from 'vue'
-
 const routing = [{
         url: "/",
         name: "Home",
         slug: "home",
         icon: "HomeIcon",
         access: true
-
     },
     {
         url: "/books",
         name: "Books",
         slug: "books",
         icon: "BookIcon",
-        access: true,
+        access: true
     },
     {
         url: "/users",
         name: "Users",
         slug: "users",
         icon: "UsersIcon",
-        access: Vue.prototype.$hasPermission(3)
+        access: false
     },
     {
         url: "/settings",
         name: "Settings",
         slug: "settings",
         icon: "SettingsIcon",
-        access: Vue.prototype.$hasPermission(10)
+        access: true
     },
 ]
-
+ 
 export default routing.filter(el => el.access == true)
 
 /*=========================================================================================
