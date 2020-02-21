@@ -41,6 +41,7 @@
                 <div class="vx-row mb-6">
                   <div class="vx-col w-full">
                     <vs-input
+                    disabled
                       type="email"
                       class="w-full"
                       icon-pack="feather"
@@ -48,18 +49,6 @@
                       icon-no-border
                       label="Email"
                       v-model="userInfo.email"
-                    />
-                  </div>
-                </div>
-                <div class="vx-row mb-6">
-                  <div class="vx-col w-full">
-                    <vs-input
-                      class="w-full"
-                      icon-pack="feather"
-                      icon="icon-smartphone"
-                      icon-no-border
-                      label="Mobile"
-                      v-model="userInfo.phoneNumber"
                     />
                   </div>
                 </div>
@@ -147,7 +136,7 @@
               </div>
             </div>
             <div class="vx-row">
-              <div class="vx-col sm:w-2/3 w-full ml-auto">
+              <div class="vx-col sm:w-2/3 w-full">
                 <vs-button class="mr-3 mb-2">Save</vs-button>
                 <vs-button
                   color="warning"
@@ -172,7 +161,6 @@ export default {
       id: '',
       lastName: '',
       firstName: '',
-      phoneNumber:'',
       role: {},
       permissions: []
     },
@@ -209,8 +197,6 @@ export default {
   },
   computed:{
 datalist() {
-  const a =this.$store.state.userInfo.permissions
-  a.map(el=> el.name.split(':'))
   return this.$store.state.userInfo.permissions
 },
 
@@ -223,9 +209,8 @@ datalist() {
       console.log({
         id:this.userInfo.id,
         firstName: this.userInfo.firstName,
-        lastName: this.userInfo.lastName, 
-        phoneNumber: this.userInfo.phoneNumber,
-        email: this.userInfo.email
+        lastName: this.userInfo.lastName,
+     //   email: this.userInfo.email
       })
     }
   },

@@ -107,6 +107,10 @@ const mutations = {
     },
     setUserInfo(state, payload) {
         state.userInfo = payload
+    },
+    setTokenExpired(state, payload) {
+        state.tokenExpiration = payload
+        console.log(state.tokenExpiration)
     }
 }
 

@@ -50,9 +50,14 @@
             <vs-button class="m-1" icon="edit" color="primary" type="filled"
               >Edit</vs-button
             >
-            <vs-button class="m-1" icon="delete" color="danger" type="border"
+            <vs-button disabled class="m-1" icon="delete" color="danger" type="border"
               >Delete</vs-button
             >
+          <ul class="con-s ml-5">
+
+      <label color="red" for="">Diactivate</label>
+      <vs-switch v-model="isActive"/>
+</ul>
           </div>
         </vs-row>
       </vs-row>
@@ -96,6 +101,7 @@ export default {
   props: ["id"],
   data() {
     return {
+      isActive:true,
       datalist: [
         {
           type: "Librarian",

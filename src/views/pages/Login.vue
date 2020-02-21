@@ -40,7 +40,7 @@
                 />
 
                 <vs-input
-                v-on:keyup.enter="login"
+                  v-on:keyup.enter="login"
                   type="password"
                   icon="icon icon-lock"
                   icon-pack="feather"
@@ -48,9 +48,17 @@
                   v-model="auth.password"
                   class="w-full mt-6 no-icon-border"
                 />
-
                 <div class="flex flex-wrap justify-between my-5">
-                  <vs-button @click="login()"  class="float-right"
+                  <a href="#">Forgot a Password ?</a>
+                </div>
+                <div class="flex flex-wrap justify-between my-5">
+                  <vs-button
+                    ref="loadableButton"
+                    id="button-with-loading"
+                    class="vs-con-loading__container float-right"
+                    type="relief"
+                    vslor="primary"
+                    @click="login()"
                     >Login</vs-button
                   >
                 </div>
@@ -64,8 +72,8 @@
 </template>
 
 <script>
-import Auth from '../../services/Auth';
-import axios from 'axios';
+import Auth from "../../services/Auth";
+import axios from "axios";
 
 export default {
   data() {
@@ -79,15 +87,30 @@ export default {
   },
   methods: {
     login() {
-      Auth.getToken(this.auth).then((res)=>{
-        this.$store.dispatch("recieveToken", res.token).then(() => {
-          this.$router.push('/');
-       });
-      });
-      // console.log(this.$store.getters.isLogIn)
-    //  this.$store.dispatch("recieveToken", this.auth).then(() => {
-    //    this.$router.push('/');
-    //  });
+      this.loading(true);
+      Auth.getToken(this.auth)
+        .then(res => {
+          this.$store.dispatch("recieveToken", res.token).then(() => {
+            this.loading(false);
+            this.$router.push("/");
+          });
+        })
+        .catch(error => console.log("error at: " + error));
+    },
+    loading(val) {
+      if (val == true) {
+        this.$vs.loading({
+          background: "primary",
+          color: "white",
+          container: "#button-with-loading",
+          scale: 0.45
+        });
+        setTimeout(() => {
+          this.$vs.loading.close("#button-with-loading > .con-vs-loading");
+        }, 3000);
+      } else {
+        this.$vs.loading.close("#button-with-loading > .con-vs-loading");
+      }
     }
   }
 };

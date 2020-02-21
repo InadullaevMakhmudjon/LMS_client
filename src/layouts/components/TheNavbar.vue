@@ -315,7 +315,6 @@ export default {
         Profile.getOne()
         .then(userInfo => {
           this.userDetail = userInfo
-          console.log( userInfo.firstName)
           this.checker = true
           this.$store.dispatch("storeData", userInfo);
         }).catch(error => console.log(error));

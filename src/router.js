@@ -71,7 +71,8 @@ const router = new Router({
                             { title: 'book item', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Books'
+                        pageTitle: 'Books',
+                        requiresAuth: true
 
                     }
                 },
@@ -88,7 +89,8 @@ const router = new Router({
                             { title: 'Book Info', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Book Info'
+                        pageTitle: 'Book Info',
+                        requiresAuth: true
 
                     }
                 },
@@ -104,7 +106,8 @@ const router = new Router({
                             { title: 'Create New Book', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Create Book'
+                        pageTitle: 'Create Book',
+                        requiresAuth: true
                     }
                 },
                 {
@@ -120,7 +123,8 @@ const router = new Router({
                             { title: 'Create New Book', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Update Book'
+                        pageTitle: 'Update Book',
+                        requiresAuth: true
                     }
                 },
 
@@ -135,7 +139,8 @@ const router = new Router({
                             { title: 'Users List', active: false },
                             { title: 'book item', active: false },
                         ],
-                        pageTitle: 'users'
+                        pageTitle: 'users',
+                        requiresAuth: true
 
                     }
 
@@ -154,6 +159,7 @@ const router = new Router({
                         ],
                         pageTitle: 'User Info',
                         parent: 'users',
+                        requiresAuth: true
 
                     }
 
@@ -173,6 +179,7 @@ const router = new Router({
                         ],
                         pageTitle: 'Users',
                         parent: 'users',
+                        requiresAuth: true
 
 
                     }
@@ -193,6 +200,7 @@ const router = new Router({
                         ],
                         pageTitle: 'User create',
                         parent: 'users',
+                        requiresAuth: true
 
 
                     }
@@ -208,7 +216,8 @@ const router = new Router({
                             { title: 'Home', url: '/' },
                             { title: 'book item', active: true },
                         ],
-                        pageTitle: 'Settings'
+                        pageTitle: 'Settings',
+                        requiresAuth: true
 
                     }
                 },
@@ -223,7 +232,8 @@ const router = new Router({
                             { title: 'book item', active: true },
                         ],
                         rule: '',
-                        pageTitle: 'Profile info'
+                        pageTitle: 'Profile info',
+                        requiresAuth: true
                     }
                 },
             ],
@@ -279,6 +289,7 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         // this route requires auth, check if logged in
         // if not, redirect to login page.
+        //console.log(store.state.tokenExpiration)
         if (!(store.state.token.length > 0)) {
             next('/pages/login')
         } else {

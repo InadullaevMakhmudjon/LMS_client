@@ -48,12 +48,12 @@
           class="w-full"
         />
       </vs-select>
-         <vs-input
+         <!-- <vs-input
         disabled
         label="Responsible Person"
         v-model="bookObj.userId"
         class="w-full mt-5"
-      />
+      /> -->
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.typeId"
@@ -188,7 +188,7 @@
         accept="image/*"
         @change="onfilepicked"
       />
-      <template v-if="imageUrl ">
+      <template v-if="imageUrl">
         <img
           class="zooming"
           height="300"
@@ -208,7 +208,7 @@
       </template>
     <vs-popup
       background-color="rgba(0, 0, 0, 0.8)"
-      :title="bookObj.title + ' ( Cover )'"
+      :title="bookObj.title"
       :active.sync="popupActivo"
     >
       <img class="center" :src="imageUrl" />
@@ -274,7 +274,8 @@ export default {
       this.bookObj.publishedYear = value.getFullYear();
     },
     selectedAuthors(val){
-        this.bookObj.authors = val
+
+     this.bookObj.authors = val
     }
   },
   components: {
@@ -288,7 +289,7 @@ export default {
          this.isValidIsbn = false
          this.image = this.bookObj.image
          this.point = true
-         this.selectedAuthors = this.bookObj.authors
+         //this.selectedAuthors = this.bookObj.authors
        }
       this.loading = true;
       Promise.all([

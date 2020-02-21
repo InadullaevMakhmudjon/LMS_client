@@ -111,7 +111,6 @@ export default {
         
           this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
           this.bookObj.image = imageUrl;
-          console.log(this.bookObj)
           Books.create(this.bookObj)
           .then(() => {
             this.$vs.notify({

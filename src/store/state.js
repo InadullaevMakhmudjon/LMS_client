@@ -13,6 +13,16 @@ import colors from '@/../themeConfig.js'
 
 const state = {
     token: localStorage.getItem('access_token') || '',
+    userInfo: {
+        firstName: "",
+        lastName: "",
+        role: {
+            id: "",
+            name: ""
+        },
+        permissions: []
+    },
+    tokenExpiration: false,
     isSidebarActive: true,
     breakpoint: null,
     sidebarWidth: "default",
@@ -31,15 +41,6 @@ const state = {
         phone: '232343444',
         status: 'active',
         role: 'admin'
-    },
-    userInfo: {
-        firstName: "",
-        lastName: "",
-        role: {
-            id: "",
-            name: ""
-        },
-        permissions: []
     },
 
     themePrimaryColor: colors.primary,
