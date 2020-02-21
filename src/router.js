@@ -139,7 +139,7 @@ const router = new Router({
                             { title: 'Users List', active: false },
                             { title: 'book item', active: false },
                         ],
-                        pageTitle: 'users',
+                        pageTitle: 'Users',
                         requiresAuth: true
 
                     }

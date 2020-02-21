@@ -7,6 +7,7 @@
           <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
             <vx-input-group class="mb-base w-full">
               <vs-input
+              v-if="$hasPermission(11)"
                 type="text"
                 v-model="item.value"
                 @keyup.enter="addlist(item)"
@@ -14,6 +15,7 @@
               <template slot="append">
                 <div class="append-text btn-addon">
                   <vs-button
+                  v-if="$hasPermission(11)"
                     color="primary"
                     type="border"
                     @click="addlist(item)"
@@ -63,6 +65,7 @@
                   </vs-td>
                   <vs-td :data="tr.id">
                     <vs-button
+                    v-if="$hasPermission(12)"
                       type="filled"
                       @click="editName(item.id, tr.id, tr)"
                       color="primary"
@@ -83,8 +86,7 @@
                       :text="
                         tr.bookItems.length > 0
                           ? 'This item has already been assigned to a book so that it cannot be deleted'
-                          : 'No book item is assigned'
-                      "
+                          : 'No book item is assigned'"
                     >
                       <vs-button
                         :disabled="tr.bookItems.length > 0"
@@ -112,6 +114,7 @@
                       "
                     >
                       <vs-button
+                        v-if="$hasPermission(13)"
                         :disabled="tr.books.length > 0"
                         radius
                         color="danger"

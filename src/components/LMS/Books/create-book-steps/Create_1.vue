@@ -100,7 +100,7 @@
       <p class="mt-4 text-small">Book Author</p>
       <v-select
         multiple
-        v-model="selectedAuthors"
+        v-model="bookObj.authors"
         taggable
         push-tags
         :disabled="isValidIsbn"
@@ -203,7 +203,7 @@
           height="300"
           v-if="!popupActivo"
           @click="popupActivo = true"
-          :src="this.bookObj.image"
+          :src="bookObj.image"
         />
       </template>
     <vs-popup
@@ -245,7 +245,6 @@ export default {
       ],
       point: false,
       publishedYear: 2,
-      selectedAuthors:[],
       popupActivo: false,
       image: null,
       imageUrl: "",
@@ -272,10 +271,6 @@ export default {
   watch: {
     publishedYear(value) {
       this.bookObj.publishedYear = value.getFullYear();
-    },
-    selectedAuthors(val){
-
-     this.bookObj.authors = val
     }
   },
   components: {
@@ -289,7 +284,6 @@ export default {
          this.isValidIsbn = false
          this.image = this.bookObj.image
          this.point = true
-         //this.selectedAuthors = this.bookObj.authors
        }
       this.loading = true;
       Promise.all([

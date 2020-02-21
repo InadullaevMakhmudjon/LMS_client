@@ -6,7 +6,7 @@
 <vx-card class="mt-5">
  
   <div class="flex">
-      <vs-button class="my-auto mt-5 m-5" to="/user-create">New user</vs-button>
+      <vs-button v-if="$hasPermission(1)" class="my-auto mt-5 m-5" to="/user-create">New user</vs-button>
        <vs-select
       class="my-auto"
       label="Status"

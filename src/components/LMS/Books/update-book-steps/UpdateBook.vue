@@ -35,7 +35,7 @@ export default {
         };
         console.log(this.bookInfo)
         this.bookInfo.language = book.language.name;
-        this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
+        // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
     submitData() {

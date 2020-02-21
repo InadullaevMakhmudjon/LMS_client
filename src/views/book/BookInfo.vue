@@ -5,10 +5,10 @@
           <vs-button type="flat"  size="small" icon="keyboard_arrow_left" class="mr-2" @click="backHistory">
             back
         </vs-button>
-        <vs-button color="primary" class="mr-4" type="filled" icon="add"
+        <vs-button  v-if="$hasPermission(7)" color="primary" class="mr-4" type="filled" icon="add"
           >Add</vs-button
         >
-        <vs-button color="primary" type="filled"  icon="edit"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
+        <vs-button  v-if="$hasPermission(5)" color="primary" type="filled"  icon="edit"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
       </vs-row>
 
       <vs-row class="justify-between">

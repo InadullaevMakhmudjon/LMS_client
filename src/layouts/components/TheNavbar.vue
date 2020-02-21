@@ -31,7 +31,8 @@
             position="bottom"
             text="You can add new book from here"
           >
-            <vs-button
+            <vs-button 
+            v-if="$hasPermission(4)"
               radius
               color="#2CA3F2"
               type="border"

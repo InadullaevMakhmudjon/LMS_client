@@ -10,7 +10,7 @@
           vs-w="10"
         >
           <div class="mt-2">
-            <vs-button v-if="$hasPermission(2)" class="" color="#2ca3f2" to="/book/create-book" dark>
+            <vs-button v-if="$hasPermission(4)" class="" color="#2ca3f2" to="/book/create-book" dark>
               Create Book
             </vs-button>
           </div>
