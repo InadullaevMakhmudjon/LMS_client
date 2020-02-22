@@ -120,6 +120,7 @@ export default {
     VxBreadcrumb,
     Report,
     Archive
-  }
+  },
+
 };
 </script>

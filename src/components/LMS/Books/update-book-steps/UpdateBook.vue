@@ -34,7 +34,7 @@ export default {
           imageFile: new FormData()
         };
         this.bookInfo.language = book.language.name;
-        this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
+        // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
     submitData() {

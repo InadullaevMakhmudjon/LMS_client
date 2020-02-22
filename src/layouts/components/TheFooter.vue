@@ -11,13 +11,7 @@
 
 <template functional>
     <footer class="the-footer flex-wrap justify-between" :class="classes">
-        <span>COPYRIGHT @ {{ new Date().getFullYear() }} <a href="https://inha.uz" target="_blank" rel="nofollow">Inha.uz</a>, Inha university in Tashkent</span>
-        <span class="md:flex hidden items-center">
-           <a href="http://itsolutions.uz/" target="_blank" rel="nofollow">
-            <feather-icon icon="BarChart2Icon" svgClasses="stroke-current text-primary w-6 h-6" class="" />
-           IT solutions</a>
-           
-        </span>
+        <span>COPYRIGHT @ {{ new Date().getFullYear() }} <a href="http://itsolutions.uz/" target="_blank" rel="nofollow">IT solutions</a>, Inha university in Tashkent</span>
     </footer>
 </template>
 

@@ -6,8 +6,7 @@
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
-
-
+import axios from 'axios'
 const actions = {
 
     // ////////////////////////////////////////////
@@ -15,16 +14,16 @@ const actions = {
     // ////////////////////////////////////////////
 
     updateSidebarWidth({ commit }, width) {
-      commit('UPDATE_SIDEBAR_WIDTH', width);
+        commit('UPDATE_SIDEBAR_WIDTH', width);
     },
     toggleContentOverlay({ commit }) {
-      commit('TOGGLE_CONTENT_OVERLAY');
+        commit('TOGGLE_CONTENT_OVERLAY');
     },
     updateTheme({ commit }, val) {
-      commit('UPDATE_THEME', val);
+        commit('UPDATE_THEME', val);
     },
     updateWindowWidth({ commit }, width) {
-      commit('UPDATE_WINDOW_WIDTH', width);
+        commit('UPDATE_WINDOW_WIDTH', width);
     },
 
 
@@ -34,16 +33,34 @@ const actions = {
 
     // VxAutoSuggest
     updateStarredPage({ commit }, payload) {
-      commit('UPDATE_STARRED_PAGE', payload)
+        commit('UPDATE_STARRED_PAGE', payload)
     },
 
     //  The Navbar
     arrangeStarredPagesLimited({ commit }, list) {
-      commit('ARRANGE_STARRED_PAGES_LIMITED', list)
+        commit('ARRANGE_STARRED_PAGES_LIMITED', list)
     },
     arrangeStarredPagesMore({ commit }, list) {
-      commit('ARRANGE_STARRED_PAGES_MORE', list)
+        commit('ARRANGE_STARRED_PAGES_MORE', list)
     },
+
+
+
+    recieveToken(context, payload) {
+        localStorage.setItem('access_token', payload)
+        context.commit('recieveToken', payload)
+    },
+    logout({ commit }) {
+        localStorage.removeItem('access_token')
+        delete axios.defaults.headers.common["Authorization"]
+        commit('logout')
+    },
+    storeData(context, payload) {
+        localStorage.setItem('profileInfo', JSON.stringify(payload))
+        context.commit('setUserInfo', payload)
+    }
 }
+
+
 
 export default actions

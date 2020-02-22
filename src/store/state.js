@@ -12,6 +12,17 @@ import themeConfig from '@/../themeConfig.js'
 import colors from '@/../themeConfig.js'
 
 const state = {
+    token: localStorage.getItem('access_token') || '',
+    userInfo: {
+        firstName: "",
+        lastName: "",
+        role: {
+            id: "",
+            name: ""
+        },
+        permissions: []
+    },
+    tokenExpiration: false,
     isSidebarActive: true,
     breakpoint: null,
     sidebarWidth: "default",
@@ -26,6 +37,10 @@ const state = {
         about: 'Dessert chocolate cake lemon drops jujubes. Biscuit cupcake ice cream bear claw brownie brownie marshmallow.',
         img: 'avatar-s-11.png',
         status: 'online',
+        email: 'smshasaasd@gmail.com',
+        phone: '232343444',
+        status: 'active',
+        role: 'admin'
     },
 
     themePrimaryColor: colors.primary,

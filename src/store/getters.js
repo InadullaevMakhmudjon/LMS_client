@@ -9,10 +9,21 @@
 
 
 const getters = {
-
-	// COMPONENT
-		// vx-autosuggest
-	// starredPages: state => state.navbarSearchAndPinList.data.filter((page) => page.highlightAction),
+    isLogIn(state) {
+        return state.token !== null && state.token !== undefined
+    },
+    hasToken(state) {
+        return state.token.lengh > 0
+    },
+    userInfo(state) {
+        return state.userInfo
+    },
+    // getUserInfo(state) {
+    //     return state.userInfo
+    // },
+    // COMPONENT
+    // vx-autosuggest
+    // starredPages: state => state.navbarSearchAndPinList.data.filter((page) => page.highlightAction),
 }
 
 export default getters

@@ -48,21 +48,12 @@
           class="w-full"
         />
       </vs-select>
-      <!--book responsible person-->
-      <vs-select
-        :disabled="isValidIsbn"
-        v-model="bookResponsiblePerson"
-        class="w-full select-large mt-5"
+         <!-- <vs-input
+        disabled
         label="Responsible Person"
-      >
-        <vs-select-item
-          v-for="item in resPersonList"
-          :key="item.id"
-          :value="item.id"
-          :text="item.name"
-          class="w-full"
-        />
-      </vs-select>
+        v-model="bookObj.userId"
+        class="w-full mt-5"
+      /> -->
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.typeId"
@@ -109,7 +100,7 @@
       <p class="mt-4 text-small">Book Author</p>
       <v-select
         multiple
-        v-model="selectedAuthors"
+        v-model="bookObj.authors"
         taggable
         push-tags
         :disabled="isValidIsbn"
@@ -197,7 +188,7 @@
         accept="image/*"
         @change="onfilepicked"
       />
-      <template v-if="imageUrl ">
+      <template v-if="imageUrl">
         <img
           class="zooming"
           height="300"
@@ -212,12 +203,12 @@
           height="300"
           v-if="!popupActivo"
           @click="popupActivo = true"
-          :src="this.bookObj.image"
+          :src="bookObj.image"
         />
       </template>
     <vs-popup
       background-color="rgba(0, 0, 0, 0.8)"
-      :title="bookObj.title + ' ( Cover )'"
+      :title="bookObj.title"
       :active.sync="popupActivo"
     >
       <img class="center" :src="imageUrl" />
@@ -234,7 +225,7 @@ import "vue-form-wizard/dist/vue-form-wizard.min.css";
 import Authors from "@/services/Authors";
 import Categories from "@/services/Categories";
 import Languages from "@/services/Languages";
-import Users from "@/services/Users";
+
 import Courses from "@/services/Courses";
 import Subjects from "@/services/Subjects";
 import BookTypes from "@/services/BookTypes";
@@ -254,22 +245,20 @@ export default {
       ],
       point: false,
       publishedYear: 2,
-      selectedAuthors:[],
       popupActivo: false,
       image: null,
       imageUrl: "",
       loading: false,
       isUploadable: true,
       isValidIsbn: true,
-      bookResponsiblePerson: "",
-      resPersonList: [],
       bookTypeList: [],
       bookAuthorList: [],
       bookSubjectList: [],
       courseList: [],
       subjects: [],
       categoryList: [],
-      languageList: []
+      languageList: [],
+      responsible: this.$store.state.userInfo.lastName
     };
   },
   computed: {
@@ -282,9 +271,6 @@ export default {
   watch: {
     publishedYear(value) {
       this.bookObj.publishedYear = value.getFullYear();
-    },
-    selectedAuthors(val){
-        this.bookObj.authors = val
     }
   },
   components: {
@@ -294,19 +280,16 @@ export default {
   },
   methods: {
     getAll() {
-      console.log(this.$route.name)
        if(this.$route.name=='update_book'){
          this.isValidIsbn = false
          this.image = this.bookObj.image
          this.point = true
-         this.selectedAuthors = this.bookObj.authors
        }
       this.loading = true;
       Promise.all([
         Authors.getAll(),
         Categories.getAll(),
         Languages.getAll(),
-        Users.getAll(),
         Courses.getAll(),
         Subjects.getAll(),
         BookTypes.getAll()
@@ -316,7 +299,6 @@ export default {
             authors,
             categories,
             languages,
-            users,
             courses,
             subjects,
             bookTypes
@@ -324,7 +306,6 @@ export default {
           this.bookAuthorList = authors;
           this.categoryList = categories;
           this.languageList = languages;
-          this.resPersonList = users;
           this.courseList = courses;
           this.bookSubjectList = subjects;
           this.bookTypeList = bookTypes;
@@ -346,7 +327,6 @@ export default {
       fileReader.readAsDataURL(files[0]);
       this.image = files[0].name;
       this.bookObj.imageFile.append("image", files[0]);
-      console.log(this.bookObj)
     },
     onPickFile() {
       this.$refs.fileInput.click();

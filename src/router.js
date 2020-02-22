@@ -19,7 +19,8 @@
 
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import store from './store/store'
+import AuthGuard from './utils/router-guard'
 Vue.use(Router)
 
 const router = new Router({
@@ -37,6 +38,7 @@ const router = new Router({
             path: '',
             component: () =>
                 import ('./layouts/main/Main.vue'),
+            // beforeEnter: AuthGuard,
             children: [
                 // =============================================================================
                 // Theme Routes
@@ -46,13 +48,15 @@ const router = new Router({
                     name: 'home',
                     component: () =>
                         import ('./views/Home.vue'),
+
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
                             { title: 'book item', active: true },
                         ],
                         rule: 'editor',
-                        pageTitle: 'Home'
+                        pageTitle: 'Home',
+                        requiresAuth: true
                     }
                 },
                 {
@@ -67,7 +71,8 @@ const router = new Router({
                             { title: 'book item', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Books'
+                        pageTitle: 'Books',
+                        requiresAuth: true
 
                     }
                 },
@@ -84,7 +89,8 @@ const router = new Router({
                             { title: 'Book Info', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Book Info'
+                        pageTitle: 'Book Info',
+                        requiresAuth: true
 
                     }
                 },
@@ -100,7 +106,8 @@ const router = new Router({
                             { title: 'Create New Book', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Create Book'
+                        pageTitle: 'Create Book',
+                        requiresAuth: true
                     }
                 },
                 {
@@ -116,7 +123,8 @@ const router = new Router({
                             { title: 'Create New Book', active: true },
                         ],
                         parent: 'books',
-                        pageTitle: 'Update Book'
+                        pageTitle: 'Update Book',
+                        requiresAuth: true
                     }
                 },
 
@@ -124,7 +132,79 @@ const router = new Router({
                     path: '/users',
                     name: 'Users',
                     component: () =>
-                        import ('./views/Users.vue')
+                        import ('./views/Users.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users List', active: false },
+                            { title: 'book item', active: false },
+                        ],
+                        pageTitle: 'Users',
+                        requiresAuth: true
+
+                    }
+
+                },
+                {
+                    path: '/user-view/:id',
+                    props: true,
+                    name: 'Userinfo',
+                    component: () =>
+                        import ('./views/User/View.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users List', url: '/users' },
+                            { title: 'book item', active: false },
+                        ],
+                        pageTitle: 'User Info',
+                        parent: 'users',
+                        requiresAuth: true
+
+                    }
+
+                },
+                {
+                    path: '/user-edit/:id',
+                    props: true,
+                    name: 'UserUpdate',
+                    component: () =>
+                        import ('./views/User/Update.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users List', active: false },
+                            { title: 'User Edit', active: false },
+                            { title: 'book item', active: false },
+                        ],
+                        pageTitle: 'Users',
+                        parent: 'users',
+                        requiresAuth: true
+
+
+                    }
+
+                },
+                {
+                    path: '/user-create/',
+                    name: 'UserCreate',
+                    component: () =>
+                        import ('./views/User/Create.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Users', url: '/users' },
+                            { title: 'User Create', url: '/users' },
+                            { title: '', active: false },
+
+                        ],
+                        pageTitle: 'User create',
+                        parent: 'users',
+                        requiresAuth: true
+
+
+                    }
+
                 },
                 {
                     path: '/settings',
@@ -136,8 +216,24 @@ const router = new Router({
                             { title: 'Home', url: '/' },
                             { title: 'book item', active: true },
                         ],
-                        pageTitle: 'Settings'
+                        pageTitle: 'Settings',
+                        requiresAuth: true
 
+                    }
+                },
+                {
+                    path: '/profile',
+                    name: 'Profile',
+                    component: () =>
+                        import ('./components/LMS/Profile/Profile.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/books' },
+                            { title: 'book item', active: true },
+                        ],
+                        rule: '',
+                        pageTitle: 'Profile info',
+                        requiresAuth: true
                     }
                 },
             ],
@@ -184,7 +280,26 @@ router.afterEach(() => {
 })
 
 // router.beforeEach((to, from, next) => {
-//     if (to.path === "/pages/login" || to.path === "/pages/error-404") return next();
-//     router.push({ path: '/pages/login', query: { to: to.path } })
+//     if (store.getters.hasToken) next('/pages/login')
+//     else {
+//         next()
+//     }
 // })
+router.beforeEach((to, from, next) => {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // this route requires auth, check if logged in
+        // if not, redirect to login page.
+        //console.log(store.state.tokenExpiration)
+        if (!(store.state.token.length > 0)) {
+            next('/pages/login')
+        } else {
+            next();
+        }
+    } else {
+        next() // make sure to always call next()!
+    }
+})
+
+
+
 export default router

@@ -10,7 +10,7 @@
           vs-w="10"
         >
           <div class="mt-2">
-            <vs-button class="" color="#2ca3f2" to="/book/create-book" dark>
+            <vs-button v-if="$hasPermission(4)" class="" color="#2ca3f2" to="/book/create-book" dark>
               Create Book
             </vs-button>
           </div>
@@ -19,21 +19,23 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Year</p>
             <v-select
+              :disabled="disableField"
               v-model="filterList.courseYear"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
-              :options="year"
+              label="name"
+              :reduce="({ id }) => id"
+              :options="courses"
             ></v-select>
           </div>
 
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Book Type</p>
             <v-select
+              :disabled="disableField"
               v-model="filterList.typeId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
+              label="name"
+              :reduce="({ id }) => id"
               :options="bookTypes"
             ></v-select>
           </div>
@@ -41,10 +43,11 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Subject</p>
             <v-select
+              :disabled="disableField"
               v-model="filterList.subjectId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
+              label="name"
+              :reduce="({ id }) => id"
               :options="subjects"
             ></v-select>
           </div>
@@ -52,21 +55,23 @@
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Category</p>
             <v-select
+              :disabled="disableField"
               v-model="filterList.categoryId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
-              :options="category"
+              label="name"
+              :reduce="({ id }) => id"
+              :options="categories"
             ></v-select>
           </div>
           <div class="flex-1 pa-2 m-2 mb-5 xs:w-full ">
             <p>Language</p>
             <v-select
+              :disabled="disableField"
               v-model="filterList.languageId"
               class="w-full select-large"
-              label="text"
-              :reduce="({ value }) => value"
-              :options="language"
+              label="name"
+              :reduce="({ id }) => id"
+              :options="languages"
             ></v-select>
           </div>
         </vs-col>
@@ -78,19 +83,29 @@
             vs-align="center"
             vs-w="10"
           >
+            <vx-tooltip text="Use only ISBN format here">
               <vs-input
-                class="mb-4 md:mb-0 mr-4  flex-1"
-                v-model="filterList.title"
-                placeholder="Search..."
+                placeholder="isbn"
+                class="mb-4 md:mb-0 mr-2  flex-1"
+                v-model="filterList.isbn"
+                @input="searchByIsbn"
                 v-on:keyup.enter="getResult"
               />
-              <vs-button
-                @click="getResult"
-                color="#2ca3f2"
-                class="flex"
-                v-text="'Search'"
-              ></vs-button>
-       
+            </vx-tooltip>
+            <vs-input
+              :disabled="disableAllfields"
+              class="mb-4 md:mb-0 mr-2  flex-1"
+              v-model="filterList.title"
+              placeholder="Search by title..."
+              @input="addEvent"
+              v-on:keyup.enter="getResult"
+            />
+            <vs-button
+              @click="getResult"
+              color="primary"
+              class="flex"
+              v-text="'Search'"
+            ></vs-button>
           </vs-col>
         </vs-row>
       </vx-card>
@@ -106,8 +121,12 @@
           <div class="book-card">
             <div class="book-card__cover">
               <div class="book-card__book">
-                <div class="book-card__book-front "  slot="media">
-                  <img class="book-card__img" :src="book.image" :alt="book.image" />
+                <div class="book-card__book-front " slot="media">
+                  <img
+                    class="book-card__img"
+                    :src="book.image"
+                    :alt="book.image"
+                  />
                 </div>
                 <div class="book-card__book-back"></div>
                 <div class="book-card__book-side"></div>
@@ -148,18 +167,26 @@
 
 <script>
 import Books from "@/services/Books";
+import Categories from "@/services/Categories";
+import Languages from "@/services/Languages";
+import Courses from "@/services/Courses";
+import Subjects from "@/services/Subjects";
+import BookTypes from "@/services/BookTypes";
 import vSelect from "vue-select";
 import { Validator } from "vee-validate";
 
 export default {
   data: () => ({
     selectedCourse: "",
+    disableField: false,
+    disableAllfields: false,
     currentx: 1,
     page: 1,
     booksQuantity: 0,
     required: "THE FIELD IS REQUIRED",
     filterList: {
       title: "",
+      isbn: "",
       courseYear: "",
       languageId: "",
       categoryId: "",
@@ -167,48 +194,11 @@ export default {
       typeId: ""
     },
 
-    year: [
-      { text: "Freshman", value: "1" },
-      { text: "Sophomore", value: "2" },
-      { text: "Senior", value: "3" },
-      { text: "Junior", value: "4" },
-      { text: "staff", value: "5" }
-    ],
-    bookTypes: [
-      { text: "borrowable", value: "1" },
-      { text: "Not borrowable", value: "2" }
-    ],
-    subjects: [
-      { text: "Computer Algorithm", value: "1" },
-      { text: "System Analysis", value: "2" },
-      { text: "Calculus", value: "3" },
-      { text: "Physics", value: "4" },
-      { text: "Academic English 1", value: "5" },
-      { text: "Academic English 2", value: "6" },
-      { text: "Korean 1", value: "7" },
-      { text: "Korean 2", value: "8" },
-      { text: "Data Stucture", value: "9" },
-      { text: "Discrete Mathematics", value: "10" },
-      { text: "Signal and Systems", value: "11" }
-    ],
-    category: [
-      { text: "Computer Science", value: "1" },
-      { text: "Data Science", value: "2" },
-      { text: "Biology", value: "3" },
-      { text: "Chemistry", value: "4" },
-      { text: "Lingustics", value: "5" },
-      { text: "Algorithms", value: "6" },
-      { text: "Phylosophy", value: "7" }
-    ],
-    language: [
-      { text: "Uzbek", value: "1" },
-      { text: "English", value: "2" },
-      { text: "Russian", value: "3" },
-      { text: "Korean", value: "4" },
-      { text: "Italian", value: "5" },
-      { text: "Spain", value: "6" },
-      { text: "Chinese", value: "7" }
-    ],
+    courses: [],
+    bookTypes: [],
+    subjects: [],
+    categories: [],
+    languages: [],
     books: [
       {
         id: 1,
@@ -228,38 +218,98 @@ export default {
     }
   },
   watch: {
+    filterList: {
+      handler(value) {
+        Object.keys(value).forEach(key => {
+          if (value[key] === null) {
+            this.filterList[key] = "";
+          }
+        });
+      },
+      deep: true
+    },
     currentx(val) {
-      this.getAll(val);
+      this.getAll(val,12);
     }
   },
   methods: {
     getResult() {
-      // this.$validator.validateAll().then(result => {
-      //   if (result) {
-          this.loading(true);
-          const url = Object.keys(this.filterList)
-            .map(key => `${key}=${this.filterList[key]}`)
-            .join("&");
-            console.log(url)
-          Books.getSearchedBooks(url).then(({ items: books, length }) => {
+      this.loading(true);
+      if (this.disableAllfields && this.disableAllfields) {
+        Books.getISBN(this.filterList.isbn,this.currentx, 12).then(({ items: books, length }) => {
+          this.books = books;
+          this.booksQuantity = length;
+          this.page = Math.ceil(length / 12);
+          this.loading(false);
+          this.books.forEach(book => {
+              book.authorName = book.authors.map(({ name }) => name).join(", ");
+            });
+        }).catch(error => {
+            console.log(error);
+            this.loading(false);})
+
+      } else {
+        // this.$validator.validateAll().then(result => {
+        //   if (result) {
+
+        // const url = Object.keys(this.filterList)
+        //   .map(key => `${key}=${this.filterList[key]}`)
+        //   .join("&");
+        const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=&typeId=${this.filterList.typeId}`;
+        Books.getSearchedBooks(url,this.currentx,12)
+          .then(({ items: books, length }) => {
             this.books = books;
             this.booksQuantity = length;
             this.page = Math.ceil(length / 12);
             this.books.forEach(book => {
               book.authorName = book.authors.map(({ name }) => name).join(", ");
-            })
-               this.loading(false);
-              }).catch( error => {
-              console.log(error)
+            });
             this.loading(false);
-        //   });
-        // } else {
-        //    alert('ERROR')
-        // }
-      });
+          })
+          .catch(error => {
+            console.log(error);
+            this.loading(false);
+            //   });
+            // } else {
+            //    alert('ERROR')
+            // }
+          });
+      }
     },
     bookInfo(id) {
       this.$router.push("/books/" + id);
+    },
+    //   languages() {
+    //     Languages.getAll().then((languages) => {
+    //     this.languages = languages;
+    //   });
+    // },
+    //   courses() {
+    //     Courses.getAll().then((courses) => {
+    //     this.courses = courses;
+    //   });
+    // },
+    //   courses() {
+    //     Courses.getAll().then((courses) => {
+    //     this.courses = courses;
+    //   });
+    // },
+
+    getFilters() {
+      Promise.all([
+        Categories.getAll(),
+        BookTypes.getAll(),
+        Subjects.getAll(),
+        Courses.getAll(),
+        Languages.getAll()
+      ]).then(result => {
+        const [categories, booktypes, subjects, courses, languages] = result;
+        this.categories = categories;
+        this.subjects = subjects;
+        this.bookTypes = booktypes;
+        this.courses = courses;
+        this.languages = languages;
+      });
     },
     getAll(val) {
       Books.getAll(val, 12).then(({ items: books, length }) => {
@@ -284,10 +334,24 @@ export default {
       } else if (con == false) {
         this.$vs.loading.close("#div-with-loading > .con-vs-loading");
       }
+    },
+    addEvent(val) {
+      if (this.filterList.title.length > 0) this.disableField = true;
+      else this.disableField = false;
+    },
+    searchByIsbn(val) {
+      if (val.length > 0) {
+        this.disableAllfields = true;
+        this.disableField = true;
+      } else {
+        this.disableAllfields = false;
+        this.disableField = false;
+      }
     }
   },
   mounted() {
     this.getAll(1, 12);
+    this.getFilters();
   }
 };
 </script>

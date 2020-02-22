@@ -36,14 +36,6 @@
           <vs-button color="primary" type="flat" icon="vertical_align_bottom"
             >Excel</vs-button
           >
-          <vs-button
-            type="border"
-            icon="print"
-            radius
-            class="w-full ml-2"
-            size="large"
-            @click="gridApi.exportDataAsCsv()"
-          ></vs-button>
         </vs-col>
       </vs-row>
       <ag-grid-vue
