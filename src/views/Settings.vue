@@ -236,7 +236,7 @@ export default {
       }
     },
     deleteItem(id, itemId, tr) {
-      console.log(tr);
+    //  console.log(tr);
       switch (id) {
         case 1:
           Categories.delete(itemId)
