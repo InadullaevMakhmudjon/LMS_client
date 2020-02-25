@@ -14,6 +14,11 @@ export function execute(promise) {
                             //store.commit('setTokenExpired', true)
                             router.push('/pages/login')
                         }
+                        if (err.response.status == 403) {
+                            //store.commit('setTokenExpired', true)
+                            const type = err.response.data.errors[0]
+                            alert(`${type.param} : ${type.msg}`)
+                        }
                         reject(new Error(error.response.status));
                     }
                     reject(new Error(err));
