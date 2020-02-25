@@ -42,9 +42,11 @@
           >Next</wizard-button
         >
         <wizard-button
+        :disabled ="onState"
+         id="button-with-loading"
           v-if="!props.isLastStep"
           @click.native="submitData(bookObj.title)"
-          class="mx-2 wizard-footer-right"
+          class="mx-2 wizard-footer-right vs-con-loading__container"
           :style="props.fillButtonStyle"
           ><strong>Save</strong></wizard-button
         >
@@ -70,6 +72,7 @@ import Books from '@/services/Books';
 export default {
   data() {
     return {
+      onState: false,
       bookObj: {
         title: "",
         typeId: 0,
@@ -106,9 +109,9 @@ export default {
       props.nextTab();
     },
     submitData(title) {
+      this.loading(true)
       Books.uploadImage(this.bookObj.imageFile)
       .then(({ imageUrl }) => {
-        
           this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
           this.bookObj.image = imageUrl;
           Books.create(this.bookObj)
@@ -121,9 +124,11 @@ export default {
               iconPack: "feather",
               icon: "icon-check-circle"
             });
+            this.loading(false)
             this.$router.push("/books");
           })
           .catch(err => {
+            this.loading(false)
             this.$vs.notify({
               time: 3000,
               title: title,
@@ -133,6 +138,20 @@ export default {
             });
         })
       });
+    },
+    loading( val ) {
+     if (val) {
+       this.onState = true
+        this.$vs.loading({
+        background: 'primary',
+        color: 'white',
+        container: "#button-with-loading",
+        scale: 0.45
+      })
+     } else {
+        this.onState = true
+         this.$vs.loading.close("#button-with-loading > .con-vs-loading")
+     }
     }
   },
   computed: {
