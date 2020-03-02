@@ -236,6 +236,7 @@ export default {
     getResult() {
       this.loading(true);
       if (this.disableAllfields && this.disableAllfields) {
+        alert('sda')
         Books.getISBN(this.filterList.isbn,this.currentx, 12).then(({ items: books, length }) => {
           this.books = books;
           this.booksQuantity = length;
@@ -255,7 +256,8 @@ export default {
         // const url = Object.keys(this.filterList)
         //   .map(key => `${key}=${this.filterList[key]}`)
         //   .join("&");
-        const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=&typeId=${this.filterList.typeId}`;
+        const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=${this.filterList.subjectId}&typeId=${this.filterList.typeId}`;
+        console.log(url)
         Books.getSearchedBooks(url,this.currentx,12)
           .then(({ items: books, length }) => {
             this.books = books;

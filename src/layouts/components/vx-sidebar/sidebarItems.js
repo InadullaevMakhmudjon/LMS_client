@@ -46,7 +46,7 @@ const routing = [{
         access: true
     },
 ]
- 
+
 export default routing.filter(el => el.access == true)
 
 /*=========================================================================================
