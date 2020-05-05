@@ -182,6 +182,7 @@ export default {
         this.types[2].lists = authors;
         this.types[3].lists = shelves;
          this.types[4].lists = languages;
+         console.log(this.types[4].lists)
       });
     },
     notify(val, type, action) {
@@ -193,6 +194,7 @@ export default {
       });
     },
     addlist(item) {
+      console.log(item)
       switch (item.id) {
         case 1:
           Categories.create(item.value)
@@ -238,7 +240,7 @@ export default {
               item.value = "";
             });
             return;
-        case 4:
+        case 5:
           Language.create(item.value)
             .then(() => {
               this.getAll();

@@ -133,7 +133,7 @@
               </div>
             </div>
             <div>
-              <div class="book-card__status">
+              <div v-if="false" class="book-card__status">
                 {{ book.isBorrowable ? "Borrowable" : "Not Borrowable" }}
               </div>
               <div class="book-card__title">
@@ -314,10 +314,10 @@ export default {
       });
     },
     getAll(val) {
-      Books.getAll(val, 12).then(({ items: books, length }) => {
+      Books.getAll(val, 16).then(({ items: books, length }) => {
         this.books = books;
         this.booksQuantity = length;
-        this.page = Math.ceil(length / 12);
+        this.page = Math.ceil(length / 16);
         this.books.forEach(book => {
           book.authorName = book.authors.map(({ name }) => name).join(", ");
         });

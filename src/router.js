@@ -26,8 +26,15 @@ Vue.use(Router)
 const router = new Router({
     // mode: 'history',
     base: process.env.BASE_URL,
-    scrollBehavior() {
-        return { x: 0, y: 0 }
+    scrollBehavior (to, from, savedPosition) {
+        console.log(savedPosition)
+        let scrollTo = 0
+        console.log(to)
+    if (to.hash) {
+      scrollTo = to.hash
+    } else if (savedPosition) {
+      scrollTo = savedPosition.y
+    }
     },
     routes: [
 
