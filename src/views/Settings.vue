@@ -341,6 +341,13 @@ export default {
             this.notify(obj.name, "Shelf", "updated");
           });
           return;
+          case 5:
+          Language.update(obj.id, obj.name).then(() => {
+            this.getAll();
+            this.toggle = false;
+            this.notify(obj.name, "language", "updated");
+          });
+          return;
       }
     }
   },
