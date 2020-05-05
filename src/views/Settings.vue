@@ -5,28 +5,30 @@
         <!-- left -->
         <vs-tabs color="primary">
           <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
-            <vx-input-group class="mb-base w-full">
-              <vs-input
-              v-if="$hasPermission(11)"
-                type="text"
-                v-model="item.value"
-                @keyup.enter="addlist(item)"
-              />
-              <template slot="append">
-                <div class="append-text btn-addon">
-                  <vs-button
-                  v-if="$hasPermission(11)"
-                    color="primary"
-                    type="border"
-                    @click="addlist(item)"
-                    icon-pack="feather"
-                    icon="icon-plus"
-                    >add</vs-button
-                  >
-                </div>
-              </template>
-            </vx-input-group>
-            <vs-table :data="item.lists" pagination max-items="5" search>
+            <vs-table :data="item.lists" pagination max-items="15" search>
+               <template slot="header">
+                  <vx-input-group class="w-10/12 flex-shrink pr-1">
+                      <vs-input
+                      v-if="$hasPermission(11)"
+                        type="text"
+                        v-model="item.value"
+                        @keyup.enter="addlist(item)"
+                      />
+                      <template slot="append">
+                        <div class="append-text btn-addon">
+                          <vs-button
+                          v-if="$hasPermission(11)"
+                            color="primary"
+                            type="border"
+                            @click="addlist(item)"
+                            icon-pack="feather"
+                            icon="icon-plus"
+                            >add</vs-button
+                          >
+                        </div>
+                      </template>
+                   </vx-input-group>
+                </template>
               <template slot="thead">
                 <vs-th sort-key="id">
                   Order
@@ -147,6 +149,7 @@ import Categories from "@/services/Categories";
 import Subjects from "@/services/Subjects";
 import Authors from "@/services/Authors";
 import Shelves from "@/services/Shelves";
+import Language from '@/services/Languages';
 
 export default {
   data: () => ({
@@ -159,7 +162,8 @@ export default {
       { id: 1, text: "Add category", value: "", lists: [] },
       { id: 2, text: "Add subject", value: "", lists: [] },
       { id: 3, text: "Add author", value: "", lists: [] },
-      { id: 4, text: "Add shelf", value: "", lists: [] }
+      { id: 4, text: "Add shelf", value: "", lists: [] },
+      { id: 5, text: "Add Language", value: "", lists: [] }
       /* { text: "Add shelf", value: "", lists: [] } */
     ]
   }),
@@ -169,13 +173,15 @@ export default {
         Categories.getAll(),
         Authors.getAll(),
         Subjects.getAll(),
-        Shelves.getAll()
+        Shelves.getAll(),
+        Language.getAll()
       ]).then(result => {
-        const [categories, authors, subjects, shelves] = result;
+        const [categories, authors, subjects, shelves, languages] = result;
         this.types[0].lists = categories;
         this.types[1].lists = subjects;
         this.types[2].lists = authors;
         this.types[3].lists = shelves;
+         this.types[4].lists = languages;
       });
     },
     notify(val, type, action) {
@@ -231,33 +237,66 @@ export default {
             .finally(() => {
               item.value = "";
             });
+            return;
+        case 4:
+          Language.create(item.value)
+            .then(() => {
+              this.getAll();
+              this.notify(item.value, "Language", "created");
+            })
+            .catch(err => console.error(err))
+            .finally(() => {
+              item.value = "";
+            });
+            return;
         default:
           return;
       }
     },
     deleteItem(id, itemId, tr) {
+      console.log(tr)
     //  console.log(tr);
       switch (id) {
         case 1:
           Categories.delete(itemId)
-            .then(() => this.getAll())
+            .then(() => {
+              this.notify(tr.name, "Category", "deleted")
+              this.getAll()
+              })
             .catch(error => {
               console.error(error);
             });
           return;
         case 2:
           Subjects.delete(itemId)
-            .then(() => this.getAll())
+            .then(() => {
+              this.notify(tr.name, "Subject", "deleted")
+              this.getAll()
+              })
             .catch(error => console.error(error));
           return;
         case 3:
           Authors.delete(itemId)
-            .then(() => this.getAll())
+            .then(() => {
+              this.notify(tr.name, "Author", "deleted")
+              this.getAll()
+              })
             .catch(error => console.error(error));
           return;
         case 4:
           Shelves.delete(itemId)
-            .then(() => this.getAll())
+            .then(() => {
+              this.notify(tr.name, "Shelf", "deleted")
+              this.getAll()
+              })
+            .catch(error => console.error(error));
+          return;
+            case 5:
+          Language.delete(itemId)
+            .then(() => {
+              this.notify(tr.name, "Language", "deleted")
+              this.getAll()
+              })
             .catch(error => console.error(error));
           return;
         default:
