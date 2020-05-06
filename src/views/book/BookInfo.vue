@@ -14,6 +14,7 @@
       <vs-row class="justify-between">
         <!--book definition-->
         <vs-col
+          v-if="bookInfo.title"
           vs-offset="0"
           vs-type="flex"
           vs-justify="start"
@@ -39,6 +40,9 @@
                   <p class=" text-lg mb-2">
                     {{ `Published Year: ${bookInfo.publishedYear}` }}
                   </p>
+                    <p class=" text-lg mb-2">
+                    {{ `Category: ${bookInfo.category.name}` }}
+                  </p>
                   <p class=" text-lg mb-2">
                     {{ `Language: ${bookInfo.language}` }}
                   </p>
@@ -57,14 +61,21 @@
                     <feather-icon icon="CheckSquareIcon" />
                   </div>
 
-                  <p class="text-lg mb-2 text-grey">
-                    Arabkhanova Mohina
+                  <p class="text-lg mb-2 text-grey" v-if="bookInfo.user">
+                    {{bookInfo.user.firstName+' '+bookInfo.user.lastName}}
                   </p>
-                  <p class="font-medium text-2xl text-grey mt-4">
+                  <p class="font-medium yellow text-1xl text-grey mt-4">
                     Book Location: 23A
                   </p>
                 </vs-list>
               </div>
+            </vs-col>
+            <vs-col>
+              <vx-card card-border no-shadow class="mt-2">
+                  <p class="font-medium text-1xl text-black ">
+                    {{bookInfo.description ? bookInfo.description : 'not available...'}}
+                  </p>
+              </vx-card>
             </vs-col>
           </vx-card>
         </vs-col>
@@ -222,6 +233,7 @@ export default {
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
+        console.log(book)
         this.bookInfo = book;
         this.bookInfo.language = book.language.name;
         this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");

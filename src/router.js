@@ -1,22 +1,3 @@
-/*=========================================================================================
-  File Name: router.js
-  Description: Routes for vue-router. Lazy loading is enabled.
-  Object Strucutre:
-                    path => router path
-                    name => router name
-                    component(lazy loading) => component to load
-                    meta : {
-                      rule => which user can have access (ACL)
-                      breadcrumb => Add breadcrumb to specific page
-                      pageTitle => Display title besides breadcrumb
-                    }
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-==========================================================================================*/
-
-
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from './store/store'
@@ -27,9 +8,7 @@ const router = new Router({
     // mode: 'history',
     base: process.env.BASE_URL,
     scrollBehavior (to, from, savedPosition) {
-        console.log(savedPosition)
-        let scrollTo = 0
-        console.log(to)
+    let scrollTo = 0
     if (to.hash) {
       scrollTo = to.hash
     } else if (savedPosition) {

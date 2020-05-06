@@ -1,6 +1,5 @@
 <template>
 <div>
-  <!-- tab 1 content -->
      <div class="vx-row">
             <div class="vx-col">
                <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="isbn">ISBN</vs-radio>
@@ -377,9 +376,6 @@ export default {
       });
     },
     checkISBN(code) {
-        console.log({
-          ISBNCode: code
-      })
       Books.checkISBN({
           ISBNCode: code
       })

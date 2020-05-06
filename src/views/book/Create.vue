@@ -111,7 +111,6 @@ export default {
       props.nextTab();
     },
     submitData(title) {
-      console.log(this.bookObj)
           this.loading(true)
           Books.uploadImage(this.bookObj.imageFile)
           .then(({ imageUrl }) => {
