@@ -1,13 +1,3 @@
-<!-- =========================================================================================
-  File Name: TheNavbar.vue
-  Description: Navbar component
-  Component Name: TheNavbar
-  ----------------------------------------------------------------------------------------
-  Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-  Author: Pixinvent
-  Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
-
 <template>
   <div class="relative">
     <div class="vx-navbar-wrapper">
@@ -164,7 +154,7 @@
                     icon="LogOutIcon"
                     svgClasses="w-4 h-4"
                   ></feather-icon>
-                  <span class="ml-2">Loagout</span>
+                  <span class="ml-2">Logout</span>
                 </li>
               </ul>
             </vs-dropdown-menu>
