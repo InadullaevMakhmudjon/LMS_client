@@ -17,9 +17,9 @@ export function execute(promise) {
                             const type = err.response.data.errors[0]
                             alert(`${type.param} : ${type.msg}`)
                         }
-                        reject((error.response));
+                        reject(err.response);
                     }
-                    reject((err));
+                    reject(new Error(err));
 
                 }
                 reject(new Error('Check your request, and server'));

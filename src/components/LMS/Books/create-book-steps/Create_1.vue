@@ -1,17 +1,41 @@
 <template>
+<div>
   <!-- tab 1 content -->
+     <div class="vx-row">
+            <div class="vx-col">
+               <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="isbn">ISBN</vs-radio>
+            </div>
+            <div class="vx-col">
+                <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="issn">ISSN</vs-radio>
+            </div>
+            <div class="vx-col">
+                <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="issn">Other</vs-radio>
+            </div>
+       </div>
   <div class="vx-row">
     <div class="vx-col  sm:w-full md:w-1/3 w-full mt-5">
       <!--check Isbn-->
-      <p>Check ISBN: (example: 2-266-11156-6)</p>
-      <vx-input-group class="">
-        <vs-input  :disabled="point" v-model="bookObj.ISBNCode" />
-
+      <p>{{ !isTypeIssn ?'Check ISBN: (example: 2-266-11156-6)': 'Check ISSN: (example: 1538-3598)'}}</p>
+      <vx-input-group v-if="!isTypeIssn" class="">
+      <vs-input  :disabled="point" v-model="bookObj.ISBNCode" />
         <template slot="append">
           <div class="append-text btn-addon">
             <vs-button
               :disabled="point"
               @click="checkISBN(bookObj.ISBNCode)"
+              :color="isValidIsbn ? '#2ca3f2' : 'success'"
+              >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
+            >
+          </div>
+        </template>
+      </vx-input-group>
+         <vx-input-group class="" v-else>
+      <vs-input  :disabled="point" v-model="bookObj.ISSNCode" />
+        <template slot="append">
+          <div class="append-text btn-addon">
+            <vs-button
+              :disabled="point"
+              @click="checkISSN(bookObj.ISSNCode)"
               :color="isValidIsbn ? '#2ca3f2' : 'success'"
               >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
             >
@@ -28,6 +52,7 @@
 
       <!--book isbn -->
       <vs-input
+        v-if="!isTypeIssn"
         disabled
         label="Book ISBN"
         v-model="bookObj.ISBNCode"
@@ -55,6 +80,7 @@
         class="w-full mt-5"
       /> -->
       <vs-select
+         v-if="!isTypeIssn"
         :disabled="isValidIsbn"
         v-model="bookObj.typeId"
         class="w-full select-large mt-5"
@@ -84,6 +110,7 @@
     <div class="vx-col sm:w-full md:w-1/3 w-full mt-5">
       <!--Book subjects-->
       <vs-select
+        v-if="!isTypeIssn"
         :disabled="isValidIsbn"
         v-model="bookObj.subjectId"
         class="w-full select-large mt-0"
@@ -97,6 +124,7 @@
           class="w-full"
         />
       </vs-select>
+      <div v-if="!isTypeIssn" class="mb-4">
       <p class="mt-4 text-small">Book Author</p>
       <v-select
         multiple
@@ -108,12 +136,12 @@
         :create-option=" item => ({ id: 0, name: item }) "
         label="name"
       />
-
+      </div>
       <!--book langugage-->
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.languageId"
-        class="w-full select-large mt-4"
+        class="w-full select-large"
         label="Book Language"
       >
         <vs-select-item
@@ -141,6 +169,7 @@
       </vs-row> -->
       <!--appended courses for the book-->
       <vs-select
+        v-if="!isTypeIssn"
         :disabled="isValidIsbn"
         v-model="bookObj.courseYear"
         class="w-full select-large mt-3"
@@ -215,6 +244,7 @@
     </vs-popup>
   </div>
   </div>
+</div>
 </template>
 <script>
 import vSelect from "vue-select";
@@ -229,6 +259,7 @@ import Languages from "@/services/Languages";
 import Courses from "@/services/Courses";
 import Subjects from "@/services/Subjects";
 import BookTypes from "@/services/BookTypes";
+import Journals from '@/services/Journals';
 
 export default {
   props: {
@@ -266,6 +297,9 @@ export default {
       return process.env.NODE_ENV === "production"
         ? process.env.VUE_APP_BASE_URL
         : "http://localhost:3030/api";
+    },
+    isTypeIssn() {
+      return this.bookObj.formType=='issn'
     }
   },
   watch: {
@@ -340,6 +374,11 @@ export default {
     },
     checkISBN(isbn) {
       Books.checkISBN(isbn)
+        .then(() => (this.isValidIsbn = false))
+        .catch(() => (this.isValidIsbn = true));
+    },
+    checkISSN(isbn) {
+      Journals.checkISSN(isbn)
         .then(() => (this.isValidIsbn = false))
         .catch(() => (this.isValidIsbn = true));
     },

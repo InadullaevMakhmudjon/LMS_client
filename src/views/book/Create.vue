@@ -74,10 +74,12 @@ export default {
     return {
       onState: false,
       bookObj: {
+        formType: 'isbn',
         title: "",
         typeId: 0,
         authors:[],
         ISBNCode: "",
+        ISSNCode: "",
         courseYear: 0,
         subjectId: 0,
         isBorrowable: false,
@@ -109,49 +111,69 @@ export default {
       props.nextTab();
     },
     submitData(title) {
-      this.loading(true)
-      Books.uploadImage(this.bookObj.imageFile)
-      .then(({ imageUrl }) => {
-          this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
-          this.bookObj.image = imageUrl;
-          Books.create(this.bookObj)
-          .then(() => {
-            this.$vs.notify({
-              time: 3000,
-              title: title,
-              text: "The book has successfully added",
-              color: "success",
-              iconPack: "feather",
-              icon: "icon-check-circle"
-            });
-            this.loading(false)
-            this.$router.push("/books");
-          })
-          .catch(err => {
-            this.loading(false)
-            this.$vs.notify({
-              time: 3000,
-              title: title,
-              text: err.message || 'Error occured',
-              color: "danger",
-              iconPack: "feather",
-            });
-        })
-      });
+        if (this.bookObj.formType=='isbn') {
+          this.loading(true)
+          Books.uploadImage(this.bookObj.imageFile)
+          .then(({ imageUrl }) => {
+              this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
+              this.bookObj.image = imageUrl;
+              Books.create(this.bookObj)
+              .then(() => {
+                this.$vs.notify({
+                  time: 3000,
+                  title: title,
+                  text: "The book has successfully added",
+                  color: "success",
+                  iconPack: "feather",
+                  icon: "icon-check-circle"
+                });
+                this.loading(false)
+                this.$router.push("/books");
+              })
+              .catch(err => {
+                this.loading(false)
+                this.$vs.notify({
+                  time: 3000,
+                  title: title,
+                  text: err.message || 'Error occured',
+                  color: "danger",
+                  iconPack: "feather",
+                });
+            })
+          }).catch( err => {
+              this.loading(false)
+              console.log(err)
+            })
+        } else if (this.bookObj.formType=='issn') {
+           const form = {
+                  title: this.bookObj.title,
+                  publishedYear: this.bookObj.publishedYear,
+                  ISSNCode: this.bookObj.ISSNCode,
+                  description: this.bookObj.description,
+                  isBorrowable: this.bookObj.isBorrowable,
+                  duration: this.bookObj.duration,
+                  image: this.bookObj.image,
+                  categoryId: this.bookObj.categoryId,
+                  languageId:this.bookObj.languageId,
+                  userId: this.bookObj.userId,
+          }
+            console.log(form)
+        }
     },
+
     loading( val ) {
-     if (val) {
-       this.onState = true
-        this.$vs.loading({
-        background: 'primary',
-        color: 'white',
-        container: "#button-with-loading",
-        scale: 0.45
-      })
-     } else {
+      if (val) {
         this.onState = true
-         this.$vs.loading.close("#button-with-loading > .con-vs-loading")
-     }
+          this.$vs.loading({
+          background: 'primary',
+          color: 'white',
+          container: "#button-with-loading",
+          scale: 0.45
+        })
+      } else {
+          this.onState = true
+          this.$vs.loading.close("#button-with-loading > .con-vs-loading")
+      }
     }
   },
   computed: {
