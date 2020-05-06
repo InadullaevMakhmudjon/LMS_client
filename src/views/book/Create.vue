@@ -79,9 +79,9 @@ export default {
         typeId: 0,
         authors:[],
         ISBNCode: "",
-        ISSNCode: "",
-        courseYear: 0,
-        subjectId: 0,
+        // ISSNCode: "",
+        courseYear: null,
+        subjectId: null,
         isBorrowable: false,
         duration: 0,
         categoryId: 0,
@@ -111,7 +111,7 @@ export default {
       props.nextTab();
     },
     submitData(title) {
-        if (this.bookObj.formType=='isbn') {
+      console.log(this.bookObj)
           this.loading(true)
           Books.uploadImage(this.bookObj.imageFile)
           .then(({ imageUrl }) => {
@@ -144,21 +144,6 @@ export default {
               this.loading(false)
               console.log(err)
             })
-        } else if (this.bookObj.formType=='issn') {
-           const form = {
-                  title: this.bookObj.title,
-                  publishedYear: this.bookObj.publishedYear,
-                  ISSNCode: this.bookObj.ISSNCode,
-                  description: this.bookObj.description,
-                  isBorrowable: this.bookObj.isBorrowable,
-                  duration: this.bookObj.duration,
-                  image: this.bookObj.image,
-                  categoryId: this.bookObj.categoryId,
-                  languageId:this.bookObj.languageId,
-                  userId: this.bookObj.userId,
-          }
-            console.log(form)
-        }
     },
 
     loading( val ) {

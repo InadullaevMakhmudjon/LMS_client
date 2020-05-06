@@ -33,11 +33,13 @@ export default {
           ...book,
           imageFile: new FormData()
         };
+        console.log(book)
         this.bookInfo.language = book.language.name;
         // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
     submitData() {
+      console.log(this.bookInfo)
       if(Object.entries(this.bookInfo.imageFile).length !== 0) {
 
       Books.uploadImage(this.bookInfo.imageFile )
