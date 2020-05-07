@@ -74,12 +74,14 @@ export default {
     return {
       onState: false,
       bookObj: {
+        formType: 'isbn',
         title: "",
         typeId: 0,
         authors:[],
         ISBNCode: "",
-        courseYear: 0,
-        subjectId: 0,
+        // ISSNCode: "",
+        courseYear: null,
+        subjectId: null,
         isBorrowable: false,
         duration: 0,
         categoryId: 0,
@@ -109,49 +111,53 @@ export default {
       props.nextTab();
     },
     submitData(title) {
-      this.loading(true)
-      Books.uploadImage(this.bookObj.imageFile)
-      .then(({ imageUrl }) => {
-          this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
-          this.bookObj.image = imageUrl;
-          Books.create(this.bookObj)
-          .then(() => {
-            this.$vs.notify({
-              time: 3000,
-              title: title,
-              text: "The book has successfully added",
-              color: "success",
-              iconPack: "feather",
-              icon: "icon-check-circle"
-            });
-            this.loading(false)
-            this.$router.push("/books");
-          })
-          .catch(err => {
-            this.loading(false)
-            this.$vs.notify({
-              time: 3000,
-              title: title,
-              text: err.message || 'Error occured',
-              color: "danger",
-              iconPack: "feather",
-            });
-        })
-      });
+          this.loading(true)
+          Books.uploadImage(this.bookObj.imageFile)
+          .then(({ imageUrl }) => {
+              this.bookObj.isBorrowable = this.bookObj.isBorrowable ? 1 : 0;
+              this.bookObj.image = imageUrl;
+              Books.create(this.bookObj)
+              .then(() => {
+                this.$vs.notify({
+                  time: 3000,
+                  title: title,
+                  text: "The book has successfully added",
+                  color: "success",
+                  iconPack: "feather",
+                  icon: "icon-check-circle"
+                });
+                this.loading(false)
+                this.$router.push("/books");
+              })
+              .catch(err => {
+                this.loading(false)
+                this.$vs.notify({
+                  time: 3000,
+                  title: title,
+                  text: err.message || 'Error occured',
+                  color: "danger",
+                  iconPack: "feather",
+                });
+            })
+          }).catch( err => {
+              this.loading(false)
+              console.log(err)
+            })
     },
+
     loading( val ) {
-     if (val) {
-       this.onState = true
-        this.$vs.loading({
-        background: 'primary',
-        color: 'white',
-        container: "#button-with-loading",
-        scale: 0.45
-      })
-     } else {
+      if (val) {
         this.onState = true
-         this.$vs.loading.close("#button-with-loading > .con-vs-loading")
-     }
+          this.$vs.loading({
+          background: 'primary',
+          color: 'white',
+          container: "#button-with-loading",
+          scale: 0.45
+        })
+      } else {
+          this.onState = true
+          this.$vs.loading.close("#button-with-loading > .con-vs-loading")
+      }
     }
   },
   computed: {

@@ -1,12 +1,23 @@
 <template>
-  <!-- tab 1 content -->
+<div>
+     <div class="vx-row">
+            <div class="vx-col">
+               <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="isbn">ISBN</vs-radio>
+            </div>
+            <div class="vx-col">
+                <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="issn">ISSN</vs-radio>
+            </div>
+            <!-- <div class="vx-col">
+                <vs-radio v-model="bookObj.formType" vs-name="radios1" vs-value="other">Other</vs-radio>
+            </div> -->
+       </div>
   <div class="vx-row">
     <div class="vx-col  sm:w-full md:w-1/3 w-full mt-5">
       <!--check Isbn-->
-      <p>Check ISBN: (example: 2-266-11156-6)</p>
-      <vx-input-group class="">
-        <vs-input  :disabled="point" v-model="bookObj.ISBNCode" />
-
+      <div v-if="bookObj.formType !=='other'" class="mb-5">
+          <p>{{ 'Check Format: (ISBN or ISSN)'}}</p>
+      <vx-input-group  class="">
+      <vs-input  :disabled="point" v-model="bookObj.ISBNCode" />
         <template slot="append">
           <div class="append-text btn-addon">
             <vs-button
@@ -18,12 +29,26 @@
           </div>
         </template>
       </vx-input-group>
+      <!-- <vx-input-group class="" v-else>
+      <vs-input  :disabled="point" v-model="bookObj.ISSNCode" />
+        <template slot="append">
+          <div class="append-text btn-addon">
+            <vs-button
+              :disabled="point"
+              @click="checkISBN(bookObj.ISSNCode)"
+              :color="isValidIsbn ? '#2ca3f2' : 'success'"
+              >{{ isValidIsbn ? "Check" : "checked" }}</vs-button
+            >
+          </div>
+        </template>
+      </vx-input-group> -->
+      </div>
       <!--book title-->
       <vs-input
         :disabled="isValidIsbn"
         label="Book title"
         v-model="bookObj.title"
-        class="w-full mt-5"
+        class="w-full mt-0"
       />
 
       <!--book isbn -->
@@ -84,7 +109,7 @@
     <div class="vx-col sm:w-full md:w-1/3 w-full mt-5">
       <!--Book subjects-->
       <vs-select
-        :disabled="isValidIsbn"
+        :disabled="isValidIsbn || isTypeIssn"
         v-model="bookObj.subjectId"
         class="w-full select-large mt-0"
         label="Book Subject"
@@ -97,23 +122,24 @@
           class="w-full"
         />
       </vs-select>
+      <div class="mb-4">
       <p class="mt-4 text-small">Book Author</p>
       <v-select
         multiple
         v-model="bookObj.authors"
         taggable
         push-tags
-        :disabled="isValidIsbn"
+        :disabled="isValidIsbn || isTypeIssn"
         :options="bookAuthorList"
         :create-option=" item => ({ id: 0, name: item }) "
         label="name"
       />
-
+      </div>
       <!--book langugage-->
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.languageId"
-        class="w-full select-large mt-4"
+        class="w-full select-large"
         label="Book Language"
       >
         <vs-select-item
@@ -141,7 +167,7 @@
       </vs-row> -->
       <!--appended courses for the book-->
       <vs-select
-        :disabled="isValidIsbn"
+        :disabled="isValidIsbn || isTypeIssn"
         v-model="bookObj.courseYear"
         class="w-full select-large mt-3"
         label="School Year"
@@ -215,6 +241,7 @@
     </vs-popup>
   </div>
   </div>
+</div>
 </template>
 <script>
 import vSelect from "vue-select";
@@ -229,6 +256,7 @@ import Languages from "@/services/Languages";
 import Courses from "@/services/Courses";
 import Subjects from "@/services/Subjects";
 import BookTypes from "@/services/BookTypes";
+import Journals from '@/services/Journals';
 
 export default {
   props: {
@@ -266,11 +294,20 @@ export default {
       return process.env.NODE_ENV === "production"
         ? process.env.VUE_APP_BASE_URL
         : "http://localhost:3030/api";
+    },
+    isTypeIssn() {
+      return this.bookObj.formType=='issn'
     }
   },
   watch: {
     publishedYear(value) {
       this.bookObj.publishedYear = value.getFullYear();
+    },
+    bookObj: {
+        handler(book) {
+          if(book.formType=='other') this.isValidIsbn = false
+        },
+        deep: true
     }
   },
   components: {
@@ -338,12 +375,13 @@ export default {
         text: "Cover has been successfully uploaded"
       });
     },
-    checkISBN(isbn) {
-      Books.checkISBN(isbn)
+    checkISBN(code) {
+      Books.checkISBN({
+          ISBNCode: code
+      })
         .then(() => (this.isValidIsbn = false))
         .catch(() => (this.isValidIsbn = true));
-    },
-    
+    }   
   },
   mounted() {
     this.getAll();
