@@ -178,6 +178,7 @@
           :value="item.id"
           :text="item.name"
           class="w-full"
+          
         />
       </vs-select>
       <!--book description-->
@@ -344,6 +345,7 @@ export default {
           this.categoryList = categories;
           this.languageList = languages;
           this.courseList = courses;
+         // console.log(this.courseList)
           this.bookSubjectList = subjects;
           this.bookTypeList = bookTypes;
         })
