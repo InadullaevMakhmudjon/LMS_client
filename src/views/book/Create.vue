@@ -111,6 +111,7 @@ export default {
       props.nextTab();
     },
     submitData(title) {
+    //  console.log(this.bookObj)
           this.loading(true)
           Books.uploadImage(this.bookObj.imageFile)
           .then(({ imageUrl }) => {
@@ -155,7 +156,7 @@ export default {
           scale: 0.45
         })
       } else {
-          this.onState = true
+          this.onState = false
           this.$vs.loading.close("#button-with-loading > .con-vs-loading")
       }
     }
