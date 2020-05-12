@@ -353,6 +353,7 @@ export default {
         .finally(() => (this.loading = false));
     },
     onfilepicked(event) {
+      this.bookObj.imageFile = new FormData()
       this.point = false
       const files = event.target.files;
       let filename = files[0].name;
