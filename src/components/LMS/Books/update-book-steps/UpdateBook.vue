@@ -31,20 +31,19 @@ export default {
       Books.getOnebook(id).then(book => {
         this.bookInfo = {
           ...book,
-          imageFile: new FormData()
+          imageFile: null
         };
-        console.log(book)
+        // console.log(book)
         this.bookInfo.language = book.language.name;
         // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
     submitData() {
-      console.log(this.bookInfo)
-      if(Object.entries(this.bookInfo.imageFile).length !== 0) {
+      if(this.bookInfo.imageFile !== null) {
 
       Books.uploadImage(this.bookInfo.imageFile )
       .then(({ imageUrl }) => {
-        console.log(imageUrl)
+       // console.log(imageUrl)
       this.bookInfo.image = imageUrl;
       Books.updateBookInfo(this.id, this.bookInfo).then(() => {
         this.$vs.notify({
