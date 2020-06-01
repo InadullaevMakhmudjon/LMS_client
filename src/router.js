@@ -208,6 +208,21 @@ const router = new Router({
                     }
                 },
                 {
+                    path: '/logs',
+                    name: 'Logs',
+                    component: () =>
+                        import ('./components/LMS/System/Logs.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Logs', active: true },
+                        ],
+                        pageTitle: 'Logs',
+                        requiresAuth: true
+
+                    }
+                },
+                {
                     path: '/profile',
                     name: 'Profile',
                     component: () =>

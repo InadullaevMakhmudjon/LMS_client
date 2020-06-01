@@ -34,7 +34,7 @@
       </div>
       <div class="wizard-footer-right">
         <wizard-button
-          disabled
+        disabled
           v-if="!props.isLastStep"
           @click.native="nextTab(props)"
           class="wizard-footer-right"
@@ -97,12 +97,14 @@ export default {
         { text: "A1", value: "1" },
         { text: "A2", value: "2" },
         { text: "A3", value: "3" },
-        { text: "A4", value: "4" }
+        { text: "A4", value: "4" },
+        { text: "A5", value: "5" }
       ],
       categories: [],
       languages: [],
     };
   },
+
   methods: {
     formSubmitted() {
       // console.log(this.bookObj);
