@@ -113,7 +113,23 @@ const router = new Router({
                         requiresAuth: true
                     }
                 },
-
+                {
+                    path: '/book/add-book-item/:id',
+                    props: true,
+                    name: 'add_book_item',
+                    component: () =>
+                        import ('./components/LMS/Books/update-book-steps/AddBookItem.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Update', url: '/' },
+                            { title: 'All books', url: '/books' },
+                            { title: 'add Book', active: true },
+                        ],
+                        parent: 'books',
+                        pageTitle: 'Add Book item',
+                        requiresAuth: true
+                    }
+                },
                 {
                     path: '/users',
                     name: 'Users',
@@ -208,8 +224,8 @@ const router = new Router({
                     }
                 },
                 {
-                    path: '/logs',
-                    name: 'Logs',
+                    path: '/book-control',
+                    name: 'Book Control',
                     component: () =>
                         import ('./components/LMS/System/Logs.vue'),
                     meta: {
@@ -217,7 +233,7 @@ const router = new Router({
                             { title: 'Home', url: '/' },
                             { title: 'Logs', active: true },
                         ],
-                        pageTitle: 'Logs',
+                        pageTitle: 'Book Control',
                         requiresAuth: true
 
                     }

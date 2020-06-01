@@ -5,7 +5,7 @@
           <vs-button type="flat"  size="small" icon="keyboard_arrow_left" class="mr-2" @click="backHistory">
             back
         </vs-button>
-        <vs-button  v-if="$hasPermission(7)" color="primary" class="mr-4" type="filled" icon="add"
+        <vs-button :to="`/book/add-book-item/${bookInfo.id}`"  v-if="$hasPermission(7)" color="primary" class="mr-4" type="filled" icon="add"
           >Add</vs-button
         >
         <vs-button  v-if="$hasPermission(5)" color="primary" type="filled"  icon="edit"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
@@ -233,7 +233,7 @@ export default {
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
-        console.log(book)
+        // console.log(book)
         this.bookInfo = book;
         this.bookInfo.language = book.language.name;
         this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");

@@ -50,12 +50,13 @@
             >Borrow</vs-button
           >
             <vs-button
-            to="/logs"
+            to="/book-control"
             class="ml-2"
             icon="history"
+            type="border"
             color="primary"
-            size="large"
-            >logs</vs-button
+            size="medium"
+            >Book control</vs-button
           >
         </div>
 
@@ -199,22 +200,6 @@ export default {
           icon: "AlertTriangleIcon",
           time: this.randomDate({ sec: 10 }),
           category: "warning"
-        },
-        {
-          index: 1,
-          title: "Book is stolen",
-          msg: "Calculus 2, 1992 Edition",
-          icon: "AlertCircleIcon",
-          time: this.randomDate({ sec: 40 }),
-          category: "danger"
-        },
-        {
-          index: 2,
-          title: "Server Limit Reached!",
-          msg: "Server have 99% CPU usage.",
-          icon: "ChevronsRightIcon",
-          time: this.randomDate({ min: 1 }),
-          category: "primary"
         }
       ],
       userDetail:{},

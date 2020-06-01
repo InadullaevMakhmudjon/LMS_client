@@ -2,7 +2,7 @@
  <div>
       <vs-table 
         notSpacer 
-        :maxItems="3" 
+        :maxItems="6" 
         :data="actionLogs" 
         :sst="true"
         @search="handleSearch"
@@ -13,41 +13,31 @@
         <!-- <h3>Users</h3> -->
       </template>
       <template slot="thead">
-        <vs-th>UID</vs-th>
-        <vs-th>FULL NAME</vs-th>
         <vs-th>BOOK TITLE</vs-th>
         <vs-th> DATE</vs-th>
         <vs-th>STATUS</vs-th>
-        <vs-th>BLOCK USER</vs-th>
       </template>
 
       <template slot-scope="{data}">
         <vs-tr :key="indextr" v-for="(tr, indextr) in data" >
-          <vs-td :data="data[indextr].uid">
-            {{data[indextr].uid}}
+
+           <vs-td :data="data[indextr].bookTitle">
+            {{data[indextr].bookTitle}}
           </vs-td>
 
-          <vs-td :data="data[indextr].name">
-            {{data[indextr].name}}
+          <vs-td :data="data[indextr].createdAt">
+            {{data[indextr].createdAt | moment("MMM")}}
           </vs-td>
 
-           <vs-td :data="data[indextr].bookName">
-            {{data[indextr].bookName}}
+          <vs-td :data="data[indextr].isBorrowed">
+            {{data[indextr].isBorrowed ? 'Borrowed' : 'Not borrowed'}}
           </vs-td>
 
-          <vs-td :data="data[indextr].date">
-            {{data[indextr].date}}
-          </vs-td>
-
-          <vs-td :data="data[indextr].status">
-            {{data[indextr].status}}
-          </vs-td>
-
-            <vs-td :data="data[indextr].status">
+            <!-- <vs-td :data="data[indextr].status">
              <div class="actionColor">
                  <feather-icon icon="LockIcon" class="w-6 h-6 mr-1 red"></feather-icon>
              </div>
-          </vs-td>
+          </vs-td> -->
         </vs-tr>
       </template>
     </vs-table>
@@ -55,56 +45,13 @@
 </template>
 
 <script>
+import io from "socket.io-client"
+import Logs from '../../../services/Logs'
 export default {
 data() {
     return {
-        actionLogs: [
-            {
-                uid: "u1710023",
-                name: "Saidakbar Makhmudkhujaev",
-                bookName: 'Calculus 2020',
-                status: 'Borrowed',
-                date: '2 Jan, 2020',
-                action: 23
-            },
-            {
-                uid: "u1710023",
-                name: "Saidakbar Makhmudkhujaev",
-                bookName: 'Calculus 2020',
-                status: 'Borrowed',
-                date: '2 Jan, 2020',
-                action: 23
-            },
-             {
-                uid: "u1710023",
-                name: "Saidakbar Makhmudkhujaev",
-                bookName: 'Calculus 2020',
-                status: 'Borrowed',
-                date: '2 Jan, 2020',
-                action: 23
-            }, {
-                uid: "u1710023",
-                name: "Saidakbar Makhmudkhujaev",
-                bookName: 'Calculus 2020',
-                status: 'Borrowed',
-                date: '2 Jan, 2020',
-                action: 23
-            }, {
-                uid: "u1710023",
-                name: "Saidakbar Makhmudkhujaev",
-                bookName: 'Calculus 2020',
-                status: 'Borrowed',
-                date: '2 Jan, 2020',
-                action: 23
-            }, {
-                uid: "u1710023",
-                name: "Saidakbar Makhmudkhujaev",
-                bookName: 'Calculus 2020',
-                status: 'Borrowed',
-                date: '2 Jan, 2020',
-                action: 23
-            }
-        ]
+         socket: io(process.env.VUE_APP_SOCKET,{transports: ['websocket']}),
+        actionLogs: []
     }
 },
 methods: {
@@ -113,7 +60,29 @@ methods: {
     },
     handleSearch(val) {
         console.log(val)
+    },
+    pushData(val) {
+        this.actionLogs.unshift(val)
+        this.$vs.notify({
+            title: val.bookTitle,
+            text: val.createdAt,
+            color: val.isBorrowed ? 'success': 'danger',
+            icon: val.isBorrowed ? 'verified_user' : 'privacy_tip',
+            fixed: true
+        })
+    },
+    getAllLogs() {
+        Logs.getAll().then(res => {
+            this.actionLogs = res
+            console.log(res)
+        }).catch(err => console.log(err))
     }
+},
+created() {
+    this.getAllLogs()
+     this.socket.on("newLog", data => {
+        this.pushData(data)
+      });
 }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="vx-row">
-    <vs-card>
+    <vx-card no-shadow>
       <vs-row vs-w="12">
         <vs-col
           v-for="(item, index) in shelfs"
@@ -62,7 +62,6 @@
 
         <div class="vx-col md:w-full w-full">
           <vs-table
-            multiple
             v-model="selected"
             pagination
             max-items="5"
@@ -110,7 +109,7 @@
           </vs-table>
         </div>
       </template>
-    </vs-card>
+    </vx-card>
 
     <!--data module --->
     <vs-popup
@@ -149,16 +148,11 @@
 
 <script>
 export default {
-  props: ["shelfs", "shelflist"],
- 
+  
   methods: {
   
     addShelf() {
       this.popupShelf = true
-      // this.shelfs.push({
-      //   shelfId: this.selectedShelf,
-      //   shelfName: this.selectedShelf
-      // });
     },
     submitShelf(val) {
       console.log(val)
@@ -187,6 +181,14 @@ export default {
         "tbody: Slot",
         "header: Slot"
       ],
+      shelfs: [],
+      shelflist: [
+         { text: "A1", value: "1" },
+        { text: "A2", value: "2" },
+        { text: "A3", value: "3" },
+        { text: "A4", value: "4" },
+        { text: "A5", value: "5" }
+      ],
       itemList: [
         {
           id: 1,
@@ -200,44 +202,12 @@ export default {
           isbn: "2839-32343-2433-2",
           code: "00235",
           status: 1,
-        },
-        {
-          id: 5,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00236",
-          status: 1,
-        },
-        {
-          id: 6,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00237"
-        },
-        {
-          id: 7,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00238",
-          status: 0
-        },
-        {
-          id: 8,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00239",
-          status: 1,
         }
       ]
     };
   },
   mounted() {
-    // this.$vs.loading({
-    //   container: "#div-with-loading",
-    //   scale: 1.6,
-    //   type: "point",
-    //   color: "primary"
-    // });
+
   }
 };
 </script>

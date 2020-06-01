@@ -9,13 +9,13 @@
   >
     <!-- tab 1 content -->
     <tab-content title="Step 1" class="mb-5">
-      <vx-card fixed-height="1000">
+      <vx-card no-shadow fixed-height="1000">
         <first-step :bookObj="bookObj" />
       </vx-card>
     </tab-content>
     <!-- tab 2 content -->
     <tab-content title="Step 2" class="mb-5">
-      <second-step :shelfs="shelfs" :shelflist="shelfList" />
+      <second-step  />
     </tab-content>
 
     <!-- tab 3 content -->
@@ -34,7 +34,6 @@
       </div>
       <div class="wizard-footer-right">
         <wizard-button
-        disabled
           v-if="!props.isLastStep"
           @click.native="nextTab(props)"
           class="wizard-footer-right"
@@ -70,6 +69,7 @@ import Create_3 from "../../components/LMS/Books/create-book-steps/Create_3";
 import Books from '@/services/Books';
 
 export default {
+
   data() {
     return {
       onState: false,
@@ -93,13 +93,7 @@ export default {
         imageFile: new FormData(),
       },
       shelfs: [],
-      shelfList: [
-        { text: "A1", value: "1" },
-        { text: "A2", value: "2" },
-        { text: "A3", value: "3" },
-        { text: "A4", value: "4" },
-        { text: "A5", value: "5" }
-      ],
+      shelfList: [],
       categories: [],
       languages: [],
     };
@@ -164,6 +158,10 @@ export default {
     }
   },
   computed: {
+    startPoint() {
+      console.log(this.stepIndex)
+      return this.stepIndex.index || 0
+    },
     userIdNum () {
       return this.$store.state.userInfo
     }
