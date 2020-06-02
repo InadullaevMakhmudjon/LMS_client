@@ -29,12 +29,14 @@ export default {
   methods: {
     getBook(id) {
       Books.getOnebook(id).then(book => {
+        // console.log(book)
         this.bookInfo = {
-          ...book,
+          ...book.book,
+          formType: book.formType,
           imageFile: null
         };
         // console.log(book)
-        this.bookInfo.language = book.language.name;
+        this.bookInfo.language = book.book.language.name;
         // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },

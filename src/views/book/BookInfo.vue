@@ -233,10 +233,10 @@ export default {
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
-        // console.log(book)
-        this.bookInfo = book;
-        this.bookInfo.language = book.language.name;
-        this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
+      //  console.log(book.book)
+        this.bookInfo = book.book;
+        this.bookInfo.language = book.book.language.name;
+        this.bookInfo.authors = book.book.authors.map(({ name }) => name).join(", ");
       });
     }
   },

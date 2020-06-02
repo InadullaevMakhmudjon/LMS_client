@@ -19,9 +19,9 @@
     </tab-content>
 
     <!-- tab 3 content -->
-    <tab-content title="Step 3" class="mb-5">
+    <!-- <tab-content title="Step 3" class="mb-5">
       <third-step :bookObj="bookObj" />
-    </tab-content>
+    </tab-content> -->
 
     <template slot="footer" slot-scope="props">
       <div class="wizard-footer-left">
@@ -158,10 +158,6 @@ export default {
     }
   },
   computed: {
-    startPoint() {
-      console.log(this.stepIndex)
-      return this.stepIndex.index || 0
-    },
     userIdNum () {
       return this.$store.state.userInfo
     }

@@ -110,13 +110,12 @@
         </vs-row>
       </vx-card>
     </vs-row>
-
+    <div v-if="books.length>1">
     <p class="text-grey text-2xl text-center mt-5 mb-5">
-      {{ booksQuantity }} results found in Book list
+      {{ booksQuantity }} results found in book store
     </p>
-
-    <vs-row>
-      <vs-col vs-justify="start" v-for="book in books" :key="book.id" vs-w="3">
+    <vs-row  v-if="books.length > 0">
+      <vs-col vs-justify="center" v-for="book in books" :key="book.id" vs-w="12" vs-xs="12" vs-sm="4" vs-lg="3">
         <main @click="bookInfo(book.id)">
           <div class="book-card">
             <div class="book-card__cover">
@@ -148,7 +147,7 @@
               </div>
               <div class="book-card__author">
                 <span>{{ `ISBN: ${book.ISBNCode}` }}</span
-                ><span class="book_quantity">43</span>
+                ><span class="book_quantity">inf.</span>
               </div>
             </div>
           </div>
@@ -162,6 +161,8 @@
         v-model="currentx"
       ></vs-pagination>
     </vs-row>
+    </div>
+     <vs-progress indeterminate color="primary"  :height="8" v-else></vs-progress>
   </div>
 </template>
 

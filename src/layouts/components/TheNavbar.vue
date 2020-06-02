@@ -85,7 +85,7 @@
             </li>
           </ul>
           </VuePerfectScrollbar>
-                    <div class="
+                    <div @click="$router.push('/book-control')" class="
                         checkout-footer
                         fixed
                         bottom-0
@@ -102,7 +102,7 @@
                         border-solid
                         d-theme-border-grey-light
                         cursor-pointer">
-                        <span>View All Notifications</span>
+                        <span >View All Notifications</span>
                     </div>
         </vs-dropdown-menu>
       </vs-dropdown>
@@ -220,10 +220,6 @@ export default {
     }
   },
   computed: {
-    //  getUserInfo () {
-    //    return this.$store.getters.userInfo
-    // },
-    // HELPER
 
     sidebarWidth() {
       return this.$store.state.sidebarWidth;
