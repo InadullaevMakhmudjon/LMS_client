@@ -31,11 +31,11 @@ export default {
     getBook(id) {
       Books.getOnebook(id).then(book => {
         this.bookInfo = {
-          ...book,
+          ...book.book,
           imageFile: null
         };
         // console.log(book)
-        this.bookInfo.language = book.language.name;
+        this.bookInfo.language = book.book.language.name;
         // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
@@ -55,7 +55,7 @@ export default {
     AddBookItem
    },
   
-  mounted() {
+  created() {
     this.getBook(this.id);
   }
 };
