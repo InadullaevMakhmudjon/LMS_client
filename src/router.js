@@ -38,7 +38,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
-                            { title: 'book item', active: true },
+                            { title: 'Dashboard', active: true },
                         ],
                         rule: 'editor',
                         pageTitle: 'Home',
@@ -53,8 +53,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Books', url: '/books' },
-                            { title: 'Books', url: '/books' },
-                            { title: 'book item', active: true },
+                            { title: 'Book item', active: true },
                         ],
                         parent: 'books',
                         pageTitle: 'Books',
@@ -216,7 +215,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
-                            { title: 'book item', active: true },
+                            { title: 'Settings', active: true },
                         ],
                         pageTitle: 'Settings',
                         requiresAuth: true
@@ -231,7 +230,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
-                            { title: 'Logs', active: true },
+                            { title: 'Log panel', active: true },
                         ],
                         pageTitle: 'Book Control',
                         requiresAuth: true
@@ -246,7 +245,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
-                            { title: 'book item', active: true },
+                            { title: 'User profile', active: true },
                         ],
                         rule: '',
                         pageTitle: 'Profile info',

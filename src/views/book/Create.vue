@@ -15,7 +15,7 @@
     </tab-content>
     <!-- tab 2 content -->
     <tab-content title="Step 2" class="mb-5">
-      <second-step  />
+      <second-step :bookObj="bookObj"  />
     </tab-content>
 
     <!-- tab 3 content -->

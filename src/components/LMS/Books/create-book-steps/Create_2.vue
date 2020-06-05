@@ -3,16 +3,20 @@
     <div class="tabs">
     <div class="tabs__nav">
       <div class="tabs__nav_tab"
-           v-for="(item, index) in items"
+           v-for="(item, index) in shelfItems"
            :key="index"
-           :class="[index === active ? 'tabs__nav_tab--active' : '']"
+           :class="[index === active ? 'tabs__nav_tab--active' : 'tabs__nav_offtab']"
            @click="activate(index, item)">{{ item.shelfName}}
-           </div>
-           <div @click="addShelf" class="tabs__nav_tab">&#43;</div>
+      </div>
+      <div @click="addShelf" class="tabs__nav_tab"> 
+             <feather-icon
+                    color="red"
+                    icon="PlusIcon"
+                    svgClasses="stroke-current  w-6 h-6"
+                  /></div>
     </div>
     <div class="tabs__content">
-       <vx-card no-shadow>
-    
+  
       <template >
         <vs-row
           class="mt-5"
@@ -21,18 +25,7 @@
           vs-justify="center"
           vs-w="12"
         >
-          <!-- <vs-col
-            vs-type="flex"
-            vs-justify="flex-end"
-            vs-align="center"
-            vs-w="1"
-          >
-          <div
-              id="div-with-loading"
-              class="vs-con-loading__container tz w-24 h-24"
-            ></div> 
-          </vs-col> -->
-          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="3">
             <h3 class="text-grey justify-start text-3xl pt-6">
             Listening books...
             </h3>
@@ -41,18 +34,17 @@
 
         <div class="vx-col md:w-full w-full">
           <vs-table
-            v-model="selected"
+          v-if="shelfItems.length > 0"
             pagination
-            max-items="5"
+            max-items="10"
             search
-            :data="itemList"
+            :data="shelfItems[this.active].bookItems"
           >
             <template slot="thead">
               <vs-th sort-key="order">Order</vs-th>
               <vs-th sort-key="title">Title</vs-th>
               <vs-th sort-key="isbn">ISBN</vs-th>
               <vs-th sort-key="code">Code</vs-th>
-              <vs-th sort-key="status">Status</vs-th>
               <vs-th sort-key="id">Action</vs-th>
             </template>
 
@@ -73,9 +65,6 @@
                 <vs-td :data="data[indextr].code">
                   {{ data[indextr].code }}
                 </vs-td>
-                <vs-td :data="data[indextr].code">
-                  <vs-chip :color="data[indextr].status ? 'danger': ''"> {{ data[indextr].status ? 'Borrowed': 'free' }}</vs-chip> 
-                </vs-td>
                 <vs-td>
                   <feather-icon
                     color="red"
@@ -86,22 +75,13 @@
               </vs-tr>
             </template>
           </vs-table>
+          <vs-button @click="checkerFlag">Checker</vs-button>
+          <vs-button @click="disconnect" color="red">Disconnect</vs-button>
         </div>
       </template>
-    </vx-card>
     </div>
   </div>
   
-
-    <!--data module --->
-    <vs-popup
-      class="holamundo"
-      title="Lorem ipsum dolor sit amet"
-      :active.sync="popupActive"
-    >
-      <p id="modal" v-text="msg"></p>
-    </vs-popup>
-
     <vs-popup
       class="holamundo"
       title="Select Shelf"
@@ -138,6 +118,18 @@ export default {
       required: true
     }
   },
+   data() {
+    return {
+      active: 0,
+      shelfItems: [],
+      socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
+      actived: false,
+      selectedShelf: "",
+      popupShelf: false,
+      shelflist: [],
+      itemList: []
+    };
+  },
   methods: {
     getShelves() {
       Shelves.getAll().then( res => {
@@ -145,135 +137,77 @@ export default {
         this.shelflist = res
       }).catch( err => console.log(err))
     },
+
     addShelf() {
       this.popupShelf = true
     },
+
     submitShelf(val) {
-      //console.log(val)
-      this.items.push({
+      //this.bookObj.shelfId = val.id
+      this.shelfItems.push(
+        {
         shelfName: val.name,
         shelfId: val.id,
-        bookId: '',
+        bookId: this.bookObj.id,
         bookItems: []
       })
-      //console.log(this.items)
-      // this.fetchData()
       this.popupShelf = false
     },
-    // alerting(props) {
-    //   this.actived = true
-    //   this.msg = props;
-    //   this.popupActive = true;
-    // },
-    fetchData() {
-      
-    },
+
      activate (index, item) {
-       console.log(item)
-       this.itemList = item.bookItems
+      //  item.bookItems = this.itemList
        this.active = index
-    }
-  },
-  computed: {
-      content () {
-      return this.items[this.active]
-    }
-  },
-  data() {
-    return {
-      active: 0,
-    items: [
-      {
-      shelfName: 'A1',
-      shelfId: '',
-      bookId: '',
-      bookItems: [
-       {
-        id: 's',
-        rfidTag: '232dcddcfgdfg3dfasd3f',
-        title: 'sdadas',
-        code: '2332-232-323'
-       },
-       {
-        id: 's',
-        rfidTag: '232dcddasdasc3dfasgfg',
-        title: 'asdasda',
-        code: '2332-232-323'
-       },
-       {
-        id: 's',
-        rfidTag: '232dcddsfsdfc3dfasjhyf',
-        title: 'asdasda',
-        code: '2332-232-323'
-       }
-      ]
+      //  this.itemList = item.bookItems
+      // console.log(this.itemList)
+      // console.log(this.shelfItems)
     },
-     {
-      shelfName: 'A2',
-      shelfId: '',
-      bookId: '',
-      bookItems: [
-       {
-        id: 's',
-        rfidTag: '232dcddcfgdfg3dfasd3f',
-        title: 'BBBBBB',
-        code: '2332-232-323'
-       },
-       {
-        id: 's',
-        rfidTag: '232dcddasdasc3dfasgfg',
-        title: 'BBBBBB',
-        code: '2332-232-323'
-       },
-       {
-        id: 's',
-        rfidTag: '232dcddsfsdfc3dfasjhyf',
-        title: 'BBBBBB',
-        code: '2332-232-323'
-       }
-      ]
+
+    checkerFlag() {
+      console.log('shelves...', this.shelfItems)
+      // this.bookObj.bookItems = this.shelfItems
+    },
+    disconnect() {
+      // this.itemList.unshift({
+      //     id: Math.floor(Math.random()*100),
+      //     title: 'Mathematics',
+      //     isbn: '2323-3433-e32e32-23232',
+      //     code: 'adsadad23d232q32r324w23wreateg34'
+      //   })
+        this.shelfItems[this.active].bookItems.push({ 
+          id: Math.floor(Math.random()*100),
+          title: 'Mathematics',
+          isbn: '2323-3433-e32e32-23232',
+          code: 'adsadad23d232q32r324w23wreateg34'
+          })
+      this.socket.disconnect()
+      this.$vs.notify({
+        title: 'disconnected',
+        color: 'success'
+      })
     }
-    ],
-      socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
-      actived: false,
-      selectedShelf: "",
-      msg: "not available yet",
-      popupActive: false,
-      popupShelf: false,
-      selected: [],
-      tableList: [
-        "vs-th: Component",
-        "vs-tr: Component",
-        "vs-td: Component",
-        "thread: Slot",
-        "tbody: Slot",
-        "header: Slot"
-      ],
-      shelfs: [],
-      shelflist: [],
-      itemList: []
-    };
   },
+
   created() {
-      this.getShelves()
-    // console.log('sending id ...')
-    // setTimeout(() => {
-    //   console.log(this.bookObj)
-    //   this.socket.emit('bookId',this.bookObj.id )
-    // }, 1000);
-    // setTimeout(() => {
-      
-    //   console.log('waiting response...')
-    //  this.socket.on("bookItem", data => {
-    //     console.log(data)
-    //     this.itemList.unshift( {
-    //       id: this.bookObj.id,
-    //       title: this.bookObj.title,
-    //       isbn: this.bookObj.ISBNCode,
-    //       code: data.rfidTag
-    //     })
-    //   })
-    // }, 1300);
+     this.getShelves()
+    console.log('started...')
+    setTimeout(() => {
+      this.socket.emit('bookId', this.bookObj.id )
+    }, 1000);
+
+    setTimeout(() => {
+        this.socket.on("bookItem", data => {
+        console.log(data)
+          if(this.shelfItems.length > 0) {
+          this.shelfItems[this.active].bookItems.push({
+          id: this.bookObj.id,
+          title: this.bookObj.title,
+          isbn: this.bookObj.ISBNCode,
+          code: data.rfidTag
+        })
+          }
+      })
+    }, 1200);
+ 
   }
 };
 </script>
@@ -306,32 +240,36 @@ export default {
   transform: translate(-50%, -50%);
 }
 .tabs {
+  font-size: 12pt;;
   top:0;
   left:0;
   height:100%;
   width:100%;
   box-sizing:border-box;
-  background: rgba(44, 163, 242, 0.377);
-  padding:1rem;
+  background: rgb(255, 255, 255);
+  padding:0.6rem;
   &__nav {
     display:flex;
     &_tab {
       padding:1rem;
-      margin:0 0.5rem 0 0;
-      background:#fff;
-      border-radius:0.5rem 0.5rem 0 0;
-      box-shadow:inset 0 -1rem 0.75rem -1rem rgba(0,0,0,0.25);
+      margin:0 0.8rem 0 0;
+      border-radius:0 0.5rem 0 0;
+      border-bottom-style:inset;
       cursor:pointer;
-      opacity:0.75;
-      transition:100ms linear all;
+      opacity:0.85;
+      transition:80ms linear all;
       &--active {
         opacity:1;
+        transition-timing-function: ease-in-out;
         box-shadow:none;
+        background:rgb(255, 255, 255);
+        border-bottom-width: 5px;
+        border-bottom-color: rgb(0, 150, 219);
       }
     }
   }
   &__content {
-    background:#fff;
+    background:rgb(255, 255, 255);
     padding:1rem;
     border-radius:0 0.5rem 0.5rem 0.5rem;
   }

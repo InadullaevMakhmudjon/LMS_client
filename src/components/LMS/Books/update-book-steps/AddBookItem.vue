@@ -1,7 +1,7 @@
 <template>
   <div>
     <vx-card no-shadow>
-    <add-book-item :bookObj="bookInfo" />
+    <add-book-item :bookObj="bookInfo"  />
     <vs-row>
       <vs-col vs-type="flex" vs-justify="flex-end" vs-align="center" vs-w="12">
         <vs-button @click="leaveBack" class="mx-2">Cancel</vs-button>
@@ -18,7 +18,9 @@ import Books from "@/services/Books.js";
 export default {
   data() {
     return {
-      bookInfo: {},
+      bookInfo: {
+        shelfId: 0
+      },
     };
   },
   props: {
@@ -32,6 +34,7 @@ export default {
       Books.getOnebook(id).then(book => {
         this.bookInfo = {
           ...book.book,
+           shelfId: 0,
           imageFile: null
         };
         // console.log(book)
@@ -40,12 +43,13 @@ export default {
       });
     },
     submitData() {
-       this.$vs.notify({
-        title: 'The action has occured',
-        text: 'Click on me to execute function',
-        color: 'primary',
-        fixed: true,
-     })
+   const bookItem = this.bookInfo.bookItems.map( el => {
+        return el.bookItems.map(np => {
+          console.log(np)
+          return np
+        })
+        console.log(el)
+        })
     },
     leaveBack() {
         this.$router.push('/books')

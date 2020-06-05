@@ -237,7 +237,6 @@ export default {
     getResult() {
       this.loading(true);
       if (this.disableAllfields && this.disableAllfields) {
-        alert('sda')
         Books.getISBN(this.filterList.isbn,this.currentx, 12).then(({ items: books, length }) => {
           this.books = books;
           this.booksQuantity = length;
@@ -314,9 +313,10 @@ export default {
         this.languages = languages;
       });
     },
-    getAll(val) {
-      Books.getAll(val, 16).then(({ items: books, length }) => {
+    getAll(val, range) {
+      Books.getAll(val, range).then(({ items: books, length }) => {
         this.books = books;
+        console.log(this.books)
         this.booksQuantity = length;
         this.page = Math.ceil(length / 16);
         this.books.forEach(book => {
@@ -353,7 +353,7 @@ export default {
     }
   },
   mounted() {
-    this.getAll(1, 12);
+    this.getAll(1, 16);
     this.getFilters();
   }
 };
