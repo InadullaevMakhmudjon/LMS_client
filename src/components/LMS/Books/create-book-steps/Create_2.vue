@@ -3,7 +3,7 @@
     <div class="tabs">
     <div class="tabs__nav">
       <div class="tabs__nav_tab"
-           v-for="(item, index) in shelfItems"
+           v-for="(item, index) in bookObj.shelfItems"
            :key="index"
            :class="[index === active ? 'tabs__nav_tab--active' : 'tabs__nav_offtab']"
            @click="activate(index, item)">{{ item.shelfName}}
@@ -34,11 +34,11 @@
 
         <div class="vx-col md:w-full w-full">
           <vs-table
-          v-if="shelfItems.length > 0"
+          v-if="bookObj.shelfItems.length"
             pagination
             max-items="10"
             search
-            :data="shelfItems[this.active].bookItems"
+            :data="bookObj.shelfItems[this.active].bookItems"
           >
             <template slot="thead">
               <vs-th sort-key="order">Order</vs-th>
@@ -66,16 +66,17 @@
                   {{ data[indextr].code }}
                 </vs-td>
                 <vs-td>
+                  <div @click="deleteBookItem(tr, indextr)">
                   <feather-icon
                     color="red"
                     icon="TrashIcon"
                     svgClasses="stroke-current text-danger w-7 h-7"
                   />
+                  </div>
                 </vs-td>
               </vs-tr>
             </template>
           </vs-table>
-          <vs-button @click="checkerFlag">Checker</vs-button>
           <vs-button @click="disconnect" color="red">Disconnect</vs-button>
         </div>
       </template>
@@ -111,6 +112,7 @@
 <script>
 import io from "socket.io-client"
 import Shelves from '../../../../services/Shelves';
+import Books from '@/services/Books.js';
 export default {
   props: {
     bookObj: {
@@ -130,6 +132,9 @@ export default {
       itemList: []
     };
   },
+  computed: {
+  
+  },
   methods: {
     getShelves() {
       Shelves.getAll().then( res => {
@@ -143,8 +148,7 @@ export default {
     },
 
     submitShelf(val) {
-      //this.bookObj.shelfId = val.id
-      this.shelfItems.push(
+      this.bookObj.shelfItems.push(
         {
         shelfName: val.name,
         shelfId: val.id,
@@ -155,39 +159,33 @@ export default {
     },
 
      activate (index, item) {
-      //  item.bookItems = this.itemList
        this.active = index
-      //  this.itemList = item.bookItems
-      // console.log(this.itemList)
-      // console.log(this.shelfItems)
     },
 
-    checkerFlag() {
-      console.log('shelves...', this.shelfItems)
-      // this.bookObj.bookItems = this.shelfItems
+    deleteBookItem(item, idx) {
+      console.log(item, idx)
+      this.bookObj.shelfItems[this.active].bookItems.splice(idx, 1)
+      console.log(this.bookObj.shelfItems[this.active])
+      this.socket.emit('delete', { rfidTag: item.code });
     },
+ 
     disconnect() {
-      // this.itemList.unshift({
-      //     id: Math.floor(Math.random()*100),
-      //     title: 'Mathematics',
-      //     isbn: '2323-3433-e32e32-23232',
-      //     code: 'adsadad23d232q32r324w23wreateg34'
-      //   })
-        this.shelfItems[this.active].bookItems.push({ 
-          id: Math.floor(Math.random()*100),
-          title: 'Mathematics',
-          isbn: '2323-3433-e32e32-23232',
-          code: 'adsadad23d232q32r324w23wreateg34'
-          })
-      this.socket.disconnect()
-      this.$vs.notify({
-        title: 'disconnected',
-        color: 'success'
-      })
+       this.bookObj.shelfItems[this.active].bookItems.push({
+          id:  Math.floor(Math.random()*100),
+          title: `${Math.floor(Math.random()*100)}dasdasasaq`,
+          isbn: Math.floor(Math.random()*10000),
+          code: Math.floor(Math.random()*100000)
+        })
+      // this.socket.disconnect()
+      // this.$vs.notify({
+      //   title: 'disconnected',
+      //   color: 'success'
+      // })
     }
   },
 
   created() {
+    console.log(this.bookObj)
      this.getShelves()
     console.log('started...')
     setTimeout(() => {
@@ -196,15 +194,28 @@ export default {
 
     setTimeout(() => {
         this.socket.on("bookItem", data => {
-        console.log(data)
-          if(this.shelfItems.length > 0) {
-          this.shelfItems[this.active].bookItems.push({
-          id: this.bookObj.id,
-          title: this.bookObj.title,
-          isbn: this.bookObj.ISBNCode,
-          code: data.rfidTag
-        })
-          }
+          console.log(data)
+          Books.hasBookItem(data.rfidTag).then( (res) => {
+          if(res.length == 0 )
+            {
+            if(this.bookObj.shelfItems.length > 0 ) {
+            this.bookObj.shelfItems[this.active].bookItems.push({
+            id: this.bookObj.id,
+            title: this.bookObj.title,
+            isbn: this.bookObj.ISBNCode,
+            code: data.rfidTag
+            })
+            }
+            }else {
+              this.$vs.notify({
+                title: 'DUBLICATED BOOK ITEM, CHECK !',
+                color: 'warning',
+                fixed: true
+              })
+            }
+
+          }).catch( err => console.log(err))
+       
       })
     }, 1200);
  

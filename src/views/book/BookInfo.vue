@@ -111,9 +111,10 @@
             <vs-tab label="Books">
               <div>
                 <vs-table
+                v-if="bookItems.length > 0"
                   max-items="10"
                   pagination
-                  :data="users"
+                  :data="bookItems"
                   maxHeight="600px"
                   search
                 >
@@ -124,8 +125,11 @@
                     <vs-th>
                       Code
                     </vs-th>
-                    <vs-th>
-                      Title
+                     <vs-th>
+                      Added by
+                    </vs-th>
+                     <vs-th>
+                      Shelf
                     </vs-th>
                     <vs-th>
                       Status
@@ -144,15 +148,16 @@
                         {{ indextr + 1 }}
                       </vs-td>
                       <vs-td :data="data[indextr].code">
-                        {{ data[indextr].code }}
+                        {{ data[indextr].rfidTag }}
                       </vs-td>
-
-                      <vs-td :data="data[indextr].title">
-                        {{ data[indextr].title }}
+                      <vs-td :data="data[indextr].code">
+                        {{ data[indextr].user.firstName + ' ' +data[indextr].user.lastName}}
                       </vs-td>
-
                       <vs-td :data="data[indextr].status">
-                        {{ data[indextr].status }}
+                        {{ data[indextr].shelf.name }}
+                      </vs-td>
+                      <vs-td :data="data[indextr].status">
+                        {{ data[indextr].lostDate }}
                       </vs-td>
 
                       <vs-td :data="data[indextr].id">
@@ -210,21 +215,12 @@ export default {
       selected: "",
       persentaging: Math.floor(Math.random() * 100),
       bookInfo: [],
-      users: [
-        {
-          id: 1,
-          code: "234343",
-          title: "The Fundomental of Calculus",
-          status: "borrowed",
-          edit: "hildegard.org",
-          action: true
-        }
-      ]
+      bookItems: []
     };
   },
   methods: {
     backHistory(){
- window.history.back();
+      window.history.back();
     },
 
     doArchive(val) {
@@ -233,7 +229,8 @@ export default {
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
-      //  console.log(book.book)
+        console.log(book.book)
+        this.bookItems = book.book.bookItems
         this.bookInfo = book.book;
         this.bookInfo.language = book.book.language.name;
         this.bookInfo.authors = book.book.authors.map(({ name }) => name).join(", ");

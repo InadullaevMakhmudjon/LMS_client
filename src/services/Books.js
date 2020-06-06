@@ -9,5 +9,6 @@ export default {
     getISBN: (str, page, size) => execute(API().get(`/books/search/?page=${page}&size=${size}&ISBNCode=${str}`)),
     uploadImage: book => execute(API().post('books/images', book)),
     getSearchedBooks: (books, page, size) => execute(API().get(`books/search?page=${page}&size=${size}&` + books)),
-    postBookItems:items => execute(API().post('booksItems', items))
+    postBookItems:items => execute(API().post('bookItems', items)),
+    hasBookItem: rfidTag => execute(API().get(`bookItems/check?rfidTag=${rfidTag}`))
 }

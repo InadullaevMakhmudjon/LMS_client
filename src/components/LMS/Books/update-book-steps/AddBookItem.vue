@@ -1,13 +1,18 @@
 <template>
   <div>
     <vx-card no-shadow>
-    <add-book-item :bookObj="bookInfo"  />
-    <vs-row>
-      <vs-col vs-type="flex" vs-justify="flex-end" vs-align="center" vs-w="12">
-        <vs-button @click="leaveBack" class="mx-2">Cancel</vs-button>
-        <vs-button @click="submitData" imageFile>Save changes</vs-button>
-      </vs-col>
-    </vs-row>
+      <add-book-item :bookObj="bookInfo" />
+      <vs-row>
+        <vs-col
+          vs-type="flex"
+          vs-justify="flex-end"
+          vs-align="center"
+          vs-w="12"
+        >
+          <vs-button @click="leaveBack" class="mx-2">Cancel</vs-button>
+          <vs-button @click="submitData" imageFile>Save changes</vs-button>
+        </vs-col>
+      </vs-row>
     </vx-card>
   </div>
 </template>
@@ -19,8 +24,9 @@ export default {
   data() {
     return {
       bookInfo: {
-        shelfId: 0
-      },
+        shelfId: 0,
+        shelfItems: []
+      }
     };
   },
   props: {
@@ -34,32 +40,44 @@ export default {
       Books.getOnebook(id).then(book => {
         this.bookInfo = {
           ...book.book,
-           shelfId: 0,
+          shelfItems: [],
+          shelfId: 0,
           imageFile: null
         };
-        // console.log(book)
         this.bookInfo.language = book.book.language.name;
         // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
     submitData() {
-   const bookItem = this.bookInfo.bookItems.map( el => {
-        return el.bookItems.map(np => {
-          console.log(np)
-          return np
+      
+      const bookItem = this.bookInfo.shelfItems
+        .map(el => {
+          return el.bookItems.map(r => ({
+            bookId: r.id,
+            shelfId: el.shelfId,
+            rfidTag: r.code
+          }));
         })
-        console.log(el)
-        })
+        .reduce((ac, cur) => ac.concat(cur));
+    console.log(bookItem)
+      // Books.postBookItems(bookItem).then(res  => {
+      //   this.$router.push(`/books/${this.bookInfo.id}`)
+      //   this.$vs.notify({ 
+      //     title: 'Book items added successfully',
+      //     color: 'success'
+      //   })
+      // }).catch( err => console.log(err))
     },
     leaveBack() {
-        this.$router.push('/books')
+      this.$router.push(`/books/${this.bookInfo.id}`);
     }
   },
   components: {
     AddBookItem
-   },
-  
+  },
+
   created() {
+    console.log(this.bookInfo.shelfItems.length);
     this.getBook(this.id);
   }
 };
