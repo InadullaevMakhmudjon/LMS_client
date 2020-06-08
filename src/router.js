@@ -185,6 +185,56 @@ const router = new Router({
 
                     }
 
+                }, 
+                {
+                    path: '/transfer',
+                    name: 'Transfer',
+                    component: () =>
+                        import ('./views/book/GiveBooks.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Transfer', active: false },
+
+                        ],
+                        pageTitle: 'Transformation',
+                        parent: '',
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: '/transfer/return',
+                    name: 'Transfers',
+                    props: true,
+                    component: () =>
+                        import ('./components/LMS/Books/return-borrow-books/Return.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Transfer', active: false },
+
+                        ],
+                        pageTitle: 'Transformation',
+                        parent: 'Transfer',
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: '/transfer/borrow',
+                    name: 'Transferss',
+                    props: true,
+                    component: () =>
+                        import ('./components/LMS/Books/return-borrow-books/Borrow.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Transfer', active: false },
+
+                        ],
+                        pageTitle: 'Transformation',
+                        parent: 'Transfer',
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: '/user-create/',

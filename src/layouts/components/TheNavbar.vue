@@ -34,6 +34,7 @@
           </vx-tooltip>
           <!-- <span @click="alerting"><vs-icon icon-pack="feather"  size="30px" icon="archiveIcon"></vs-icon></span> -->
           <vs-button
+            to="/transfer/return"
             class="ml-2"
             color="success"
             type="border"
@@ -42,6 +43,7 @@
             >Return</vs-button
           >
           <vs-button
+            to="/transfer/borrow"
             class="ml-2"
             color="primary"
             type="border"

@@ -60,13 +60,13 @@ export default {
         })
         .reduce((ac, cur) => ac.concat(cur));
     console.log(bookItem)
-      // Books.postBookItems(bookItem).then(res  => {
-      //   this.$router.push(`/books/${this.bookInfo.id}`)
-      //   this.$vs.notify({ 
-      //     title: 'Book items added successfully',
-      //     color: 'success'
-      //   })
-      // }).catch( err => console.log(err))
+      Books.postBookItems(bookItem).then(res  => {
+        this.$router.push(`/books/${this.bookInfo.id}`)
+        this.$vs.notify({ 
+          title: 'Book items added successfully',
+          color: 'success'
+        })
+      }).catch( err => console.log(err))
     },
     leaveBack() {
       this.$router.push(`/books/${this.bookInfo.id}`);
