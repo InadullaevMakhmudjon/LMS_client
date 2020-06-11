@@ -229,7 +229,7 @@ export default {
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
-        console.log(book.book)
+        console.log(book)
         this.bookItems = book.book.bookItems
         this.bookInfo = book.book;
         this.bookInfo.language = book.book.language.name;

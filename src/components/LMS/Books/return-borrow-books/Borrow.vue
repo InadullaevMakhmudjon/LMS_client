@@ -42,12 +42,12 @@
                     <vs-col class="mx-0" vs-type="flex" vs-justify="start" vs-align="center" vs-w="2">
                         <vs-button :disabled="flagBtn" color="primary" @click="openData">Start Borrowing</vs-button>
                     </vs-col>
-                    <vs-col vs-type="flex" vs-w="2">
-                        <h3> <strong>count: </strong>{{bookItems.length}}</h3>
+                    <vs-col vs-align="center" vs-type="flex" vs-w="2">
+                        <h3 class="py-0"> <strong>Quantity: </strong>{{bookItems.length}}</h3>
                     </vs-col>
                       <vs-col class="px-0" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-                        <vs-button class="ml-2" type="border" color="primary">Cancel</vs-button>
-                        <vs-button class="ml-2" color="primary">Finish</vs-button>
+                        <vs-button to="/transfer" class="ml-2" type="border" color="primary">Cancel</vs-button>
+                        <vs-button @click=" submitData" class="ml-2" color="primary">Finish</vs-button>
                     </vs-col>
                   </vs-row>
                 </template>
@@ -78,12 +78,14 @@
                       {{ data[indextr].id}}
                     </vs-td>
 
-                    <vs-td :data="data[indextr].date">
-                      {{data[indextr].createdAt }}
+                    <vs-td :data="data[indextr].createdAt">
+                      {{ data[indextr].createdAt | moment('Do MMM, YYYY hh:mm:ss') }}
                     </vs-td>
+
                      <vs-td :data="data[indextr].date">
                       {{data[indextr].rfidTag }}
                     </vs-td>
+
                     <vs-td>
                       <div @click="deleteF(indextr, data[indextr].rfidTag)">
                        <feather-icon
@@ -92,6 +94,7 @@
                         svgClasses="stroke-current text-danger w-7 h-7"
                        /></div>
                     </vs-td>
+                    
                   </vs-tr>
                 </template>
               </vs-table>
@@ -110,16 +113,15 @@ import moment from 'moment';
 import flatPickr from 'vue-flatpickr-component';
 import 'flatpickr/dist/flatpickr.css';
 import io from "socket.io-client"
-
+import Transfer from '@/services/Transfer.js';
 export default {
   data() {
     return {
-      
+      flagBtn: false,
       date: null,
       socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
       studentInfo: {
         "id": 1,
-        flagBtn: false,
         "uid": "u1710008",
         "name": "Abdullaev Azamat",
         "rfidTag": "123qwewer",
@@ -173,12 +175,44 @@ export default {
           })
       setTimeout( ()=> {
         this.$vs.loading.close()
-      }, 8300);
+      }, 300);
     },
+
+    submitData() {
+      this.socket.disconnect()
+      const tasks = []
+      this.bookItems.forEach((borrow) => tasks.push(Transfer.borrowBooks({
+        memberId: this.studentInfo.id,
+        bookItemId: borrow.id,
+        dueDate: this.$moment(new Date().getTime()).add(1, 'day').valueOf()
+      }))); 
+      Promise.all(tasks).then( result => {
+        console.log(result)
+        this.bookItems = []
+        this.flagBtn = false
+        this.$vs.notify({
+          title: 'Success',
+          text: 'Books has borrowed successfully',
+          color: 'success',
+          icon: 'send'
+        })
+      }).catch(err => console.log(err))
+
+    }
     },
     created() {
-        console.log('dsad')
         this.openLoadingBackground('return', '#b8a018')
+    },
+    beforeRouteLeave(to, from, next) {
+       const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+  if (answer) {
+     console.log('diconnect')
+    this.socket.disconnect()
+    next()
+  } else {
+    next(false)
+  }
+
     }
 }
 </script>

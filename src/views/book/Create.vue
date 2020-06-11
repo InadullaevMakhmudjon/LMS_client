@@ -168,6 +168,14 @@ export default {
     FirstStep: Create_1,
     SecondStep: Create_2,
     ThirdStep: Create_3
-  }
+  },
+   beforeRouteLeave(to, from, next) {
+       const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+      if (answer) {
+         next()
+      } else {
+        next(false)
+      }
+    }
 };
 </script>

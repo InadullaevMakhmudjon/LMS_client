@@ -25,7 +25,7 @@ Vue.component(VxBreadcrumb.name, VxBreadcrumb)
 Vue.component(FeatherIcon.name, FeatherIcon)
 Vue.component(VxInputGroup.name, VxInputGroup)
 Vue.component('v-select', vSelect)
-
+Vue.use(require('vue-moment'));
 // v-select component
 
 // Set the components prop default to return our fresh components
