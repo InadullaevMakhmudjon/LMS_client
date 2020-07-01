@@ -151,7 +151,7 @@ const router = new Router({
                     props: true,
                     name: 'Userinfo',
                     component: () =>
-                        import ('./views/User/View.vue'),
+                        import ('./views/User/Update.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
@@ -328,11 +328,16 @@ const router = new Router({
                         import ('@/views/pages/Error404.vue')
                 },
                 {
+                    path: '/user/success',
+                    name: 'success-200',
+                    component: () => import ('@/views/pages/SuccessRegistered.vue')
+                },
+                {
                     path: '/reset/user/pwd/:id',
                     name: 'Reset',
                     props: true,
                     component: () => import('./views/pages/ResetPassword.vue'),
-                  },
+                },
             ]
         },
         // Redirect to 404 page, if no match found

@@ -19,7 +19,7 @@ const routing = [{
         name: "Users",
         slug: "users",
         icon: "UsersIcon",
-        access: false
+        access: true
     },
     {
         url: "/settings",

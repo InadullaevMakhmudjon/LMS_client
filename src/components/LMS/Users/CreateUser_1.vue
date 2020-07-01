@@ -18,6 +18,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-input
+              :disabled="isEditing"
                 class="w-full"
                 icon-pack="feather"
                 icon="icon-user"
@@ -32,6 +33,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-input
+              :disabled="isEditing"
                 class="w-full"
                 icon-pack="feather"
                 icon="icon-user"
@@ -46,6 +48,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-input
+              :disabled="isEditing"
                 type="email"
                 class="w-full"
                 icon-pack="feather"
@@ -61,6 +64,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-input
+              :disabled="isEditing"
                 type="email"
                 class="w-full"
                 icon-pack="feather"
@@ -76,6 +80,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-select
+              :disabled="isEditing"
                 v-model="userData.roleId"
                 class="w-full select-large mt-5"
               >
@@ -96,6 +101,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-input
+                :disabled="isEditing"
                 type="password"
                 class="w-full"
                 icon-pack="feather"
@@ -111,6 +117,7 @@
             </div>
             <div class="vx-col sm:w-2/3 w-full">
               <vs-input
+                :disabled="isEditing"
                 :danger="confirmingPwd ? false : true"
                 :danger-text="confirmingPwd ? '' : 'Password doesnt match'"
                 type="password"
@@ -148,12 +155,16 @@
           </div>
         </div>
       </vs-row>
-      <vs-row>
+      <vs-row class="mt-2">
         <div class="vx-col w-1/8 ml-auto mt-5">
-          <vs-button class="mr-3 " @click="submitData">Save</vs-button>
-          <vs-button color="danger" type="border">Discard</vs-button>
+          <vs-button class="mr-3 " v-if="!isEditing" :disabled="isSaved" @click="submitData">Save</vs-button>
+          <vs-button class="mr-3 " v-else :disabled="isSaved" @click="saveEdit">Save Edits</vs-button>
+          <vs-button color="danger" :disabled="isSaved" type="border" to="/users">Discard</vs-button>
         </div>
       </vs-row>
+      <template slot="footer">
+        <vs-progress v-if="isSaved" indeterminate :height="4" color="success">primary</vs-progress>
+      </template>
     </vx-card>
   </div>
 </template>
@@ -163,9 +174,16 @@ import Permissions from "../../../services/Permissions";
 import Users from "../../../services/Users";
 import Roles from "../../../services/Roles";
 export default {
+  props: {
+    propsData: {
+      type: Object,
+      required: false
+    }
+  },
   data() {
     return {
       pwd: "",
+      isSaved: false,
       userData: {
         firstName: "",
         lastName: "",
@@ -181,6 +199,9 @@ export default {
   computed: {
     confirmingPwd() {
       return this.pwd == this.userData.password;
+    },
+    isEditing() {
+      return this.$route.name == 'Userinfo'
     }
   },
   methods: {
@@ -190,6 +211,12 @@ export default {
       });
     },
     submitData() {
+      if(this.userData.firstName == '' && this.userData.lastName == '' && this.userData.roleId == '' && this.userData.email == '' && this.userData.password == '')
+        {
+          alert('All fields are required. Please fill in the fields')
+          return;
+        }
+      this.isSaved = true
       let assignedRoles = [];
       let user = "";
       this.datalist.forEach(element => {
@@ -197,7 +224,7 @@ export default {
       });
       Users.create1(this.userData)
         .then(res => {
-          console.log(assignedRoles)
+          // console.log(assignedRoles)
           Users.create2(res.user.id, {
             permissions: assignedRoles
           })
@@ -213,15 +240,48 @@ export default {
                 password: ""
               };
               this.pwd = ''
+               this.isSaved = false
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+            this.isSaved = false
+            console.log(error)
+            });
         })
-        .catch(error => console.log(error));
+        .catch(error => {
+          this.isSaved = false
+          console.log(error)
+          });
+    },
+    saveEdit() {
+      // E'tiborga olinsa shu qism davom ettiriladi, bolmasa faqat rollarni edit qilish mumkun boladi 
+      const assignedRoles = []
+      this.datalist.forEach(element => {
+        if (element.has == true) assignedRoles.push({ id: element.id});
+      });
+      Users.update(this.propsData.id, assignedRoles).then(res => {
+        // console.log(res)
+        this.$vs.notify({
+          title: 'Successfully updated',
+          color: 'success',
+        })
+        this.$router.push('/users')
+      }).catch( err => {
+        console.log(err)
+      })
     },
     getPermissionList() {
       Permissions.getAll()
         .then(permissions => {
-          this.datalist = permissions;
+          // console.log(permissions)
+          if(!this.isEditing) this.datalist = permissions;
+          else {
+              this.datalist = permissions.map(el => ({
+                  id: el.id,
+                  name: el.name,
+                  has: this.propsData.permissions.filter(fn => el.id == fn.id).length > 0
+                }))
+            }
+          
         })
         .catch(error => console.log(error));
     },
@@ -229,11 +289,25 @@ export default {
       this.$vs.notify({
         color: "success",
         title: value,
-        text: "User Has successfully created"
+        text: "User has successfully created. Check user's mail",
+        icon:'mail',
+        fixed: true
       });
     }
   },
-  mounted() {
+  created () {
+
+    // console.log(this.propsData)
+    if(this.$route.name == 'Userinfo')
+        {
+          this.userData = this.propsData
+          // this.datalist = this.propsData.permissions.map(el => {
+          //   return {
+          //     id: el.id, name: el.name, has: true 
+          //     }
+          // })
+          
+        }
     this.getPermissionList();
     this.getRoles();
   }

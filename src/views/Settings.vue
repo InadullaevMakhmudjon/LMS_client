@@ -230,6 +230,7 @@ export default {
             });
           return;
         case 4:
+          console.log(item.value)
           Shelves.create(item.value)
             .then(() => {
               this.getAll();
