@@ -223,11 +223,14 @@ export default {
       });
     }, 1200);
   },
-  beforeRouteLeave(to, from, next) {
-    console.log('diconnect')
-    this.socket.disconnect();
-    next();
-  }
+  beforeDestroy() {
+    location.reload()
+    // console.log('diconnect')
+    // this.socket.disconnect();
+  },
+  // beforeRouteLeave(to, from, next) {
+  //   next();
+  // }
 };
 </script>
 

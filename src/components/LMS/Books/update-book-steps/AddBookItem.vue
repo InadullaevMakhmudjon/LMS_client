@@ -82,7 +82,7 @@ export default {
   },
 
   created() {
-    console.log(this.bookInfo.shelfItems.length);
+    // console.log(this.bookInfo.shelfItems.length);
     this.getBook(this.id);
   }
 };

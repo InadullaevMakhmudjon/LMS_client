@@ -15,7 +15,7 @@
     </tab-content>
     <!-- tab 2 content -->
     <tab-content title="Step 2" class="mb-5">
-      <second-step :bookObj="bookObj"  />
+      <second-step v-if="false" :bookObj="bookObj"  />
     </tab-content>
 
     <!-- tab 3 content -->
@@ -34,6 +34,7 @@
       </div>
       <div class="wizard-footer-right">
         <wizard-button
+          :disabled="true"
           v-if="!props.isLastStep"
           @click.native="nextTab(props)"
           class="wizard-footer-right"

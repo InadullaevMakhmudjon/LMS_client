@@ -10,5 +10,6 @@ export default {
     uploadImage: book => execute(API().post('books/images', book)),
     getSearchedBooks: (books, page, size) => execute(API().get(`books/search?page=${page}&size=${size}&` + books)),
     postBookItems:items => execute(API().post('bookItems', items)),
-    hasBookItem: rfidTag => execute(API().get(`bookItems/check?rfidTag=${rfidTag}`))
+    hasBookItem: rfidTag => execute(API().get(`bookItems/check?rfidTag=${rfidTag}`)),
+    deleteBookItem: id => execute(API().delete(`bookItems/${id}`))
 }

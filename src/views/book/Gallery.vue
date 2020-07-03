@@ -147,7 +147,7 @@
               </div>
               <div class="book-card__author">
                 <span>{{ `ISBN: ${book.ISBNCode}` }}</span
-                ><span class="book_quantity">inf.</span>
+                ><span class="book_quantity">{{book.bookItems.length}}</span>
               </div>
             </div>
           </div>

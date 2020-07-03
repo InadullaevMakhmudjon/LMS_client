@@ -182,7 +182,7 @@
                         ></span>
                       </vs-td>
                       <vs-td v-else :data="data[indextr].id">
-                        <span @click="doArchive(data)"
+                        <span @click="doArchive(tr)"
                           ><vs-icon
                             class="cursor"
                             size="medium"
@@ -224,8 +224,16 @@ export default {
     },
 
     doArchive(val) {
-      alert("dsfsa");
-      console.log(val);
+      console.log(val)
+     Books.deleteBookItem(val.id).then(res => {
+       this.$vs.notify({
+         title: 'Successfully archived',
+         color: 'success'
+       })
+      //  this.getBook(this.id)
+     }).catch(err => {
+       console.log(err)
+     })
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
