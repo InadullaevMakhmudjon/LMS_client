@@ -1,6 +1,6 @@
 <template>
   <div>
-      <vs-row vs-type="flex" class="mb-6">
+      <vs-row vs-type="flex" class="mb-6" v-if="studentInfo.id">
         <vs-col vs-type="flex" vs-w="3">
             <img class="image__" not-margin src="https://img.freepik.com/free-photo/teenager-student-girl-yellow-pointing-finger-side_1368-40175.jpg?size=626&ext=jpg">
         </vs-col>
@@ -11,7 +11,7 @@
                   <div>
                     <h4 class="pb-2"><strong>Student Name:</strong> {{studentInfo.name}}</h4>
                     <h4 class="pb-2"><strong>ID Number:</strong> {{studentInfo.uid}}</h4>
-                    <h4 class="pb-2"><strong>Course: </strong>{{studentInfo.course}}</h4>
+                    <h4 class="pb-2"><strong>Course: </strong>{{studentInfo.course.name}}</h4>
                     <h4 class="pb-2"><strong>Phone number: </strong><a :href="'tel:'+studentInfo.phoneNumber" >{{studentInfo.phoneNumber}}</a></h4>
                     <div><h4 class="pb-2"><strong>Borrowed books:</strong> {{studentInfo.borrows.length}}</h4></div>
                     <div><h4 class="pb-2"><strong>Status:</strong> <span :class="studentInfo.isBlocked ? 'passive__bck py-1 px-4 ml-3': 'active__bck py-1 px-4 ml-3'">{{studentInfo.isBlocked ? 'blocked' : 'active'}}</span></h4></div>
@@ -120,30 +120,31 @@ export default {
       flagBtn: false,
       date: null,
       socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
+      socketOfUser: io(process.env.VUE_APP_BR_SOCKET, {transports: ['websocket']}),
       studentInfo: {
-        "id": 1,
-        "uid": "u1710008",
-        "name": "Abdullaev Azamat",
-        "rfidTag": "123qwewer",
-        "phoneNumber": "+998909272970",
-         course: "Senior",
-        "isBlocked": false,
-        "createdAt": "2020-06-08T12:53:33.000Z",
-        "updatedAt": "2020-06-08T12:53:33.000Z",
-        "borrows": [
-            {
-                "id": 1,
-                "memberId": 1,
-                "bookItemId": 1,
-                "borrowedDate": "2020-06-08T13:04:04.000Z",
-                "dueDate": "2021-05-14T19:00:00.000Z",
-                "isReturned": false,
-                "returnedDate": null,
-                "extendedDate": null,
-                "createdAt": "2020-06-08T13:04:04.000Z",
-                "updatedAt": "2020-06-08T13:04:04.000Z"
-            }
-        ]
+        "id": '',
+        // "uid": "u1710008",
+        // "name": "Abdullaev Azamat",
+        // "rfidTag": "123qwewer",
+        // "phoneNumber": "+998909272970",
+        //  course: "Senior",
+        // "isBlocked": false,
+        // "createdAt": "2020-06-08T12:53:33.000Z",
+        // "updatedAt": "2020-06-08T12:53:33.000Z",
+        // "borrows": [
+        //     {
+        //         "id": 1,
+        //         "memberId": 1,
+        //         "bookItemId": 1,
+        //         "borrowedDate": "2020-06-08T13:04:04.000Z",
+        //         "dueDate": "2021-05-14T19:00:00.000Z",
+        //         "isReturned": false,
+        //         "returnedDate": null,
+        //         "extendedDate": null,
+        //         "createdAt": "2020-06-08T13:04:04.000Z",
+        //         "updatedAt": "2020-06-08T13:04:04.000Z"
+        //     }
+        // ]
     },
       bookItems: []
     }
@@ -153,6 +154,7 @@ export default {
   },
     methods: {
       openData() {
+        this.disconnectNFC()
         this.flagBtn = true
         this.socket.emit('rfidTag')
         console.log('socket started...')
@@ -165,7 +167,9 @@ export default {
         this.bookItems.splice(idx, 1)
       this.socket.emit('delete', { rfidTag: code });
       },
-    openLoadingBackground(type, color){
+    
+    openLoadingBackground(type, color) {
+      console.log('user socket started...', process.env.VUE_APP_BR_SOCKET)
       this.$vs.loading({
           background: color,
           color:'rgb(255, 255, 255)',
@@ -173,11 +177,15 @@ export default {
           type: 'point',
           scale: 1.3
           })
-      setTimeout( ()=> {
-        this.$vs.loading.close()
-      }, 300);
+          this.socketOfUser.on('studentReceived',data => {
+            console.log(data)
+            this.studentInfo = data
+            this.$vs.loading.close()
+          })
     },
-
+    disconnectNFC() {
+      this.socketOfUser.disconnect()
+    },
     submitData() {
       this.socket.disconnect()
       const tasks = []
@@ -187,7 +195,7 @@ export default {
         dueDate: this.$moment(new Date().getTime()).add(1, 'day').valueOf()
       }))); 
       Promise.all(tasks).then( result => {
-        console.log(result)
+        // console.log(result)
         this.bookItems = []
         this.flagBtn = false
         this.$vs.notify({
@@ -208,6 +216,7 @@ export default {
   if (answer) {
      console.log('diconnect')
     this.socket.disconnect()
+    this.disconnectNFC()
     next()
   } else {
     next(false)

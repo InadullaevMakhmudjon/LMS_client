@@ -119,6 +119,7 @@ export default {
       globalFlag: '',
       isBookItem: '',
       socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
+      socketOfUser: io(process.env.VUE_APP_BR_SOCKET, {transports: ['websocket']}),
       studentInfo: {
         "id": 1,
         "uid": "u1710008",
@@ -151,8 +152,8 @@ export default {
     flatPickr
   },
     methods: {
-      getBorrowedBooks() {
-        Transfer.studentBorrowedBooks().then( res => {
+      getBorrowedBooks(id) {
+        Transfer.studentBorrowedBooks(id).then( res => {
           console.log(res)
           this.bookItems = res.map(el => {
             return {
@@ -164,6 +165,7 @@ export default {
         }).catch( err => console.log(err))
       },
       openData() {
+        this.disconnectNFC()
         this.flagBtn = true
         console.log('socket started...')
         this.socket.emit('rfidTag')
@@ -190,17 +192,22 @@ export default {
       },
     openLoadingBackground(type, color){
       this.$vs.loading({
-          background: color,
+        background: color,
           color:'rgb(255, 255, 255)',
           text: 'Please, use student Card to continue process',
           type: 'point',
           scale: 1.3
           })
-      setTimeout( ()=> {
-        this.$vs.loading.close()
-      }, 1300);
+         this.socketOfUser.on('studentReceived',data => {
+           console.log(data)
+            this.studentInfo = data
+            this.getBorrowedBooks(this.studentInfo.id)
+            this.$vs.loading.close()
+          })
     },
-
+    disconnectNFC() {
+      this.socketOfUser.disconnect()
+    },
     submitData() {
       // this.socket.disconnect()
       // const tasks = []
