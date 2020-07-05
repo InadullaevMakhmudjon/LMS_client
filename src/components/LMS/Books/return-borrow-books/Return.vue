@@ -11,7 +11,7 @@
                   <div>
                     <h4 class="pb-2"><strong>Student Name:</strong> {{studentInfo.name}}</h4>
                     <h4 class="pb-2"><strong>ID Number:</strong> {{studentInfo.uid}}</h4>
-                    <h4 class="pb-2"><strong>Course: </strong>{{studentInfo.course}}</h4>
+                    <h4 class="pb-2"><strong>Course: </strong>{{studentInfo.course.name }}</h4>
                     <h4 class="pb-2"><strong>Phone number: </strong><a :href="'tel:'+studentInfo.phoneNumber" >{{studentInfo.phoneNumber}}</a></h4>
                     <div><h4 class="pb-2"><strong>Borrowed books:</strong> {{studentInfo.borrows.length}}</h4></div>
                     <div><h4 class="pb-2"><strong>Status:</strong> <span :class="studentInfo.isBlocked ? 'passive__bck py-1 px-4 ml-3': 'active__bck py-1 px-4 ml-3'">{{studentInfo.isBlocked ? 'blocked' : 'active'}}</span></h4></div>
@@ -39,10 +39,10 @@
                       </vs-col>
                   </vs-row>
                   <vs-row class="my-2" vs-type="flex" vs-justify="space-between">
-                  <vs-col class="mx-0" vs-type="flex" vs-justify="start" vs-align="center" vs-w="2">
+                  <vs-col class="mx-0 px-0" vs-type="flex" vs-justify="start" vs-align="center" vs-w="6" vs-sm="3" vs-lg="2">
                       <vs-button :disabled="flagBtn" color="primary" @click="openData">Start Returning</vs-button>
                   </vs-col>
-                  <vs-col class="px-0" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+                  <vs-col class="px-0" vs-type="flex" vs-justify="flex-end" vs-align="center"  vs-w="6" vs-sm="3" vs-lg="2">
                       <vs-button to="/transfer" class="ml-2" type="border" color="primary">Cancel</vs-button>
                       <vs-button @click=" submitData" class="ml-2" color="primary">Finish</vs-button>
                   </vs-col>

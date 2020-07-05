@@ -1,6 +1,7 @@
 /* eslint-disable */
 // eslint-disable-next-line
-const routing = [{
+const routing = [
+    {
         url: "/",
         name: "Home",
         slug: "home",
@@ -12,6 +13,13 @@ const routing = [{
         name: "Books",
         slug: "books",
         icon: "BookIcon",
+        access: true
+    },
+    {
+        url: "/inventory",
+        name: "Inventory",
+        slug: "invetory",
+        icon: "MonitorIcon",
         access: true
     },
     {

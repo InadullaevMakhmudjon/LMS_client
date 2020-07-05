@@ -130,6 +130,20 @@ const router = new Router({
                     }
                 },
                 {
+                    path: '/inventory',
+                    name: 'inventory',
+                    component: () =>
+                        import ('./views/Inventory/Inventory.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Monitorize book items', url: '/' },
+                            { title: 'Scan the books', active: true },
+                        ],
+                        pageTitle: 'Invetory',
+                        requiresAuth: true
+                    }
+                },
+                {
                     path: '/users',
                     name: 'Users',
                     component: () =>
