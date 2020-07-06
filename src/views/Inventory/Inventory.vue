@@ -64,7 +64,6 @@
                     <vs-th>Book quantity</vs-th>
                     <vs-th>In library</vs-th>
                     <vs-th>Borrowed</vs-th>
-                    <vs-th>Returned</vs-th>
                     <vs-th>Damaged</vs-th>
                     <vs-th>Lost</vs-th>
                     <vs-th>Shortfall</vs-th>
@@ -80,32 +79,28 @@
                         {{data[indextr].title}}
                     </vs-td>
 
-                    <vs-td :data="data[indextr].quantity">
-                        {{data[indextr].quantity}}
+                    <vs-td :data="data[indextr].numbers.all">
+                        {{data[indextr].numbers.all}}
                     </vs-td>
 
-                    <vs-td :data="data[indextr].real">
-                        {{data[indextr].real}}
+                    <vs-td :data="data[indextr].numbers.inLibrary">
+                        {{data[indextr].numbers.inLibrary}}
                     </vs-td>
 
-                    <vs-td :data="data[indextr].returned">
-                        {{data[indextr].returned}}
+                    <vs-td :data="data[indextr].numbers.borrowed">
+                        {{data[indextr].numbers.borrowed}}
                     </vs-td>
 
-                     <vs-td :data="data[indextr].borrowed">
-                        {{data[indextr].borrowed}}
+                     <vs-td :data="data[indextr].numbers.damaged">
+                        {{data[indextr].numbers.damaged}}
                     </vs-td>
 
-                     <vs-td :data="data[indextr].damaged">
-                        {{data[indextr].damaged}}
+                    <vs-td :data="data[indextr].numbers.lost">
+                        {{data[indextr].numbers.lost}}
                     </vs-td>
 
-                    <vs-td :data="data[indextr].lost">
-                        {{data[indextr].lost}}
-                    </vs-td>
-
-                     <vs-td :data="data[indextr].shortfall">
-                        {{data[indextr].shortfall}}
+                     <vs-td :data="data[indextr].id">
+                        {{data[indextr].numbers.all - data[indextr].numbers.inLibrary}}
                     </vs-td>
                     </vs-tr>
                 </template>
@@ -115,30 +110,31 @@
 </template>
 
 <script>
+import io from "socket.io-client"
+import Inventory from '../../services/Inventory';
 export default {
 data() {
     return {
         loading: false,
-        invetoryItems: []
+        invetoryItems: [],
+        socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
     }
 },
 methods: {
     startScanning() {
-        this.invetoryItems = []
         this.loading = true
-        setTimeout(() => {
-            this.loading = false
-            this.invetoryItems.push({
-                title: 'Academic English',
-                quantity: 200,
-                real: 170,
-                returned: 20,
-                borrowed: 20,
-                damaged: 10,
-                lost: 2,
-                shortfall: 1
+        this.invetoryItems = []
+        this.socket.emit('inventory');
+        this.socket.on('inventoryResults', data => {
+            console.log(data)
+            Inventory.postArraysOfTags(data).then(table => {
+                console.log(table)
+                this.invetoryItems = table
+            }).catch(err => {
+                console.log(err)
             })
-        }, 5000);
+            this.loading = false
+        })
     }
 }
 }
