@@ -136,6 +136,10 @@ methods: {
             this.loading = false
         })
     }
+},
+beforeDestroy() {
+    console.log('distroy started...')
+    this.socket.disconnect()
 }
 }
 </script>

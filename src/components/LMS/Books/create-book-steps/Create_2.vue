@@ -46,7 +46,7 @@
             <vs-table
               v-if="bookObj.shelfItems.length"
               pagination
-              max-items="10"
+              max-items="100"
               search
               :data="bookObj.shelfItems[this.active].bookItems"
             >
@@ -135,7 +135,8 @@ export default {
       selectedShelf: "",
       popupShelf: false,
       shelflist: [],
-      itemList: []
+      itemList: [],
+      socket: io(process.env.VUE_APP_READER_SOCKET, { transports: ["websocket"]}),
     };
   },
   computed: {},
@@ -171,7 +172,7 @@ export default {
       console.log(item, idx);
       this.bookObj.shelfItems[this.active].bookItems.splice(idx, 1);
       console.log(this.bookObj.shelfItems[this.active]);
-      this.bookObj.socket.emit("delete", { rfidTag: item.code });
+      this.socket.emit("delete", { rfidTag: item.code });
     },
 
     // disconnect() {
@@ -194,11 +195,11 @@ export default {
     this.getShelves();
     console.log("started...");
     setTimeout(() => {
-      this.bookObj.socket.emit("bookId", this.bookObj.id);
+      this.socket.emit("bookId", this.bookObj.id);
     }, 1000);
 
     setTimeout(() => {
-      this.bookObj.socket.on("bookItem", data => {
+      this.socket.on("bookItem", data => {
         console.log(data);
         Books.hasBookItem(data.rfidTag)
           .then(res => {
@@ -224,6 +225,7 @@ export default {
     }, 1200);
   },
   beforeDestroy() {
+    this.socket.disconnect()
     location.reload()
     // console.log('diconnect')
     // this.socket.disconnect();

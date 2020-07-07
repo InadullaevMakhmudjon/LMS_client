@@ -17,6 +17,7 @@ import FeatherIcon from './components/FeatherIcon.vue'
 import VxInputGroup from './components/vx-input-group/VxInputGroup.vue'
 import vSelect from "vue-select";
 import { ValidationProvider } from 'vee-validate';
+
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component(VxTooltip.name, VxTooltip)
 Vue.component(VxCard.name, VxCard)

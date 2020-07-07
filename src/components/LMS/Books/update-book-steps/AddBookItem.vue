@@ -20,14 +20,13 @@
 <script>
 import AddBookItem from "../create-book-steps/Create_2";
 import Books from "@/services/Books.js";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 export default {
   data() {
     return {
       bookInfo: {
         shelfId: 0,
         shelfItems: [],
-        socket: io(process.env.VUE_APP_READER_SOCKET, { transports: ["websocket"]}),
       }
     };
   },
@@ -44,7 +43,7 @@ export default {
           ...book.book,
           shelfItems: [],
           shelfId: 0,
-          socket: io(process.env.VUE_APP_READER_SOCKET, { transports: ["websocket"]}),
+          // socket: io(process.env.VUE_APP_READER_SOCKET, { transports: ["websocket"]}),
           imageFile: null
         };
         this.bookInfo.language = book.book.language.name;
@@ -64,7 +63,7 @@ export default {
         .reduce((ac, cur) => ac.concat(cur));
         console.log(bookItem)
       Books.postBookItems(bookItem).then(res  => {
-        this.bookInfo.socket.disconnect()
+        // this.bookInfo.socket.disconnect()
         this.$router.push(`/books/${this.bookInfo.id}`)
         this.$vs.notify({ 
           title: 'Book items added successfully',
@@ -73,7 +72,7 @@ export default {
       }).catch( err => console.log(err))
     },
     leaveBack() {
-      this.bookInfo.socket.disconnect()
+      // this.bookInfo.socket.disconnect()
       this.$router.push(`/books/${this.bookInfo.id}`);
     }
   },
