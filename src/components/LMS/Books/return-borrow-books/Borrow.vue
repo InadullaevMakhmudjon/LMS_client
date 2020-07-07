@@ -1,8 +1,8 @@
 <template>
   <div>
-      <vs-row vs-type="flex" class="mb-6" v-if="studentInfo.id">
+      <vs-row vs-type="flex" class="mb-6" v-if="studentInfo.name">
         <vs-col vs-type="flex" vs-w="3">
-            <img class="image__" not-margin src="https://img.freepik.com/free-photo/teenager-student-girl-yellow-pointing-finger-side_1368-40175.jpg?size=626&ext=jpg">
+            <img class="image__" not-margin src="https://cdn.pixabay.com/photo/2018/06/27/07/45/student-3500990_960_720.jpg">
         </vs-col>
         <vs-col vs-type="flex" vs-w="9">
            <vx-card no-shadow>
@@ -13,7 +13,7 @@
                     <h4 class="pb-2"><strong>ID Number:</strong> {{studentInfo.uid}}</h4>
                     <h4 class="pb-2"><strong>Course: </strong>{{studentInfo.course.name}}</h4>
                     <h4 class="pb-2"><strong>Phone number: </strong><a :href="'tel:'+studentInfo.phoneNumber" >{{studentInfo.phoneNumber}}</a></h4>
-                    <div><h4 class="pb-2"><strong>Borrowed books:</strong> {{studentInfo.borrows.length}}</h4></div>
+                    <div><h4 class="pb-2"><strong>Borrowed books:</strong>22</h4></div>
                     <div><h4 class="pb-2"><strong>Status:</strong> <span :class="studentInfo.isBlocked ? 'passive__bck py-1 px-4 ml-3': 'active__bck py-1 px-4 ml-3'">{{studentInfo.isBlocked ? 'blocked' : 'active'}}</span></h4></div>
                   </div>
               </vs-col>
@@ -180,6 +180,7 @@ export default {
           this.socketOfUser.on('studentReceived',data => {
             console.log(data)
             this.studentInfo = data
+            console.log(this.studentInfo)
             this.$vs.loading.close()
           })
     },
