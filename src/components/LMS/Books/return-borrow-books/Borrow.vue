@@ -13,7 +13,7 @@
                     <h4 class="pb-2"><strong>ID Number:</strong> {{studentInfo.uid}}</h4>
                     <h4 class="pb-2"><strong>Course: </strong>{{studentInfo.course.name}}</h4>
                     <h4 class="pb-2"><strong>Phone number: </strong><a :href="'tel:'+studentInfo.phoneNumber" >{{studentInfo.phoneNumber}}</a></h4>
-                    <div><h4 class="pb-2"><strong>Borrowed books:</strong>22</h4></div>
+                    <!-- <div><h4 class="pb-2"><strong>Borrowed books:</strong>22</h4></div> -->
                     <div><h4 class="pb-2"><strong>Status:</strong> <span :class="studentInfo.isBlocked ? 'passive__bck py-1 px-4 ml-3': 'active__bck py-1 px-4 ml-3'">{{studentInfo.isBlocked ? 'blocked' : 'active'}}</span></h4></div>
                   </div>
               </vs-col>
@@ -160,7 +160,12 @@ export default {
         console.log('socket started...')
         this.socket.on("bookItemDetails", data => {
           console.log(data)
-          this.bookItems.push(data)
+          Transfer.isAllowedBorrowing(data.id).then(res => {
+            console.log(res)
+            this.bookItems.push(data)
+          }).catch(err => {
+            console.log(err)
+          })
         })
       },
       deleteF(idx, code) {

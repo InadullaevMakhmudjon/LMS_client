@@ -211,7 +211,7 @@ const router = new Router({
                             { title: 'Transfer', active: false },
 
                         ],
-                        pageTitle: 'Transformation',
+                        pageTitle: 'Book flow',
                         parent: '',
                         requiresAuth: true
                     }

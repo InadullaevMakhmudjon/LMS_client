@@ -5,5 +5,6 @@ export default {
   studentBorrowedBooks: (id) => execute(API().get(`borrows?memberId=${id}&isReturned=0`)),
   studentRetunedBooks: () => execute(API().get('borrows?memberId=1&isReturned=1')),
   studentPostBook: (id) => execute(API().post(`borrows/${id}/return`)),
-  transactions: () => execute(API().get('transactions'))
+  transactions: () => execute(API().get('transactions')),
+  isAllowedBorrowing: id => execute(API().get(`borrows/${id}/check`))
 }

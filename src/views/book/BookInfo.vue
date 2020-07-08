@@ -135,9 +135,6 @@
                       Status
                     </vs-th>
                     <vs-th>
-                      Edit
-                    </vs-th>
-                    <vs-th>
                       Archive
                     </vs-th>
                   </template>
@@ -160,7 +157,7 @@
                         {{ data[indextr].lostDate }}
                       </vs-td>
 
-                      <vs-td :data="data[indextr].id">
+                      <vs-td v-if="false" :data="data[indextr].id">
                         <vs-icon
                           class="cursor"
                           icon="edit"

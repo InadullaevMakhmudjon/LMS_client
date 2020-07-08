@@ -29,10 +29,10 @@
                   }}</a>
                 </h4>
                 <div>
-                  <h4 class="pb-2">
+                  <!-- <h4 class="pb-2">
                     <strong>Borrowed books:</strong>
-                    {{ studentInfo.borrows.length }}
-                  </h4>
+                    22
+                  </h4> -->
                 </div>
                 <div>
                   <h4 class="pb-2">
@@ -190,29 +190,29 @@ export default {
         transports: ["websocket"]
       }),
       studentInfo: {
-        id: 1,
-        uid: "u1710008",
-        name: "Abdullaev Azamat",
-        rfidTag: "123qwewer",
-        phoneNumber: "+998909272970",
-        course: "Senior",
-        isBlocked: false,
-        createdAt: "2020-06-08T12:53:33.000Z",
-        updatedAt: "2020-06-08T12:53:33.000Z",
-        borrows: [
-          {
-            id: 1,
-            memberId: 1,
-            bookItemId: 1,
-            borrowedDate: "2020-06-08T13:04:04.000Z",
-            dueDate: "2021-05-14T19:00:00.000Z",
-            isReturned: false,
-            returnedDate: null,
-            extendedDate: null,
-            createdAt: "2020-06-08T13:04:04.000Z",
-            updatedAt: "2020-06-08T13:04:04.000Z"
-          }
-        ]
+        // id: 1,
+        // uid: "u1710008",
+        // name: "Abdullaev Azamat",
+        // rfidTag: "123qwewer",
+        // phoneNumber: "+998909272970",
+        // course: "Senior",
+        // isBlocked: false,
+        // createdAt: "2020-06-08T12:53:33.000Z",
+        // updatedAt: "2020-06-08T12:53:33.000Z",
+        // borrows: [
+        //   {
+        //     id: 1,
+        //     memberId: 1,
+        //     bookItemId: 1,
+        //     borrowedDate: "2020-06-08T13:04:04.000Z",
+        //     dueDate: "2021-05-14T19:00:00.000Z",
+        //     isReturned: false,
+        //     returnedDate: null,
+        //     extendedDate: null,
+        //     createdAt: "2020-06-08T13:04:04.000Z",
+        //     updatedAt: "2020-06-08T13:04:04.000Z"
+        //   }
+        // ]
       },
       bookItems: []
     };
