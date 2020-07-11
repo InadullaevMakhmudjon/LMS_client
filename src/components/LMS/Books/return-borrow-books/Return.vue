@@ -313,6 +313,7 @@ export default {
       "Do you really want to leave? you have unsaved changes!"
     );
     if (answer) {
+      this.$vs.loading.close()
       next();
     } else {
       next(false);

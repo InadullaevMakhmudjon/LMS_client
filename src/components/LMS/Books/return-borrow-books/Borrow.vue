@@ -223,6 +223,7 @@ export default {
      console.log('diconnect')
     this.socket.disconnect()
     this.disconnectNFC()
+    this.$vs.loading.close()
     next()
   } else {
     next(false)

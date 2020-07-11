@@ -11,5 +11,6 @@ export default {
     getSearchedBooks: (books, page, size) => execute(API().get(`books/search?page=${page}&size=${size}&` + books)),
     postBookItems:items => execute(API().post('bookItems', items)),
     hasBookItem: rfidTag => execute(API().get(`bookItems/check?rfidTag=${rfidTag}`)),
-    deleteBookItem: id => execute(API().delete(`bookItems/${id}`))
+    changeBookItemStatus: (id,bookStatusId) => execute(API().post(`bookItems/${id}`, { bookStatusId: bookStatusId })),
+    statistics: (id) =>execute(API().get(`books/${id}/stats`))
 }

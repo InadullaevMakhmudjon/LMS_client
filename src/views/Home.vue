@@ -1,6 +1,6 @@
 <template>
   <div>
-    <vs-row class="mt-5">
+    <vs-row v-if="false" class="mt-5">
       <vs-col
         v-for="(item, i) in analysis"
         :key="i"
@@ -45,7 +45,7 @@
         </div>
       </vs-col>
     </vs-row>
-    <vs-row>
+    <!-- <vs-row>
       <vs-col>
         <report/>
       </vs-col>
@@ -54,13 +54,15 @@
       <vs-col>
         <archive/>
       </vs-col>
-    </vs-row>
+    </vs-row> -->
+    <give-books/>
   </div>
 </template>
 <script>
 import VxBreadcrumb from "../layouts/components/VxBreadcrumb.vue";
 import Report from '../components/LMS/Books/Report'
 import Archive from '../components/LMS/Books/Archive'
+import GiveBooks from '../views/book/GiveBooks'
 export default {
   data() {
     return {
@@ -119,7 +121,8 @@ export default {
   components: {
     VxBreadcrumb,
     Report,
-    Archive
+    Archive,
+    GiveBooks
   },
 
 };

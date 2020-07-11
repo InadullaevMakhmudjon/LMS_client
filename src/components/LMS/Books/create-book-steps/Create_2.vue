@@ -200,10 +200,11 @@ export default {
 
     setTimeout(() => {
       this.socket.on("bookItem", data => {
-        console.log(data);
+        // console.log(data);
         Books.hasBookItem(data.rfidTag)
           .then(res => {
-            if (res.length == 0) {
+            console.log(res)
+            if (res.status == 'OK') {
               if (this.bookObj.shelfItems.length > 0) {
                 this.bookObj.shelfItems[this.active].bookItems.push({
                   id: this.bookObj.id,
@@ -212,9 +213,13 @@ export default {
                   code: data.rfidTag
                 });
               }
-            } else {
-              this.$vs.notify({
-                title: "DUBLICATED BOOK ITEM, CHECK !",
+              else {
+                alert('Please select proper shelf')
+              }
+            } 
+            else if (res.status == 'DUPLICATE') {
+               this.$vs.notify({
+                title: res.description,
                 color: "warning",
                 fixed: true
               });

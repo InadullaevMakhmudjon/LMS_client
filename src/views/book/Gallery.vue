@@ -257,7 +257,7 @@ export default {
         //   .map(key => `${key}=${this.filterList[key]}`)
         //   .join("&");
         const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=${this.filterList.subjectId}&typeId=${this.filterList.typeId}`;
-        console.log(url)
+        // console.log(url)
         Books.getSearchedBooks(url,this.currentx,12)
           .then(({ items: books, length }) => {
             this.books = books;
@@ -316,7 +316,7 @@ export default {
     getAll(val, range) {
       Books.getAll(val, range).then(({ items: books, length }) => {
         this.books = books;
-        console.log(this.books)
+        // console.log(this.books)
         this.booksQuantity = length;
         this.page = Math.ceil(length / 16);
         this.books.forEach(book => {

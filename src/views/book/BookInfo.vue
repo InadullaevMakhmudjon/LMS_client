@@ -81,26 +81,19 @@
         </vs-col>
         <!--book statistics-->
         <vs-col vs-type="flex" vs-align="center" vs-w="5">
-          <vx-card class="elevation1" title="Browser Statistics">
+          <vx-card class="elevation1" title="Statistics">
             <div
-              v-for="(browser, index) in 4"
+              v-for="(browser, index) in stats.numbers"
               :key="browser.id"
               :class="{ 'mt-4': index }"
             >
               <div class="flex justify-between">
                 <div class="flex flex-col">
-                  <span class="mb-1">null</span>
-                  <h4>{{ persentaging }}%</h4>
-                </div>
-                <div class="flex flex-col text-right">
-                  <span class="flex -mr-1">
-                    <span class="mr-1">null</span>
-                    <!-- <feather-icon :icon=" browser.comparedResult < 0 ? 'ArrowDownIcon' : 'ArrowUpIcon'" :svgClasses="[browser.comparedResult < 0 ? 'text-danger' : 'text-success'  ,'stroke-current h-4 w-4 mb-1 mr-1']"></feather-icon> -->
-                  </span>
-                  <span class="text-grey">null</span>
+                  <span class="mb-1">{{browser.name}}</span>
+                  <h4>{{ browser.value }}</h4>
                 </div>
               </div>
-              <vs-progress :percent="persentaging"></vs-progress>
+              <vs-progress :percent="persentaging(browser.value)"></vs-progress>
             </div>
           </vx-card>
         </vs-col>
@@ -210,27 +203,56 @@ export default {
   data() {
     return {
       selected: "",
-      persentaging: Math.floor(Math.random() * 100),
       bookInfo: [],
-      bookItems: []
+      bookItems: [],
+      tempStatus: '',
+      stats: {}
     };
   },
   methods: {
+    persentaging(value) {
+      return (value*100)/this.stats.numbers[0].value
+    },
     backHistory(){
       window.history.back();
     },
-
+    acceptDamaged() {
+      // console.log(id)
+      Books.changeBookItemStatus(this.tempStatus.id, 4).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    acceptLost(){
+      Books.changeBookItemStatus(this.tempStatus.id, 3).then(res => {
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
     doArchive(val) {
       console.log(val)
-     Books.deleteBookItem(val.id).then(res => {
-       this.$vs.notify({
-         title: 'Successfully archived',
-         color: 'success'
-       })
-      //  this.getBook(this.id)
-     }).catch(err => {
-       console.log(err)
-     })
+      this.tempStatus = val
+        this.$vs.dialog({
+        type: 'confirm',
+        color: 'danger',
+        title: `Confirm`,
+        text: 'Warning! Reason of action: Lost, Student lost the book. Damaged, book is damaged',
+        acceptText: 'DAMAGED',
+        cancelText: 'LOST',
+        accept: this.acceptDamaged,
+        cancel: this.acceptLost
+      })
+    //  Books.deleteBookItem(val.id).then(res => {
+    //    this.$vs.notify({
+    //      title: 'Successfully archived',
+    //      color: 'success'
+    //    })
+    //   //  this.getBook(this.id)
+    //  }).catch(err => {
+    //    console.log(err)
+    //  })
     },
     getBook(id) {
       Books.getOnebook(id).then(book => {
@@ -240,9 +262,18 @@ export default {
         this.bookInfo.language = book.book.language.name;
         this.bookInfo.authors = book.book.authors.map(({ name }) => name).join(", ");
       });
+    },
+    getStats(id) {
+      Books.statistics(id).then(res => {
+        this.stats = res
+        console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
-  mounted() {
+  created() {
+    this.getStats(this.id)
     this.getBook(this.id);
   }
 };
