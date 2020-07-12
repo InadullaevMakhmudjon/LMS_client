@@ -14,25 +14,30 @@
             <vs-col vs-type="flex" vs-w="6">
               <div>
                 <h4 class="pb-2">
-                  <strong>Student Name:</strong> {{ studentInfo.name }}
+                  <strong>Student Name:</strong>
+                  {{ studentInfo.name }}
                 </h4>
                 <h4 class="pb-2">
-                  <strong>ID Number:</strong> {{ studentInfo.uid }}
+                  <strong>ID Number:</strong>
+                  {{ studentInfo.uid }}
                 </h4>
                 <h4 class="pb-2">
-                  <strong>Course: </strong>{{ studentInfo.course.name }}
+                  <strong>Course:</strong>
+                  {{ studentInfo.course.name }}
                 </h4>
                 <h4 class="pb-2">
-                  <strong>Phone number: </strong
-                  ><a :href="'tel:' + studentInfo.phoneNumber">{{
+                  <strong>Phone number:</strong>
+                  <a :href="'tel:' + studentInfo.phoneNumber">
+                    {{
                     studentInfo.phoneNumber
-                  }}</a>
+                    }}
+                  </a>
                 </h4>
                 <div>
                   <!-- <h4 class="pb-2">
                     <strong>Borrowed books:</strong>
                     22
-                  </h4> -->
+                  </h4>-->
                 </div>
                 <div>
                   <h4 class="pb-2">
@@ -43,8 +48,7 @@
                           ? 'passive__bck py-1 px-4 ml-3'
                           : 'active__bck py-1 px-4 ml-3'
                       "
-                      >{{ studentInfo.isBlocked ? "blocked" : "active" }}</span
-                    >
+                    >{{ studentInfo.isBlocked ? "blocked" : "active" }}</span>
                   </h4>
                 </div>
               </div>
@@ -53,10 +57,10 @@
           <vs-row class="mt-5" vs-type="flex" vs-justify="space-between">
             <!-- <vs-col vs-type="flex" vs-w="3">
                     <vs-button color="primary">Start Borrowing</vs-button>
-                </vs-col> -->
+            </vs-col>-->
             <!-- <vs-col  vs-type="flex" vs-w="3">
                     <vs-button color="success">Save</vs-button>
-                </vs-col> -->
+            </vs-col>-->
           </vs-row>
         </vx-card>
       </vs-col>
@@ -79,77 +83,49 @@
                 vs-type="flex"
                 vs-justify="start"
                 vs-align="center"
-                vs-w="6"
-                vs-sm="3"
-                vs-lg="2"
+                vs-w="auto"
+                vs-sm="auto"
+                vs-lg="auto"
               >
-                <vs-button :disabled="flagBtn" color="primary" @click="openData"
-                  >Start Returning</vs-button
-                >
+                <vs-button :disabled="flagBtn" color="primary" @click="openData">Start Returning</vs-button>
               </vs-col>
               <vs-col
                 class="px-0"
                 vs-type="flex"
                 vs-justify="flex-end"
                 vs-align="center"
-                vs-w="6"
-                vs-sm="3"
-                vs-lg="2"
+                vs-w="auto"
+                vs-sm="auto"
+                vs-lg="auto"
               >
-                <vs-button
-                  to="/transfer"
-                  class="ml-2"
-                  type="border"
-                  color="primary"
-                  >Cancel</vs-button
-                >
-                <vs-button @click="submitData" class="ml-2" color="primary"
-                  >Finish</vs-button
-                >
+                <vs-button to="/transfer" class="ml-2" type="border" color="primary">Cancel</vs-button>
+                <vs-button @click="submitData" class="ml-2" color="primary">Finish</vs-button>
               </vs-col>
             </vs-row>
           </template>
           <template slot="thead">
-            <vs-th>
-              Book title
-            </vs-th>
-            <vs-th>
-              Code
-            </vs-th>
-            <vs-th>
-              Borrowed Date
-            </vs-th>
-            <vs-th>
-              Tag
-            </vs-th>
-            <vs-th>
-              Change Status
-            </vs-th>
+            <vs-th>Book title</vs-th>
+            <vs-th>Code</vs-th>
+            <vs-th>Borrowed Date</vs-th>
+            <vs-th>Tag</vs-th>
+            <vs-th>Change Status</vs-th>
           </template>
           <template v-if="bookItems.length > 0" slot-scope="{ data }">
-            <vs-tr
-              :state="tr.color"
-              :key="indextr"
-              v-for="(tr, indextr) in data"
-            >
-              <vs-td :data="data[indextr].bookItem.book.title">
-                {{ data[indextr].bookItem.book.title }}
-              </vs-td>
+            <vs-tr :state="tr.color" :key="indextr" v-for="(tr, indextr) in data">
+              <vs-td
+                :data="data[indextr].bookItem.book.title"
+              >{{ data[indextr].bookItem.book.title }}</vs-td>
 
-              <vs-td :data="data[indextr].bookItem.bookId">
-                {{ data[indextr].bookItem.bookId }}
-              </vs-td>
+              <vs-td :data="data[indextr].bookItem.bookId">{{ data[indextr].bookItem.bookId }}</vs-td>
 
-              <vs-td :data="data[indextr].borrowedDate">
-                {{ data[indextr].borrowedDate | moment("Do MMM, YYYY") }}
-              </vs-td>
+              <vs-td
+                :data="data[indextr].borrowedDate"
+              >{{ data[indextr].borrowedDate | moment("Do MMM, YYYY") }}</vs-td>
 
-              <vs-td :data="data[indextr].bookItem.rfidTag">
-                {{ data[indextr].bookItem.rfidTag }}
-              </vs-td>
+              <vs-td :data="data[indextr].bookItem.rfidTag">{{ data[indextr].bookItem.rfidTag }}</vs-td>
 
               <vs-td>
-                <div @click="deleteF(indextr, data[indextr])">
+                <div @click="deleteF(indextr, tr)">
                   <feather-icon
                     color="red"
                     icon="EditIcon"
@@ -165,7 +141,26 @@
           <vx-card no-shadow>
             <datepicker class="w-full" placeholder="Select Date" v-model="date"></datepicker>
           </vx-card>
-        </vs-col> -->
+      </vs-col>-->
+    </vs-row>
+    <vs-row>
+      <vs-col>
+        <vs-popup class="holamundo" title="Change Status" :active.sync="activeStatus">
+          <vs-row>
+            <vs-col vs-w="12">
+              <h5 class="my-2">Choose proper way to continue</h5>
+            </vs-col>
+          </vs-row>
+          <vs-row vs-justify="flex-end">
+            <vs-col vs-w="auto">
+              <vs-button @click="changeStatusHandler(1)">Damaged</vs-button>
+            </vs-col>
+            <vs-col vs-w="auto">
+              <vs-button @click="changeStatusHandler(2)">Lost</vs-button>
+            </vs-col>
+          </vs-row>
+        </vs-popup>
+      </vs-col>
     </vs-row>
   </div>
 </template>
@@ -179,10 +174,12 @@ import Transfer from "@/services/Transfer.js";
 export default {
   data() {
     return {
+      activeStatus: false,
       flagBtn: false,
       date: null,
       globalFlag: "",
       isBookItem: "",
+      tempdata: "",
       socket: io(process.env.VUE_APP_READER_SOCKET, {
         transports: ["websocket"]
       }),
@@ -190,29 +187,20 @@ export default {
         transports: ["websocket"]
       }),
       studentInfo: {
-        // id: 1,
-        // uid: "u1710008",
-        // name: "Abdullaev Azamat",
-        // rfidTag: "123qwewer",
-        // phoneNumber: "+998909272970",
-        // course: "Senior",
-        // isBlocked: false,
-        // createdAt: "2020-06-08T12:53:33.000Z",
-        // updatedAt: "2020-06-08T12:53:33.000Z",
-        // borrows: [
-        //   {
-        //     id: 1,
-        //     memberId: 1,
-        //     bookItemId: 1,
-        //     borrowedDate: "2020-06-08T13:04:04.000Z",
-        //     dueDate: "2021-05-14T19:00:00.000Z",
-        //     isReturned: false,
-        //     returnedDate: null,
-        //     extendedDate: null,
-        //     createdAt: "2020-06-08T13:04:04.000Z",
-        //     updatedAt: "2020-06-08T13:04:04.000Z"
-        //   }
-        // ]
+        course: {
+          id: 4,
+          name: "Senior"
+        },
+        courseId: 4,
+        createdAt: "2020-07-12T08:07:13.000Z",
+        email: "a.abdullaev2@student.inha.uz",
+        id: 1,
+        isBlocked: false,
+        name: "Abdullaev Azamat",
+        phoneNumber: "+998909272970",
+        rfidTag: "24120de0",
+        uid: "u1710008",
+        updatedAt: "2020-07-12T08:07:13.000Z"
       },
       bookItems: []
     };
@@ -221,6 +209,34 @@ export default {
     flatPickr
   },
   methods: {
+    changeStatusHandler(id) {
+      if (id == 1) {
+        console.log(this.tempdata)
+        //change status to damaged
+        Transfer.changeStatusOfbookDamaged1(this.tempdata.bookItem.id).then(res => {
+          console.log(res)
+            Transfer.changeStatusOfbookDamaged2(this.tempdata.id).then(result => {
+            console.log(result)
+            this.getBorrowedBooks(this.studentInfo.id);
+            }).catch(err => console.log(err)).finally(() => { this.activeStatus = false })
+        }).catch(err => {
+          console.log(err)
+        })
+      } else if (id == 2) {
+        //change status to lost
+        Transfer.changeStatusOfbookLost1(this.tempdata.bookItem.id).then(res => {
+          console.log(res)
+            Transfer.changeStatusOfbookLost2(this.tempdata.id).then(result => {
+            this.getBorrowedBooks(this.studentInfo.id);
+            console.log(result)
+            }).catch(err => console.log(err)).finally(() => { this.activeStatus = false })
+        }).catch(err => {
+          console.log(err)
+        })
+      } else {
+        return;
+      }
+    },
     getBorrowedBooks(id) {
       Transfer.studentBorrowedBooks(id)
         .then(res => {
@@ -259,8 +275,11 @@ export default {
     },
     deleteF(idx, code) {
       // this.bookItems.splice(idx, 1)
-      console.log(idx, code);
-      this.isBookItem = "success";
+      this.tempdata = code;
+      this.activeStatus = true;
+      // console.log(idx, code);
+      // this.isBookItem = "success";
+
       // this.socket.emit('delete', { rfidTag: code });
     },
     openLoadingBackground(type, color) {
@@ -306,14 +325,15 @@ export default {
   },
   created() {
     this.openLoadingBackground("return", "#2fba31");
-    this.getBorrowedBooks();
+    this.getBorrowedBooks(this.studentInfo.id);
   },
   beforeRouteLeave(to, from, next) {
     const answer = window.confirm(
       "Do you really want to leave? you have unsaved changes!"
     );
     if (answer) {
-      this.$vs.loading.close()
+      this.disconnectNFC()
+      this.$vs.loading.close();
       next();
     } else {
       next(false);

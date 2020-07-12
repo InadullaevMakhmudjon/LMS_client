@@ -33,19 +33,14 @@
         <vs-col  vs-w="12">
              <vs-table class="table__border" :maxItems="20"  :data="bookItems">
                 <template slot="header">
-                  <vs-row v-if="false">
-                      <vs-col>
-                        <h5 class="my-3"><strong style="color: #dfc223;">#</strong> Please, start reading the book using RFID Reader</h5>
-                      </vs-col>
-                  </vs-row>
                   <vs-row class="my-2" vs-type="flex" vs-justify="space-between">
-                    <vs-col class="mx-0" vs-type="flex" vs-justify="start" vs-align="center" vs-w="2">
+                    <vs-col class="mx-0 px-0" vs-type="flex" vs-justify="start" vs-align="center" vs-w="auto">
                         <vs-button :disabled="flagBtn" color="primary" @click="openData">Start Borrowing</vs-button>
                     </vs-col>
-                    <vs-col vs-align="center" vs-type="flex" vs-w="2">
+                    <vs-col vs-align="center" vs-type="flex" vs-w="auto">
                         <h3 class="py-0"> <strong>Quantity: </strong>{{bookItems.length}}</h3>
                     </vs-col>
-                      <vs-col class="px-0" vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
+                      <vs-col class="px-0" vs-type="flex" vs-justify="center" vs-align="center" vs-w="auto">
                         <vs-button to="/transfer" class="ml-2" type="border" color="primary">Cancel</vs-button>
                         <vs-button @click=" submitData" class="ml-2" color="primary">Finish</vs-button>
                     </vs-col>

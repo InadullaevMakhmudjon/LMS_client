@@ -127,9 +127,6 @@
                     <vs-th>
                       Status
                     </vs-th>
-                    <vs-th>
-                      Archive
-                    </vs-th>
                   </template>
 
                   <template slot-scope="{ data }">
@@ -147,7 +144,9 @@
                         {{ data[indextr].shelf.name }}
                       </vs-td>
                       <vs-td :data="data[indextr].status">
-                        {{ data[indextr].lostDate }}
+                        <vs-chip :color="getStatus(data[indextr].bookStatusId).color">
+                           {{ getStatus(data[indextr].bookStatusId).text }}
+                        </vs-chip>
                       </vs-td>
 
                       <vs-td v-if="false" :data="data[indextr].id">
@@ -157,29 +156,6 @@
                           size="medium"
                           color="primary"
                         ></vs-icon>
-                      </vs-td>
-                      <vs-td
-                        v-if="data[indextr].action"
-                        :data="data[indextr].id"
-                      >
-                        <span
-                          ><vs-icon
-                            class="cursor"
-                            size="medium"
-                            icon="archive"
-                            color="#99d6ff"
-                          ></vs-icon
-                        ></span>
-                      </vs-td>
-                      <vs-td v-else :data="data[indextr].id">
-                        <span @click="doArchive(tr)"
-                          ><vs-icon
-                            class="cursor"
-                            size="medium"
-                            icon="archive"
-                            color="primary"
-                          ></vs-icon
-                        ></span>
                       </vs-td>
                     </vs-tr>
                   </template>
@@ -210,50 +186,19 @@ export default {
     };
   },
   methods: {
+    getStatus(id) {
+      if(id == 1) return {text: 'Available' , color: 'success'}
+      if(id == 2) return {text: 'Borrowed' , color: 'primary'}
+      if(id == 3) return {text: 'Lost' , color: 'danger'}
+      if(id == 4) return {text: 'Damaged' , color: 'warning'}
+    },
     persentaging(value) {
       return (value*100)/this.stats.numbers[0].value
     },
     backHistory(){
       window.history.back();
     },
-    acceptDamaged() {
-      // console.log(id)
-      Books.changeBookItemStatus(this.tempStatus.id, 4).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    acceptLost(){
-      Books.changeBookItemStatus(this.tempStatus.id, 3).then(res => {
-        console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
-    },
-    doArchive(val) {
-      console.log(val)
-      this.tempStatus = val
-        this.$vs.dialog({
-        type: 'confirm',
-        color: 'danger',
-        title: `Confirm`,
-        text: 'Warning! Reason of action: Lost, Student lost the book. Damaged, book is damaged',
-        acceptText: 'DAMAGED',
-        cancelText: 'LOST',
-        accept: this.acceptDamaged,
-        cancel: this.acceptLost
-      })
-    //  Books.deleteBookItem(val.id).then(res => {
-    //    this.$vs.notify({
-    //      title: 'Successfully archived',
-    //      color: 'success'
-    //    })
-    //   //  this.getBook(this.id)
-    //  }).catch(err => {
-    //    console.log(err)
-    //  })
-    },
+
     getBook(id) {
       Books.getOnebook(id).then(book => {
         console.log(book)
