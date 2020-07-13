@@ -38,7 +38,7 @@
                         <vs-button :disabled="flagBtn" color="primary" @click="openData">Start Borrowing</vs-button>
                     </vs-col>
                     <vs-col vs-align="center" vs-type="flex" vs-w="auto">
-                        <h3 class="py-0"> <strong>Quantity: </strong>{{bookItems.length}}</h3>
+                        <h3 class="py-0"><strong>Quantity: </strong>{{ bookItems.length }}</h3>
                     </vs-col>
                       <vs-col class="px-0" vs-type="flex" vs-justify="center" vs-align="center" vs-w="auto">
                         <vs-button to="/transfer" class="ml-2" type="border" color="primary">Cancel</vs-button>
@@ -74,7 +74,7 @@
                     </vs-td>
 
                     <vs-td :data="data[indextr].createdAt">
-                      {{ data[indextr].createdAt | moment('Do MMM, YYYY hh:mm:ss') }}
+                      {{ data[indextr].createdAt | moment('Do MMM, YYYY HH:mm') }}
                     </vs-td>
 
                      <vs-td :data="data[indextr].date">

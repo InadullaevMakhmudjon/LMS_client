@@ -319,7 +319,7 @@ export default {
         // console.log(this.books)
         this.booksQuantity = length;
         this.page = Math.ceil(length / 16);
-        this.books.forEach(book => {
+        this.books.forEach( book => {
           book.authorName = book.authors.map(({ name }) => name).join(", ");
         });
       });
