@@ -301,12 +301,6 @@ export default {
     if(this.$route.name == 'Userinfo')
         {
           this.userData = this.propsData
-          // this.datalist = this.propsData.permissions.map(el => {
-          //   return {
-          //     id: el.id, name: el.name, has: true 
-          //     }
-          // })
-          
         }
     this.getPermissionList();
     this.getRoles();

@@ -56,10 +56,10 @@ data() {
 },
 methods: {
     handleChangePage(val) {
-        console.log(val)
+        // console.log(val)
     },
     handleSearch(val) {
-        console.log(val)
+        // console.log(val)
     },
     pushData(val) {
         this.actionLogs.unshift(val)
@@ -74,7 +74,7 @@ methods: {
     getAllLogs() {
         Logs.getAll().then(res => {
             this.actionLogs = res
-            console.log(res)
+            // console.log(res)
         }).catch(err => console.log(err))
     }
 },

@@ -201,7 +201,7 @@ export default {
 
     getBook(id) {
       Books.getOnebook(id).then(book => {
-        console.log(book)
+        // console.log(book)
         this.bookItems = book.book.bookItems
         this.bookInfo = book.book;
         this.bookInfo.language = book.book.language.name;
@@ -211,7 +211,7 @@ export default {
     getStats(id) {
       Books.statistics(id).then(res => {
         this.stats = res
-        console.log(res)
+        // console.log(res)
       }).catch(err => {
         console.log(err)
       })

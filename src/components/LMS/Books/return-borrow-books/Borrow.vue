@@ -148,6 +148,9 @@ export default {
     flatPickr
   },
     methods: {
+      checkBookDublication(id,ds ) {
+
+      },
       openData() {
         this.disconnectNFC()
         this.flagBtn = true
@@ -155,12 +158,36 @@ export default {
         console.log('socket started...')
         this.socket.on("bookItemDetails", data => {
           console.log(data)
-          Transfer.isAllowedBorrowing(data.id).then(res => {
-            console.log(res)
-            this.bookItems.push(data)
-          }).catch(err => {
-            console.log(err)
-          })
+            
+              Transfer.isAllowedBorrowing(data.id, this.studentInfo.id, data.bookId).then(res => {
+                  // console.log(res)
+
+                  const isDublicated = this.bookItems.map(el => {
+                    if (data.bookId == el.bookId)
+                    return el
+                  })  
+                  
+                  if(isDublicated.length > 0) {
+                      this.$vs.notify({
+                        title: 'Book is already reserved',
+                        text: 'This book item has already taken',
+                        color: 'danger',
+                        icon : 'error'
+                      })
+                  }
+                  else {
+                    this.bookItems.push(data)
+                  }
+
+                }).catch(err => {
+                    this.$vs.notify({
+                      title: 'Book is already reserved',
+                      text: err.data.error,
+                      color: 'danger',
+                      icon : 'send'
+                    })
+                  console.log(err)
+                })
         })
       },
       deleteF(idx, code) {
@@ -169,7 +196,7 @@ export default {
       },
     
     openLoadingBackground(type, color) {
-      console.log('user socket started...', process.env.VUE_APP_BR_SOCKET)
+      // console.log('user socket started...', process.env.VUE_APP_BR_SOCKET)
       this.$vs.loading({
           background: color,
           color:'rgb(255, 255, 255)',
@@ -178,9 +205,9 @@ export default {
           scale: 1.3
           })
           this.socketOfUser.on('studentReceived',data => {
-            console.log(data)
+            // console.log(data)
             this.studentInfo = data
-            console.log(this.studentInfo)
+            // console.log(this.studentInfo)
             this.$vs.loading.close()
           })
     },
@@ -215,7 +242,7 @@ export default {
     beforeRouteLeave(to, from, next) {
        const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
   if (answer) {
-     console.log('diconnect')
+     console.log('disconnect')
     this.socket.disconnect()
     this.disconnectNFC()
     this.$vs.loading.close()

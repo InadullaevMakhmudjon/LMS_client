@@ -1,9 +1,9 @@
 <template>
   <vs-row vs-type="flex" vs-justify="center">
       <vs-col vs-w="12">
-          <vs-row vs-justify="space-between">
-              <vs-col vs-w="auto"><vs-button color="success" :disabled="loading" @click="startScanning">Start Scanning</vs-button></vs-col>
-              <vs-col vs-w="auto"><vs-button color="primary" type="flat" :disabled="loading" @click="startScanning">Refresh</vs-button></vs-col>
+          <vs-row>
+              <vs-col vs-w="auto" v-if="isBtnActive"><vs-button color="success" :disabled="loading" v-if="isBtnActive" @click="startScanning">Start Scanning</vs-button></vs-col>
+              <vs-col vs-w="auto"  v-else><vs-button color="primary" type="flat" @click="reload">Refresh</vs-button></vs-col>
           </vs-row>
       </vs-col>
       <vs-col vs-w="auto" vs-type="flex">
@@ -100,7 +100,7 @@
                     </vs-td>
 
                      <vs-td :data="data[indextr].id">
-                        {{data[indextr].numbers.all - data[indextr].numbers.inLibrary}}
+                        {{data[indextr].numbers.all - data[indextr].numbers.inLibrary -data[indextr].numbers.borrowed - data[indextr].numbers.damaged -data[indextr].numbers.lost}}
                     </vs-td>
                     </vs-tr>
                 </template>
@@ -116,6 +116,7 @@ export default {
 data() {
     return {
         loading: false,
+        isBtnActive: true,
         invetoryItems: [],
         socket: io(process.env.VUE_APP_READER_SOCKET,{transports: ['websocket']}),
     }
@@ -123,22 +124,26 @@ data() {
 methods: {
     startScanning() {
         this.loading = true
+        this.isBtnActive = false
         this.invetoryItems = []
         this.socket.emit('inventory');
         this.socket.on('inventoryResults', data => {
-            console.log(data)
+            // console.log(data)
             Inventory.postArraysOfTags(data).then(table => {
-                console.log(table)
+                // console.log(table)
                 this.invetoryItems = table
             }).catch(err => {
                 console.log(err)
             })
             this.loading = false
         })
+    },
+    reload() {
+        location.reload()
     }
 },
 beforeDestroy() {
-    console.log('distroy started...')
+    console.log('destroy started...')
     this.socket.disconnect()
 }
 }

@@ -31,7 +31,7 @@
                 </vs-row>
             </vs-col>
             <vs-col vs-w="auto">
-                <vs-button icon="get_app" size="large">Overdues list</vs-button>
+                <vs-button :href="baseUrl" target="_blank" icon="get_app" size="large">Overdues list</vs-button>
             </vs-col>
         </vs-row>
         <vs-row>
@@ -95,7 +95,7 @@
                         </vs-td>
 
                         <vs-td :data="data[indextr].createdAt">
-                            {{data[indextr].createdAt | moment('Do MMM, YYYY')}}
+                            {{data[indextr].createdAt | moment('Do MMM, YYYY HH:mm')}}
                         </vs-td>
 
                         <vs-td :data="data[indextr].user.firstName">
@@ -115,6 +115,7 @@ import Transfer from '@/services/Transfer.js';
 export default {
     data() {
         return {
+            baseUrl: `${process.env.VUE_APP_BASE_URL}borrows/overdues?format=excel`,
             value1: '',
             rbList:[],
             backgroundLoading:'#22c16b',

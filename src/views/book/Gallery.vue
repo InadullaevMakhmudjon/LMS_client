@@ -246,7 +246,7 @@ export default {
               book.authorName = book.authors.map(({ name }) => name).join(", ");
             });
         }).catch(error => {
-            console.log(error);
+            // console.log(error);
             this.loading(false);})
 
       } else {
@@ -269,7 +269,7 @@ export default {
             this.loading(false);
           })
           .catch(error => {
-            console.log(error);
+            // console.log(error);
             this.loading(false);
             //   });
             // } else {
@@ -281,22 +281,6 @@ export default {
     bookInfo(id) {
       this.$router.push("/books/" + id);
     },
-    //   languages() {
-    //     Languages.getAll().then((languages) => {
-    //     this.languages = languages;
-    //   });
-    // },
-    //   courses() {
-    //     Courses.getAll().then((courses) => {
-    //     this.courses = courses;
-    //   });
-    // },
-    //   courses() {
-    //     Courses.getAll().then((courses) => {
-    //     this.courses = courses;
-    //   });
-    // },
-
     getFilters() {
       Promise.all([
         Categories.getAll(),

@@ -169,9 +169,9 @@ export default {
     },
 
     deleteBookItem(item, idx) {
-      console.log(item, idx);
+      // console.log(item, idx);
       this.bookObj.shelfItems[this.active].bookItems.splice(idx, 1);
-      console.log(this.bookObj.shelfItems[this.active]);
+      // console.log(this.bookObj.shelfItems[this.active]);
       this.socket.emit("delete", { rfidTag: item.code });
     },
 
@@ -203,7 +203,7 @@ export default {
         // console.log(data);
         Books.hasBookItem(data.rfidTag)
           .then(res => {
-            console.log(res)
+            // console.log(res)
             if (res.status == 'OK') {
               if (this.bookObj.shelfItems.length > 0) {
                 this.bookObj.shelfItems[this.active].bookItems.push({

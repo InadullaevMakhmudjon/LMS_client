@@ -61,7 +61,7 @@ export default {
           }));
         })
         .reduce((ac, cur) => ac.concat(cur));
-        console.log(bookItem)
+        // console.log(bookItem)
       Books.postBookItems(bookItem).then(res  => {
         // this.bookInfo.socket.disconnect()
         this.$router.push(`/books/${this.bookInfo.id}`)

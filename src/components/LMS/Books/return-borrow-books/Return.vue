@@ -211,12 +211,9 @@ export default {
   methods: {
     changeStatusHandler(id) {
       if (id == 1) {
-        console.log(this.tempdata)
         //change status to damaged
         Transfer.changeStatusOfbookDamaged1(this.tempdata.bookItem.id).then(res => {
-          console.log(res)
             Transfer.changeStatusOfbookDamaged2(this.tempdata.id).then(result => {
-            console.log(result)
             this.getBorrowedBooks(this.studentInfo.id);
             }).catch(err => console.log(err)).finally(() => { this.activeStatus = false })
         }).catch(err => {
@@ -225,10 +222,8 @@ export default {
       } else if (id == 2) {
         //change status to lost
         Transfer.changeStatusOfbookLost1(this.tempdata.bookItem.id).then(res => {
-          console.log(res)
             Transfer.changeStatusOfbookLost2(this.tempdata.id).then(result => {
             this.getBorrowedBooks(this.studentInfo.id);
-            console.log(result)
             }).catch(err => console.log(err)).finally(() => { this.activeStatus = false })
         }).catch(err => {
           console.log(err)
@@ -247,7 +242,6 @@ export default {
               color: null
             };
           });
-          console.log(this.bookItems);
         })
         .catch(err => console.log(err));
     },
@@ -257,14 +251,14 @@ export default {
       console.log("socket started...");
       this.socket.emit("rfidTag");
       this.socket.on("bookItemDetails", data => {
-        console.log(data);
+        // console.log(data);
         this.bookItems.filter(el => {
-          console.log(el.bookItem.id == data.id);
+          // console.log(el.bookItem.id == data.id);
           if (el.bookItem.id == data.id) {
             el.color = "success";
             Transfer.studentPostBook(el.id)
               .then(res => {
-                console.log(res);
+                // console.log(res);
               })
               .catch(err => console.log(err));
           }
@@ -291,7 +285,7 @@ export default {
         scale: 1.3
       });
       this.socketOfUser.on("studentReceived", data => {
-        console.log(data);
+        // console.log(data);
         this.studentInfo = data;
         this.getBorrowedBooks(this.studentInfo.id);
         this.$vs.loading.close();
@@ -301,24 +295,6 @@ export default {
       this.socketOfUser.disconnect();
     },
     submitData() {
-      // this.socket.disconnect()
-      // const tasks = []
-      // this.bookItems.forEach((borrow) => tasks.push(Transfer.borrowBooks({
-      //   memberId: this.studentInfo.id,
-      //   bookItemId: borrow.id,
-      //   dueDate: this.$moment(new Date().getTime()).add(1, 'day').valueOf()
-      // })));
-      // Promise.all(tasks).then( result => {
-      //   console.log(result)
-      //   this.bookItems = []
-      //   this.flagBtn = false
-      //   this.$vs.notify({
-      //     title: 'Success',
-      //     text: 'Books has borrowed successfully',
-      //     color: 'success',
-      //     icon: 'send'
-      //   })
-      // }).catch(err => console.log(err))
       this.socket.disconnect();
       this.$router.push("/transfer");
     }

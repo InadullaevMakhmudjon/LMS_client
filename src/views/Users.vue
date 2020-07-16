@@ -111,7 +111,7 @@ export default {
   },
   watch:{
     selectRole(val) {
-      console.log(val)
+      // console.log(val)
     }
   },
   methods:{
@@ -120,7 +120,7 @@ export default {
     },
     getUsers() {
       Users.getAll().then(res => {
-        console.log(res)
+        // console.log(res)
         this.users = res
       }).catch(err => {
         console.log(err)

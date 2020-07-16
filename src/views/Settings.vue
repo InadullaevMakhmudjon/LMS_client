@@ -5,7 +5,7 @@
         <!-- left -->
         <vs-tabs color="primary">
           <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
-            <vs-table :data="item.lists" pagination max-items="15" search>
+            <vs-table :data="item.lists" pagination :max-items="10" search>
                <template slot="header">
                   <vx-input-group class="w-10/12 flex-shrink pr-1">
                       <vs-input
@@ -181,8 +181,7 @@ export default {
         this.types[1].lists = subjects;
         this.types[2].lists = authors;
         this.types[3].lists = shelves;
-         this.types[4].lists = languages;
-         console.log(this.types[4].lists)
+        this.types[4].lists = languages;
       });
     },
     notify(val, type, action) {
@@ -194,7 +193,7 @@ export default {
       });
     },
     addlist(item) {
-      console.log(item)
+      // console.log(item)
       switch (item.id) {
         case 1:
           Categories.create(item.value)
@@ -230,7 +229,7 @@ export default {
             });
           return;
         case 4:
-          console.log(item.value)
+          // console.log(item.value)
           Shelves.create(item.value)
             .then(() => {
               this.getAll();
@@ -257,7 +256,7 @@ export default {
       }
     },
     deleteItem(id, itemId, tr) {
-      console.log(tr)
+      // console.log(tr)
     //  console.log(tr);
       switch (id) {
         case 1:
