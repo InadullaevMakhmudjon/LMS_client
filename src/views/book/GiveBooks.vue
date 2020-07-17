@@ -31,7 +31,7 @@
                 </vs-row>
             </vs-col>
             <vs-col vs-w="auto">
-                <vs-button :href="baseUrl" target="_blank" icon="get_app" size="large">Overdues list</vs-button>
+                <vs-button :href="baseUrl" target="_blank" icon="get_app" size="medium">Overdues list</vs-button>
             </vs-col>
         </vs-row>
         <vs-row>
@@ -162,12 +162,12 @@ export default {
 
 <style lang="scss" scoped>
 .hoverAffect{
-    border: 1px solid rgb(16, 190, 153);
-    transition: transform .2s;
+    border: 1px solid rgb(240, 240, 240);
+    transition: transform .4s;
 }
 .hoverAffect:hover {
     border: 1px solid rgb(15, 168, 179);
-    transform: scale(1.01);
+    // transform: scale(1.004);
 }
 .btn_search{
     color: 'red';

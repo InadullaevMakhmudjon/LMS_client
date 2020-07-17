@@ -8,7 +8,7 @@
           src="https://www.timeshighereducation.com/sites/default/files/styles/the_breaking_news_image_style/public/Pictures/web/j/z/p/benedict-cumberbatch-as-sherlock-holmes.jpg?itok=CdKuiG3A"
         />
       </vs-col>
-      <vs-col vs-type="flex" vs-w="9">
+      <vs-col v-if="studentInfo.name" vs-type="flex" vs-w="9">
         <vx-card no-shadow>
           <vs-row vs-justify="space-between">
             <vs-col vs-type="flex" vs-w="6">
@@ -187,20 +187,20 @@ export default {
         transports: ["websocket"]
       }),
       studentInfo: {
-        course: {
-          id: 4,
-          name: "Senior"
-        },
-        courseId: 4,
-        createdAt: "2020-07-12T08:07:13.000Z",
-        email: "a.abdullaev2@student.inha.uz",
-        id: 1,
-        isBlocked: false,
-        name: "Abdullaev Azamat",
-        phoneNumber: "+998909272970",
-        rfidTag: "24120de0",
-        uid: "u1710008",
-        updatedAt: "2020-07-12T08:07:13.000Z"
+        // course: {
+        //   id: 4,
+        //   name: "Senior"
+        // },
+        // courseId: 4,
+        // createdAt: "2020-07-12T08:07:13.000Z",
+        // email: "a.abdullaev2@student.inha.uz",
+        // id: 1,
+        // isBlocked: false,
+        name: '',
+        // phoneNumber: "+998909272970",
+        // rfidTag: "24120de0",
+        // uid: "u1710008",
+        // updatedAt: "2020-07-12T08:07:13.000Z"
       },
       bookItems: []
     };
@@ -235,7 +235,7 @@ export default {
     getBorrowedBooks(id) {
       Transfer.studentBorrowedBooks(id)
         .then(res => {
-          // console.log(res)
+          console.log(res)
           this.bookItems = res.map(el => {
             return {
               ...el,
@@ -285,7 +285,7 @@ export default {
         scale: 1.3
       });
       this.socketOfUser.on("studentReceived", data => {
-        // console.log(data);
+        console.log(data);
         this.studentInfo = data;
         this.getBorrowedBooks(this.studentInfo.id);
         this.$vs.loading.close();
@@ -301,7 +301,7 @@ export default {
   },
   created() {
     this.openLoadingBackground("return", "#2fba31");
-    this.getBorrowedBooks(this.studentInfo.id);
+    // this.getBorrowedBooks(this.studentInfo.id);
   },
   beforeRouteLeave(to, from, next) {
     const answer = window.confirm(

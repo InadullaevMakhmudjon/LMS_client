@@ -110,7 +110,7 @@
         </vs-row>
       </vx-card>
     </vs-row>
-    <div v-if="books.length>1">
+    <div v-if="books.length>0">
     <p class="text-grey text-2xl text-center mt-5 mb-5">
       {{ booksQuantity }} results found in book store
     </p>
@@ -181,7 +181,7 @@ export default {
     selectedCourse: "",
     disableField: false,
     disableAllfields: false,
-    currentx: 1,
+    currentx: parseInt(localStorage.getItem('page')),
     page: 1,
     booksQuantity: 0,
     required: "THE FIELD IS REQUIRED",
@@ -201,13 +201,6 @@ export default {
     categories: [],
     languages: [],
     books: [
-      {
-        id: 1,
-        title: "",
-        author: { name },
-        image: "",
-        ISBNCode: ""
-      }
     ]
   }),
   components: {
@@ -230,17 +223,20 @@ export default {
       deep: true
     },
     currentx(val) {
-      this.getAll(val,12);
+      console.log(val)
+        localStorage.setItem('page',val)
+        this.getAll(val,16)
     }
   },
   methods: {
     getResult() {
       this.loading(true);
       if (this.disableAllfields && this.disableAllfields) {
-        Books.getISBN(this.filterList.isbn,this.currentx, 12).then(({ items: books, length }) => {
+        Books.getISBN(this.filterList.isbn,this.currentx, 16).then(({ items: books, length }) => {
           this.books = books;
+          console.log(this.books)
           this.booksQuantity = length;
-          this.page = Math.ceil(length / 12);
+          this.page = Math.ceil(length / 16);
           this.loading(false);
           this.books.forEach(book => {
               book.authorName = book.authors.map(({ name }) => name).join(", ");
@@ -250,19 +246,12 @@ export default {
             this.loading(false);})
 
       } else {
-        // this.$validator.validateAll().then(result => {
-        //   if (result) {
-
-        // const url = Object.keys(this.filterList)
-        //   .map(key => `${key}=${this.filterList[key]}`)
-        //   .join("&");
         const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=${this.filterList.subjectId}&typeId=${this.filterList.typeId}`;
-        // console.log(url)
-        Books.getSearchedBooks(url,this.currentx,12)
+        Books.getSearchedBooks(url,1,16)
           .then(({ items: books, length }) => {
             this.books = books;
             this.booksQuantity = length;
-            this.page = Math.ceil(length / 12);
+            this.page = Math.ceil(length / 16);
             this.books.forEach(book => {
               book.authorName = book.authors.map(({ name }) => name).join(", ");
             });
@@ -336,9 +325,18 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getAll(1, 16);
+  created() {
+    if(Number.isNaN(this.currentx)) {
+      console.log('nan')
+      localStorage.setItem('page', 1)
+      this.currentx = 1
+    }
+    console.log(this.currentx)
+    this.getAll(this.currentx, 16);
     this.getFilters();
+  },
+  beforeDestroy() {
+    // localStorage.removeItem('page')
   }
 };
 </script>
