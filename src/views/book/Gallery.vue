@@ -327,11 +327,10 @@ export default {
   },
   created() {
     if(Number.isNaN(this.currentx)) {
-      console.log('nan')
       localStorage.setItem('page', 1)
       this.currentx = 1
     }
-    console.log(this.currentx)
+    // console.log(this.currentx)
     this.getAll(this.currentx, 16);
     this.getFilters();
   },

@@ -1,43 +1,53 @@
 export default [{
     id: 1,
     name: 'LIBRARIAN_CREATE',
-}, {
+},  {
     id: 2,
-    name: 'LIBRARIAN_DELETE',
-}, {
-    id: 3,
     name: 'LIBRARIAN_EDIT',
 }, {
-    id: 4,
+    id: 3,
     name: 'LIBRARIAN_READ',
 }, {
-    id: 5,
+    id: 4,
     name: 'BOOK_CREATE',
 }, {
-    id: 6,
+    id: 5,
     name: 'BOOK_EDIT',
 }, {
-    id: 7,
+    id: 6,
     name: 'BOOK_READ',
 }, {
-    id: 8,
+    id: 7,
     name: 'ITEM_CREATE',
 }, {
-    id: 9,
+    id: 8,
     name: 'ITEM_DELETE',
 }, {
-    id: 10,
+    id: 9,
     name: 'ITEM_READ',
 }, {
-    id: 11,
+    id: 10,
     name: 'SETTINGS_CREATE',
 }, {
-    id: 12,
+    id: 11,
     name: 'SETTINGS_EDIT',
 }, {
-    id: 13,
+    id: 12,
     name: 'SETTINGS_READ',
 }, {
-    id: 14,
+    id: 13,
     name: 'SETTINGS_DELETE',
-}, ]
+},
+{
+    id: 14,
+    name: 'BORROW_CREATE',
+},
+{
+    id: 15,
+    name: 'BORROW_RETURN',
+},
+{
+    id: 16,
+    name: 'BORROW_UPDATE',
+},
+]

@@ -35,12 +35,13 @@ export default {
           formType: book.formType,
           imageFile: null
         };
-        // console.log(book)
+        console.log(this.bookInfo)
         this.bookInfo.language = book.book.language.name;
         // this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
       });
     },
     submitData() {
+       this.bookInfo.isBorrowable = this.bookInfo.isBorrowable ? 1 : 0;
       if(this.bookInfo.imageFile !== null) {
 
       Books.uploadImage(this.bookInfo.imageFile )
@@ -61,6 +62,7 @@ export default {
     }
       )}
       else {
+      console.log(this.bookInfo)
         Books.updateBookInfo(this.id, this.bookInfo).then(() => {
         this.$vs.notify({
           time: 3000,

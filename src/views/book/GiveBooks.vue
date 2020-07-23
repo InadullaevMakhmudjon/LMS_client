@@ -43,7 +43,7 @@
                             <vs-col class="vx-col flex justify-center align-middle px-0" vs-w="4">
                                 <vs-input class="w-full" icon="search" placeholder="Search" v-model="value1"/>
                                     <div class="py-2">
-                                        <a class="btn_search">Search</a>
+                                        <a class="btn_search">Search </a>
                                     </div>
                             </vs-col>
                         </vs-row>

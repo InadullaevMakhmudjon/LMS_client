@@ -146,7 +146,7 @@
         />
       </vs-select>
       <!--book is borrawable and duration in days-->
-      <!-- <vs-row class="mt-5" vs-align="center" vs-justify="between">
+      <vs-row class="mt-5" vs-align="center" vs-justify="between">
         <vs-checkbox
           :disabled="isValidIsbn"
           class=""
@@ -159,8 +159,8 @@
           class="flex-1 w-1/6"
           v-model="bookObj.duration"
         />
-      </vs-row> -->
-      <!--appended courses for the book-->
+      </vs-row>
+      <!-- appended courses for the book -->
       <vs-select
         :disabled="isValidIsbn || isTypeIssn"
         v-model="bookObj.courseYear"

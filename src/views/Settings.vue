@@ -3,6 +3,11 @@
     <template>
       <div>
         <!-- left -->
+        <vs-row>
+            <vs-col w-vs="12">
+              <vs-progress v-if="!(types[0].lists.length > 0)" indeterminate color="primary">primary</vs-progress>
+            </vs-col>
+        </vs-row>
         <vs-tabs color="primary">
           <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
             <vs-table :data="item.lists" pagination :max-items="10" search>
@@ -59,11 +64,11 @@
                     {{ tr.name }}
                   </vs-td>
 
-                  <vs-td :data="tr.id">
-                    {{ tr.createdAt.split("T")[0] }}
+                  <vs-td v-if="tr.createdAt" :data="tr.id">
+                    {{ tr.createdAt | moment('DD.MM.YYYY, HH:mm') }}
                   </vs-td>
-                  <vs-td :data="tr.id">
-                    {{ tr.updatedAt.split("T")[0] }}
+                  <vs-td v-if="tr.createdAt" :data="tr.id">
+                    {{ tr.updatedAt | moment('DD.MM.YYYY, HH:mm')  }}
                   </vs-td>
                   <vs-td :data="tr.id">
                     <vs-button
@@ -176,6 +181,7 @@ export default {
         Shelves.getAll(),
         Language.getAll()
       ]).then(result => {
+        console.log(result)
         const [categories, authors, subjects, shelves, languages] = result;
         this.types[0].lists = categories;
         this.types[1].lists = subjects;

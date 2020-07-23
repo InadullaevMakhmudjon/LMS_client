@@ -1,7 +1,7 @@
 import API, { execute } from './Api';
 
 export default {
-    getAll: () => execute(API().get('categories', { attributes: ['id', 'name'] })),
+    getAll: () => execute(API().get('categories?books=true', { attributes: ['id', 'name'] })),
     get: id => execute(API().get(`categories/${id}`)),
     create: category => execute(API().post('categories', { category })),
     delete: id => execute(API().delete(`categories/${id}`)),
