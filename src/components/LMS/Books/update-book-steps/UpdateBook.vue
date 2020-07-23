@@ -62,7 +62,7 @@ export default {
     }
       )}
       else {
-      console.log(this.bookInfo)
+      // console.log(this.bookInfo)
         Books.updateBookInfo(this.id, this.bookInfo).then(() => {
         this.$vs.notify({
           time: 3000,

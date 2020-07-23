@@ -286,7 +286,7 @@ export default {
 
     },
     logout() {
-      this.checker =false
+      this.checker = false
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/pages/login");
         this.userDetail = {}

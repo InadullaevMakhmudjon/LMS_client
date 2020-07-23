@@ -13,15 +13,7 @@ import colors from '@/../themeConfig.js'
 
 const state = {
     token: localStorage.getItem('access_token') || '',
-    userInfo: {
-        firstName: "",
-        lastName: "",
-        role: {
-            id: "",
-            name: ""
-        },
-        permissions: []
-    },
+    userInfo: JSON.parse(localStorage.getItem('profileInfo')) || '',
     tokenExpiration: false,
     isSidebarActive: true,
     breakpoint: null,

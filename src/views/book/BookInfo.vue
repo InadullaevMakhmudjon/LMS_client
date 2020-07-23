@@ -52,21 +52,21 @@
                   <p class=" text-lg mb-2">
                     {{ `Available:  0 / 0` }}
                   </p>
-                  <div class="book-card__status inline-flex mb-2">
+                  <div :class="`${bookInfo.isBorrowable ? 'book-card__status':'book-card__status_false'} inline-flex mb-2`">
                     <span class="py-1 mr-1"
                       >{{
                         bookInfo.isBorrowable ? "Borrowable" : "Not Borrowable"
                       }}
                     </span>
-                    <feather-icon icon="CheckSquareIcon" />
+                    <feather-icon :icon="bookInfo.isBorrowable ? 'CheckSquareIcon' : ''" />
                   </div>
 
                   <p class="text-lg mb-2 text-grey" v-if="bookInfo.user">
                     {{bookInfo.user.firstName+' '+bookInfo.user.lastName}}
                   </p>
-                  <p class="font-medium yellow text-1xl text-grey mt-4">
-                    Book Location: 23A
-                  </p>
+                  <!-- <p class="font-medium yellow text-1xl text-grey mt-4">
+                    Book shelf: {{}}
+                  </p> -->
                 </vs-list>
               </div>
             </vs-col>
@@ -201,7 +201,7 @@ export default {
 
     getBook(id) {
       Books.getOnebook(id).then(book => {
-        // console.log(book)
+        console.log(book)
         this.bookItems = book.book.bookItems
         this.bookInfo = book.book;
         this.bookInfo.language = book.book.language.name;
@@ -246,4 +246,14 @@ export default {
   margin-bottom: 2px;
   border-radius: 5px;
 }
+.book-card__status_false {
+  background: rgb(190, 72, 25);
+  color: white;
+  width: 150px;
+  padding: 1%;
+  padding-left: 3%;
+  margin-bottom: 2px;
+  border-radius: 5px;
+}
+
 </style>

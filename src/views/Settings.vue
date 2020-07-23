@@ -181,7 +181,7 @@ export default {
         Shelves.getAll(),
         Language.getAll()
       ]).then(result => {
-        console.log(result)
+        // console.log(result)
         const [categories, authors, subjects, shelves, languages] = result;
         this.types[0].lists = categories;
         this.types[1].lists = subjects;

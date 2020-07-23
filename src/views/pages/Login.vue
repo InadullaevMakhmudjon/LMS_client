@@ -116,6 +116,7 @@ export default {
       this.loading(true);
       Auth.getToken(this.auth)
         .then(res => {
+          this.$store.dispatch("storeData", res.profile);
           this.$store.dispatch("recieveToken", res.token).then(() => {
             this.loading(false);
             this.$router.push("/");
