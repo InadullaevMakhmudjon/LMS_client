@@ -5,7 +5,7 @@
           <vs-button type="flat"  size="small" icon="keyboard_arrow_left" class="mr-2" @click="backHistory">
             back
         </vs-button>
-        <vs-button  v-if="$hasPermission(7)" color="primary" class="mr-4" type="filled" icon="add"
+        <vs-button :to="`/book/add-book-item/${bookInfo.id}`"  v-if="$hasPermission(7)" color="primary" class="mr-4" type="filled" icon="add"
           >Add</vs-button
         >
         <vs-button  v-if="$hasPermission(5)" color="primary" type="filled"  icon="edit"  :to="'/book/update-book/'+bookInfo.id">Edit</vs-button>
@@ -52,21 +52,21 @@
                   <p class=" text-lg mb-2">
                     {{ `Available:  0 / 0` }}
                   </p>
-                  <div class="book-card__status inline-flex mb-2">
+                  <div :class="`${bookInfo.isBorrowable ? 'book-card__status':'book-card__status_false'} inline-flex mb-2`">
                     <span class="py-1 mr-1"
                       >{{
                         bookInfo.isBorrowable ? "Borrowable" : "Not Borrowable"
                       }}
                     </span>
-                    <feather-icon icon="CheckSquareIcon" />
+                    <feather-icon :icon="bookInfo.isBorrowable ? 'CheckSquareIcon' : ''" />
                   </div>
 
                   <p class="text-lg mb-2 text-grey" v-if="bookInfo.user">
                     {{bookInfo.user.firstName+' '+bookInfo.user.lastName}}
                   </p>
-                  <p class="font-medium yellow text-1xl text-grey mt-4">
-                    Book Location: 23A
-                  </p>
+                  <!-- <p class="font-medium yellow text-1xl text-grey mt-4">
+                    Book shelf: {{}}
+                  </p> -->
                 </vs-list>
               </div>
             </vs-col>
@@ -81,26 +81,19 @@
         </vs-col>
         <!--book statistics-->
         <vs-col vs-type="flex" vs-align="center" vs-w="5">
-          <vx-card class="elevation1" title="Browser Statistics">
+          <vx-card class="elevation1" title="Statistics">
             <div
-              v-for="(browser, index) in 4"
+              v-for="(browser, index) in stats.numbers"
               :key="browser.id"
               :class="{ 'mt-4': index }"
             >
               <div class="flex justify-between">
                 <div class="flex flex-col">
-                  <span class="mb-1">null</span>
-                  <h4>{{ persentaging }}%</h4>
-                </div>
-                <div class="flex flex-col text-right">
-                  <span class="flex -mr-1">
-                    <span class="mr-1">null</span>
-                    <!-- <feather-icon :icon=" browser.comparedResult < 0 ? 'ArrowDownIcon' : 'ArrowUpIcon'" :svgClasses="[browser.comparedResult < 0 ? 'text-danger' : 'text-success'  ,'stroke-current h-4 w-4 mb-1 mr-1']"></feather-icon> -->
-                  </span>
-                  <span class="text-grey">null</span>
+                  <span class="mb-1">{{browser.name}}</span>
+                  <h4>{{ browser.value }}</h4>
                 </div>
               </div>
-              <vs-progress :percent="persentaging"></vs-progress>
+              <vs-progress :percent="persentaging(browser.value)"></vs-progress>
             </div>
           </vx-card>
         </vs-col>
@@ -111,9 +104,10 @@
             <vs-tab label="Books">
               <div>
                 <vs-table
+                v-if="bookItems.length > 0"
                   max-items="10"
                   pagination
-                  :data="users"
+                  :data="bookItems"
                   maxHeight="600px"
                   search
                 >
@@ -124,17 +118,14 @@
                     <vs-th>
                       Code
                     </vs-th>
-                    <vs-th>
-                      Title
+                     <vs-th>
+                      Added by
+                    </vs-th>
+                     <vs-th>
+                      Shelf
                     </vs-th>
                     <vs-th>
                       Status
-                    </vs-th>
-                    <vs-th>
-                      Edit
-                    </vs-th>
-                    <vs-th>
-                      Archive
                     </vs-th>
                   </template>
 
@@ -144,47 +135,27 @@
                         {{ indextr + 1 }}
                       </vs-td>
                       <vs-td :data="data[indextr].code">
-                        {{ data[indextr].code }}
+                        {{ data[indextr].rfidTag }}
                       </vs-td>
-
-                      <vs-td :data="data[indextr].title">
-                        {{ data[indextr].title }}
+                      <vs-td :data="data[indextr].code">
+                        {{ data[indextr].user.firstName + ' ' +data[indextr].user.lastName}}
                       </vs-td>
-
                       <vs-td :data="data[indextr].status">
-                        {{ data[indextr].status }}
+                        {{ data[indextr].shelf.name }}
+                      </vs-td>
+                      <vs-td :data="data[indextr].status">
+                        <vs-chip :color="getStatus(data[indextr].bookStatusId).color">
+                           {{ getStatus(data[indextr].bookStatusId).text }}
+                        </vs-chip>
                       </vs-td>
 
-                      <vs-td :data="data[indextr].id">
+                      <vs-td v-if="false" :data="data[indextr].id">
                         <vs-icon
                           class="cursor"
                           icon="edit"
                           size="medium"
                           color="primary"
                         ></vs-icon>
-                      </vs-td>
-                      <vs-td
-                        v-if="data[indextr].action"
-                        :data="data[indextr].id"
-                      >
-                        <span
-                          ><vs-icon
-                            class="cursor"
-                            size="medium"
-                            icon="archive"
-                            color="#99d6ff"
-                          ></vs-icon
-                        ></span>
-                      </vs-td>
-                      <vs-td v-else :data="data[indextr].id">
-                        <span @click="doArchive(data)"
-                          ><vs-icon
-                            class="cursor"
-                            size="medium"
-                            icon="archive"
-                            color="primary"
-                          ></vs-icon
-                        ></span>
                       </vs-td>
                     </vs-tr>
                   </template>
@@ -208,39 +179,46 @@ export default {
   data() {
     return {
       selected: "",
-      persentaging: Math.floor(Math.random() * 100),
       bookInfo: [],
-      users: [
-        {
-          id: 1,
-          code: "234343",
-          title: "The Fundomental of Calculus",
-          status: "borrowed",
-          edit: "hildegard.org",
-          action: true
-        }
-      ]
+      bookItems: [],
+      tempStatus: '',
+      stats: {}
     };
   },
   methods: {
+    getStatus(id) {
+      if(id == 1) return {text: 'Available' , color: 'success'}
+      if(id == 2) return {text: 'Borrowed' , color: 'primary'}
+      if(id == 3) return {text: 'Lost' , color: 'danger'}
+      if(id == 4) return {text: 'Damaged' , color: 'warning'}
+    },
+    persentaging(value) {
+      return (value*100)/this.stats.numbers[0].value
+    },
     backHistory(){
- window.history.back();
+      window.history.back();
     },
 
-    doArchive(val) {
-      alert("dsfsa");
-      console.log(val);
-    },
     getBook(id) {
       Books.getOnebook(id).then(book => {
         console.log(book)
-        this.bookInfo = book;
-        this.bookInfo.language = book.language.name;
-        this.bookInfo.authors = book.authors.map(({ name }) => name).join(", ");
+        this.bookItems = book.book.bookItems
+        this.bookInfo = book.book;
+        this.bookInfo.language = book.book.language.name;
+        this.bookInfo.authors = book.book.authors.map(({ name }) => name).join(", ");
       });
+    },
+    getStats(id) {
+      Books.statistics(id).then(res => {
+        this.stats = res
+        // console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
     }
   },
-  mounted() {
+  created() {
+    this.getStats(this.id)
     this.getBook(this.id);
   }
 };
@@ -268,4 +246,14 @@ export default {
   margin-bottom: 2px;
   border-radius: 5px;
 }
+.book-card__status_false {
+  background: rgb(190, 72, 25);
+  color: white;
+  width: 150px;
+  padding: 1%;
+  padding-left: 3%;
+  margin-bottom: 2px;
+  border-radius: 5px;
+}
+
 </style>

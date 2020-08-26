@@ -1,11 +1,3 @@
-<!-- =========================================================================================
-    File Name: Login.vue
-    Description: Login Page
-    ----------------------------------------------------------------------------------------
-    Item Name: Vuesax Admin - VueJS Dashboard Admin Template
-      Author: Pixinvent
-    Author URL: http://www.themeforest.net/user/pixinvent
-========================================================================================== -->
 
 <template>
   <div
@@ -49,7 +41,7 @@
                   class="w-full mt-6 no-icon-border"
                 />
                 <div class="flex flex-wrap justify-between my-5">
-                  <a href="#">Forgot a Password ?</a>
+                  <a @click="reset.flag = true">Forgot a Password ?</a>
                 </div>
                 <div class="flex flex-wrap justify-between my-5">
                   <vs-button
@@ -68,16 +60,50 @@
         </div>
       </vx-card>
     </div>
+     <vs-popup class="holamundo"  title="Reset your Password" :active.sync="reset.flag">
+            <vs-row vs-type="flex" vs-justify="center">
+                <vs-col vs-type="flex" vs-w="12">
+                        <vx-input-group v-if="success.flag" class=" w-full">
+                            <template slot="prepend">
+                                <div class="prepend-text bg-primary">
+                                <span>@</span>
+                                </div>
+                            </template>
+                            <vs-input type="email" v-model="reset.email" placeholder="Your mail" />
+                            <template slot="append">
+                                <div class="append-text btn-addon">
+                                <vs-button color="primary" :disabled="reset.email.length == ''" @click="resetPassword">Send</vs-button>
+                                </div>
+                            </template>
+                        </vx-input-group>
+                </vs-col>  
+                <vs-col vs-w="9">
+                    <p v-if="success.flag" class=" text-center py-2">Give us your email address and we will send you a link to reset your password </p>
+                    <p v-if="!success.flag" class=" text-center py-2 text-success">* {{success.msg}}</p>  
+                    <p v-if="!success.flag" class=" text-center py-2 text-dark">You have <strong>5 minutes</strong> for activation</p>    
+                </vs-col>  
+                <!-- <button href="http://localhost:8080/" target="_blank" onclick="setToken()"></button> -->
+            </vs-row>    
+     </vs-popup>
   </div>
 </template>
 
 <script>
 import Auth from "../../services/Auth";
+import Profile from "../../services/Profile";
 import axios from "axios";
 
 export default {
   data() {
     return {
+      success: {
+        flag:  true,
+        msg: ''
+      },
+      reset: {
+        flag:  false,
+        email: ''
+      },
       auth: {
         username: "",
         password: ""
@@ -90,6 +116,7 @@ export default {
       this.loading(true);
       Auth.getToken(this.auth)
         .then(res => {
+          this.$store.dispatch("storeData", res.profile);
           this.$store.dispatch("recieveToken", res.token).then(() => {
             this.loading(false);
             this.$router.push("/");
@@ -111,6 +138,13 @@ export default {
       } else {
         this.$vs.loading.close("#button-with-loading > .con-vs-loading");
       }
+    },
+    resetPassword () {
+      console.log({email: this.reset.email})
+            Profile.resetPassword({email: this.reset.email}).then (res => {
+                this.success.msg = res.message
+                this.success.flag = false
+          }).catch ( err => console.log(err))
     }
   }
 };

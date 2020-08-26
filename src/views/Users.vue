@@ -4,17 +4,6 @@
      
 </vx-card> -->
 <vx-card class="mt-5">
- 
-  <div class="flex">
-      <vs-button v-if="$hasPermission(1)" class="my-auto mt-5 m-5" to="/user-create">New user</vs-button>
-       <vs-select
-      class="my-auto"
-      label="Status"
-      v-model="selectStatus"
-      >
-      <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in status"  :key="index"/>
-    </vs-select>
-  </div>
     <!-- <vs-col  vs-type="flex" vs-justify="start" vs-align="center" vs-w="2">
       <vs-select
       class="selectExample"
@@ -33,8 +22,19 @@
 </vs-row>
 <vs-row>
   <vs-col>
-    <vs-table v-model="selected" pagination max-items="3" search :data="users">
-
+    <vs-table v-model="selected" pagination max-items="10" search :data="users">
+      <template slot="header">
+        <div class="flex">
+          <vs-button v-if="$hasPermission(1)" class="my-auto" to="/user-create">New user</vs-button>
+            <!-- <vs-select
+              class="my-auto"
+              label="Status"
+              v-model="selectStatus"
+              >
+                <vs-select-item  :value="item.value" :text="item.label" v-for="(item,index) in status"  :key="index"/>
+            </vs-select> -->
+        </div>
+      </template>
     <template slot="thead">
        <vs-th sort-key="sorting">Order</vs-th>
       <vs-th sort-key="username">Full name</vs-th>
@@ -49,11 +49,11 @@
     <template slot-scope="{data}">
       <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
 
-           <vs-td :data="data[indextr].name">
+           <vs-td :data="data[indextr].firstName">
           {{indextr+1 }}
         </vs-td>
-        <vs-td :data="data[indextr].name">
-          {{ data[indextr].name }}
+        <vs-td :data="data[indextr].lastName">
+          {{ data[indextr].firstName + ' ' + data[indextr].lastName }}
         </vs-td>
 
         <vs-td :data="data[indextr].username">
@@ -65,10 +65,10 @@
         </vs-td>
 
         <vs-td :data="data[indextr].role">
-          {{data[indextr].role}}
+          {{data[indextr].role.name}}
         </vs-td>
-        <vs-td :data="data[indextr].status">
-          <vs-chip :color="data[indextr].status==1 ? 'success':'danger'">{{data[indextr].status==1 ? 'active' : 'Disactivated'}}</vs-chip> 
+        <vs-td :data="data[indextr].isConfirmed">
+          <vs-chip :color="data[indextr].isConfirmed==1 ? 'success':'danger'">{{data[indextr].isConfirmed==1 ? 'active' : 'Disactivated'}}</vs-chip> 
         </vs-td>
         <vs-td :data="data[indextr].id">
           <!-- <div @click="routing(data[indextr].id)"> <vs-icon class="hover" icon="visibility" size="medium" color="#424242" ></vs-icon></div> -->
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import Users from '../services/Users';
 export default {
   data() {
     return {
@@ -100,56 +101,7 @@ export default {
         'tbody: Slot',
         'header: Slot'
       ],
-      users: [
-        {
-          "id": 1,
-          "name": "Arabkhanova Mohira",
-          "username": "L001",
-          "email": "m.arabxonova@inha.uz",
-          "status": 0,
-          "role": "Librarian",
-          "phone": "+459494933232"
-        },
-          {
-          "id": 2,
-          "name": "Makhmudkhujaev Saidakbar",
-          "username": "A001",
-          "email": "s.makhmudkhujaev@student.inha.uz",
-          "status": 1,
-          "role": "Admin",
-          "phone": "+998998005598"
-        },
-         {
-          "id": 2,
-          "name": "Makhmudkhujaev Saidakbar",
-          "username": "A001",
-          "email": "s.makhmudkhujaev@student.inha.uz",
-          "status": 1,
-          "role": "Admin",
-          "phone": "+998998005598"
-        },
-      
-      ],
-      activeUsers:[
-  {
-          "id": 2,
-          "name": "Makhmudkhujaev Saidakbar",
-          "username": "A001",
-          "email": "s.makhmudkhujaev@student.inha.uz",
-          "status": 1,
-          "role": "Admin",
-          "phone": "+998998005598"
-        },
-         {
-          "id": 2,
-          "name": "Makhmudkhujaev Saidakbar",
-          "username": "A001",
-          "email": "s.makhmudkhujaev@student.inha.uz",
-          "status": 1,
-          "role": "Admin",
-          "phone": "+998998005598"
-        },
-      ],
+      users: [],
       status: [
         { label:'active', value: '1',},
         { label:'diactivated', value: '2',}
@@ -159,17 +111,24 @@ export default {
   },
   watch:{
     selectRole(val) {
-      console.log(val)
-    },
-    selectStatus(val) {
-      if (val == 1)
-      this.users = this.activeUsers
+      // console.log(val)
     }
   },
   methods:{
     routing( params ) {
       this.$router.push('/user-view/'+params)
+    },
+    getUsers() {
+      Users.getAll().then(res => {
+        // console.log(res)
+        this.users = res
+      }).catch(err => {
+        console.log(err)
+      })
     }
+  },
+  created() {
+    this.getUsers()
   }
 }
 </script>

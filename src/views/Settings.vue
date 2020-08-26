@@ -3,9 +3,14 @@
     <template>
       <div>
         <!-- left -->
+        <vs-row>
+            <vs-col w-vs="12">
+              <vs-progress v-if="!(types[0].lists.length > 0)" indeterminate color="primary">primary</vs-progress>
+            </vs-col>
+        </vs-row>
         <vs-tabs color="primary">
           <vs-tab v-for="(item, i) in types" :key="i" :label="item.text">
-            <vs-table :data="item.lists" pagination max-items="15" search>
+            <vs-table :data="item.lists" pagination :max-items="10" search>
                <template slot="header">
                   <vx-input-group class="w-10/12 flex-shrink pr-1">
                       <vs-input
@@ -59,11 +64,11 @@
                     {{ tr.name }}
                   </vs-td>
 
-                  <vs-td :data="tr.id">
-                    {{ tr.createdAt.split("T")[0] }}
+                  <vs-td v-if="tr.createdAt" :data="tr.id">
+                    {{ tr.createdAt | moment('DD.MM.YYYY, HH:mm') }}
                   </vs-td>
-                  <vs-td :data="tr.id">
-                    {{ tr.updatedAt.split("T")[0] }}
+                  <vs-td v-if="tr.createdAt" :data="tr.id">
+                    {{ tr.updatedAt | moment('DD.MM.YYYY, HH:mm')  }}
                   </vs-td>
                   <vs-td :data="tr.id">
                     <vs-button
@@ -176,13 +181,13 @@ export default {
         Shelves.getAll(),
         Language.getAll()
       ]).then(result => {
+        // console.log(result)
         const [categories, authors, subjects, shelves, languages] = result;
         this.types[0].lists = categories;
         this.types[1].lists = subjects;
         this.types[2].lists = authors;
         this.types[3].lists = shelves;
-         this.types[4].lists = languages;
-         console.log(this.types[4].lists)
+        this.types[4].lists = languages;
       });
     },
     notify(val, type, action) {
@@ -194,7 +199,7 @@ export default {
       });
     },
     addlist(item) {
-      console.log(item)
+      // console.log(item)
       switch (item.id) {
         case 1:
           Categories.create(item.value)
@@ -230,6 +235,7 @@ export default {
             });
           return;
         case 4:
+          // console.log(item.value)
           Shelves.create(item.value)
             .then(() => {
               this.getAll();
@@ -256,7 +262,7 @@ export default {
       }
     },
     deleteItem(id, itemId, tr) {
-      console.log(tr)
+      // console.log(tr)
     //  console.log(tr);
       switch (id) {
         case 1:

@@ -1,237 +1,263 @@
 <template>
   <div class="vx-row">
-    <vs-card>
-      <vs-row vs-w="12">
-        <vs-col
-          v-for="(item, index) in shelfs"
+    <div class="tabs">
+      <div class="tabs__nav">
+        <div
+          class="tabs__nav_tab"
+          v-for="(item, index) in bookObj.shelfItems"
           :key="index"
-          vs-type="flex"
-          vs-justify="center"
-          vs-align="center"
-          vs-w="1"
+          :class="[
+            index === active ? 'tabs__nav_tab--active' : 'tabs__nav_offtab'
+          ]"
+          @click="activate(index, item)"
         >
-          <div class="bookshelf" @dblclick="alerting(item.shelfName)">
-            <p class="">A {{ item.shelfId }}</p>
-          </div>
-        </vs-col>
-        <vs-button
-          radius
-          color="#2CA3F2"
-          type="border"
-          @click="addShelf"
-          icon="add"
-          size="large"
-        ></vs-button>
-      </vs-row>
-      <template v-if="!!shelfs.length">
-        <vs-row
-          class="mt-5"
-          vs-align="flex-start"
-          vs-type="flex"
-          vs-justify="center"
-          vs-w="12"
-        >
-          <!-- <vs-col
-            vs-type="flex"
-            vs-justify="flex-end"
-            vs-align="center"
-            vs-w="1"
-          >
-          <div
-              id="div-with-loading"
-              class="vs-con-loading__container tz w-24 h-24"
-            ></div> 
-          </vs-col> -->
-          <vs-col vs-type="flex" vs-justify="center" vs-align="center" vs-w="2">
-            <h3 class="text-grey justify-start text-3xl pt-6">
-            Listening books...
-            </h3>
-          </vs-col>
-        </vs-row>
-
-        <div class="vx-col md:w-full w-full">
-          <vs-table
-            multiple
-            v-model="selected"
-            pagination
-            max-items="5"
-            search
-            :data="itemList"
-          >
-            <template slot="thead">
-              <vs-th sort-key="order">Order</vs-th>
-              <vs-th sort-key="title">Title</vs-th>
-              <vs-th sort-key="isbn">ISBN</vs-th>
-              <vs-th sort-key="code">Code</vs-th>
-              <vs-th sort-key="id">Action</vs-th>
-            </template>
-
-            <template slot-scope="{ data }">
-              <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
-                <vs-td :data="data[indextr].order">
-                  {{ data[indextr].id }}
-                </vs-td>
-
-                <vs-td :data="data[indextr].title">
-                  {{ data[indextr].title }}
-                </vs-td>
-
-                <vs-td :data="data[indextr].isbn">
-                  {{ data[indextr].isbn }}
-                </vs-td>
-
-                <vs-td :data="data[indextr].code">
-                  {{ data[indextr].code }}
-                </vs-td>
-
-                <vs-td>
-                  <feather-icon
-                    color="red"
-                    icon="TrashIcon"
-                    svgClasses="stroke-current text-danger w-7 h-7"
-                  />
-                </vs-td>
-              </vs-tr>
-            </template>
-          </vs-table>
+          {{ item.shelfName }}
         </div>
-      </template>
-    </vs-card>
+        <div @click="addShelf" class="tabs__nav_tab">
+          <feather-icon
+            color="red"
+            icon="PlusIcon"
+            svgClasses="stroke-current  w-6 h-6"
+          />
+        </div>
+      </div>
+      <div class="tabs__content">
+        <template>
+          <vs-row
+            class="mt-5"
+            vs-align="flex-start"
+            vs-type="flex"
+            vs-justify="center"
+            vs-w="12"
+          >
+            <vs-col
+              vs-type="flex"
+              vs-justify="center"
+              vs-align="center"
+              vs-w="3"
+            >
+              <h3 class="text-grey justify-start text-3xl pt-6">
+                Listening books...
+              </h3>
+            </vs-col>
+          </vs-row>
 
-    <!--data module --->
-    <vs-popup
-      class="holamundo"
-      title="Lorem ipsum dolor sit amet"
-      :active.sync="popupActive"
-    >
-      <p id="modal" v-text="msg"></p>
-    </vs-popup>
+          <div class="vx-col md:w-full w-full">
+            <vs-table
+              v-if="bookObj.shelfItems.length"
+              pagination
+              max-items="100"
+              search
+              :data="bookObj.shelfItems[this.active].bookItems"
+            >
+              <template slot="thead">
+                <vs-th sort-key="order">Order</vs-th>
+                <vs-th sort-key="title">Title</vs-th>
+                <vs-th sort-key="isbn">ISBN</vs-th>
+                <vs-th sort-key="code">Code</vs-th>
+                <vs-th sort-key="id">Action</vs-th>
+              </template>
 
-    <vs-popup
-      button-close-hidden
-      class="holamundo"
-      title="Select Shelf"
-      :active.sync="popupShelf"
-    >
-      <p id="modal">Choose Proper Shelf</p>
-      <vs-select v-model="selectedShelf" class="w-full select-large mt-5">
-        <vs-select-item
-          :key="index"
-          :value="item.value"
-          :text="item.text"
-          v-for="(item, index) in shelflist"
-          class="w-full"
-        />
-      </vs-select>
-      <vs-button color="primary" @click="submitShelf(selectedShelf)">Add</vs-button>
+              <template slot-scope="{ data }">
+                <vs-tr :data="tr" :key="indextr" v-for="(tr, indextr) in data">
+                  <vs-td :data="data[indextr].order">
+                    {{ indextr + 1 }}
+                  </vs-td>
+
+                  <vs-td :data="data[indextr].title">
+                    {{ data[indextr].title }}
+                  </vs-td>
+
+                  <vs-td :data="data[indextr].isbn">
+                    {{ data[indextr].isbn }}
+                  </vs-td>
+
+                  <vs-td :data="data[indextr].code">
+                    {{ data[indextr].code }}
+                  </vs-td>
+                  <vs-td>
+                    <div @click="deleteBookItem(tr, indextr)">
+                      <feather-icon
+                        color="red"
+                        icon="TrashIcon"
+                        svgClasses="stroke-current text-danger w-7 h-7"
+                      />
+                    </div>
+                  </vs-td>
+                </vs-tr>
+              </template>
+            </vs-table>
+          </div>
+        </template>
+      </div>
+    </div>
+
+    <vs-popup class="holamundo" title="Select Shelf" :active.sync="popupShelf">
+      <p id="modal" class="">Choose Proper Shelf</p>
+      <vs-row>
+        <vs-col vs-type="flex" vs-w="7">
+          <vs-select v-model="selectedShelf" class="w-full select-large">
+            <vs-select-item
+              :key="index"
+              :value="item"
+              :text="item.name"
+              v-for="(item, index) in shelflist"
+              class="w-full"
+            />
+          </vs-select>
+        </vs-col>
+        <vs-col vs-type="flex" vs-w="3">
+          <vs-button color="primary" @click="submitShelf(selectedShelf)"
+            >Add</vs-button
+          >
+        </vs-col>
+      </vs-row>
     </vs-popup>
   </div>
 </template>
 
 <script>
+import io from "socket.io-client";
+import Shelves from "../../../../services/Shelves";
+import Books from "@/services/Books.js";
 export default {
-  props: ["shelfs", "shelflist"],
- 
-  methods: {
-  
-    addShelf() {
-      this.popupShelf = true;
-      this.shelfs.push({
-        shelfId: this.selectedShelf,
-        shelfName: this.selectedShelf
-      });
-    },
-    submitShelf(val) {
-        alert(val)
-    },
-    alerting(props) {
-      this.msg = props;
-      this.popupActive = true;
+  props: {
+    bookObj: {
+      type: Object,
+      required: true
     }
   },
   data() {
     return {
+      active: 0,
+      shelfItems: [],
+      actived: false,
       selectedShelf: "",
-      msg: "not available yet",
-      popupActive: false,
       popupShelf: false,
-      selected: [],
-      tableList: [
-        "vs-th: Component",
-        "vs-tr: Component",
-        "vs-td: Component",
-        "thread: Slot",
-        "tbody: Slot",
-        "header: Slot"
-      ],
-      itemList: [
-        {
-          id: 1,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00234"
-        },
-        {
-          id: 2,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00235"
-        },
-        {
-          id: 5,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00236"
-        },
-        {
-          id: 6,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00237"
-        },
-        {
-          id: 7,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00238"
-        },
-        {
-          id: 8,
-          title: "The fundamental of calculus",
-          isbn: "2839-32343-2433-2",
-          code: "00239"
-        }
-      ]
+      shelflist: [],
+      itemList: [],
+      socket: io(process.env.VUE_APP_READER_SOCKET, { transports: ["websocket"]}),
     };
   },
-  mounted() {
-    // this.$vs.loading({
-    //   container: "#div-with-loading",
-    //   scale: 1.6,
-    //   type: "point",
-    //   color: "primary"
-    // });
-  }
+  computed: {},
+  methods: {
+    getShelves() {
+      Shelves.getAll()
+        .then(res => {
+          // console.log(res)
+          this.shelflist = res;
+        })
+        .catch(err => console.log(err));
+    },
+
+    addShelf() {
+      this.popupShelf = true;
+    },
+
+    submitShelf(val) {
+      this.bookObj.shelfItems.push({
+        shelfName: val.name,
+        shelfId: val.id,
+        bookId: this.bookObj.id,
+        bookItems: []
+      });
+      this.popupShelf = false;
+    },
+
+    activate(index, item) {
+      this.active = index;
+    },
+
+    deleteBookItem(item, idx) {
+      // console.log(item, idx);
+      this.bookObj.shelfItems[this.active].bookItems.splice(idx, 1);
+      // console.log(this.bookObj.shelfItems[this.active]);
+      this.socket.emit("delete", { rfidTag: item.code });
+    },
+
+    // disconnect() {
+    //   this.bookObj.shelfItems[this.active].bookItems.push({
+    //     id: Math.floor(Math.random() * 100),
+    //     title: `${Math.floor(Math.random() * 100)}dasdasasaq`,
+    //     isbn: Math.floor(Math.random() * 10000),
+    //     code: Math.floor(Math.random() * 100000)
+    //   });
+    //   // this.socket.disconnect()
+    //   // this.$vs.notify({
+    //   //   title: 'disconnected',
+    //   //   color: 'success'
+    //   // })
+    // }
+  },
+
+  created() {
+    //console.log(this.bookObj);
+    this.getShelves();
+    console.log("started...");
+    setTimeout(() => {
+      this.socket.emit("bookId", this.bookObj.id);
+    }, 1000);
+
+    setTimeout(() => {
+      this.socket.on("bookItem", data => {
+        // console.log(data);
+        Books.hasBookItem(data.rfidTag)
+          .then(res => {
+            // console.log(res)
+            if (res.status == 'OK') {
+              if (this.bookObj.shelfItems.length > 0) {
+                this.bookObj.shelfItems[this.active].bookItems.push({
+                  id: this.bookObj.id,
+                  title: this.bookObj.title,
+                  isbn: this.bookObj.ISBNCode,
+                  code: data.rfidTag
+                });
+              }
+              else {
+                alert('Please select proper shelf')
+              }
+            } 
+            else if (res.status == 'DUPLICATE') {
+               this.$vs.notify({
+                title: res.description,
+                color: "warning",
+                fixed: true
+              });
+            }
+          })
+          .catch(err => console.log(err));
+      });
+    }, 1200);
+  },
+  beforeDestroy() {
+    this.socket.disconnect()
+    location.reload()
+    // console.log('diconnect')
+    // this.socket.disconnect();
+  },
+  // beforeRouteLeave(to, from, next) {
+  //   next();
+  // }
 };
 </script>
 
-<style>
+<style scoped lang="scss">
 .activeLoading {
   opacity: 0 !important;
   transform: scale(0.5);
 }
 .tz {
   background-color: #ffffff;
+  color: #b1b1b1da;
 }
 .bookshelf {
   cursor: pointer;
   background-color: #2ca3f2;
   color: #ffffff;
-  height: 100%;
   width: 100%;
   text-align: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: 12px;
 }
 
 .bookshelf p {
@@ -241,5 +267,40 @@ export default {
   left: 50%;
   margin-right: -50%;
   transform: translate(-50%, -50%);
+}
+.tabs {
+  font-size: 12pt;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background: rgb(255, 255, 255);
+  padding: 0.6rem;
+  &__nav {
+    display: flex;
+    &_tab {
+      padding: 1rem;
+      margin: 0 0.8rem 0 0;
+      border-radius: 0 0.5rem 0 0;
+      border-bottom-style: inset;
+      cursor: pointer;
+      opacity: 0.85;
+      transition: 80ms linear all;
+      &--active {
+        opacity: 1;
+        transition-timing-function: ease-in-out;
+        box-shadow: none;
+        background: rgb(255, 255, 255);
+        border-bottom-width: 5px;
+        border-bottom-color: rgb(0, 150, 219);
+      }
+    }
+  }
+  &__content {
+    background: rgb(255, 255, 255);
+    padding: 1rem;
+    border-radius: 0 0.5rem 0.5rem 0.5rem;
+  }
 }
 </style>

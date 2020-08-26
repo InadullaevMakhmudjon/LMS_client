@@ -34,6 +34,7 @@
           </vx-tooltip>
           <!-- <span @click="alerting"><vs-icon icon-pack="feather"  size="30px" icon="archiveIcon"></vs-icon></span> -->
           <vs-button
+            to="/transfer/return"
             class="ml-2"
             color="success"
             type="border"
@@ -42,6 +43,7 @@
             >Return</vs-button
           >
           <vs-button
+            to="/transfer/borrow"
             class="ml-2"
             color="primary"
             type="border"
@@ -49,19 +51,26 @@
             icon="vertical_align_top"
             >Borrow</vs-button
           >
+            <vs-button
+            to="/book-control"
+            class="ml-2"
+            icon="history"
+            type="border"
+            color="primary"
+            size="medium"
+            >Book control</vs-button
+          >
         </div>
 
         <vs-spacer></vs-spacer>
-        <h5 class="mr-3">english</h5>
-
-        <!-- NOTIFICATIONS -->
-        <!-- <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
+    
+        <vs-dropdown vs-custom-content vs-trigger-click class="cursor-pointer ml-4">
         <feather-icon icon="BellIcon" class="cursor-pointer mt-1 sm:mr-6 mr-2" :badge="unreadNotifications.length"></feather-icon>
         <vs-dropdown-menu class="notification-dropdown dropdown-custom vx-navbar-dropdown">
 
           <div class="notification-top text-center p-5 bg-primary text-white">
             <h3 class="text-white">{{ unreadNotifications.length }} New</h3>
-            <p class="opacity-75">App Notifications</p>
+            <p class="opacity-75">Notifications</p>
           </div>
 
           <VuePerfectScrollbar ref="mainSidebarPs" class="scroll-area--nofications-dropdown p-0 mb-10" :settings="settings">
@@ -78,7 +87,7 @@
             </li>
           </ul>
           </VuePerfectScrollbar>
-                    <div class="
+                    <div @click="$router.push('/book-control')" class="
                         checkout-footer
                         fixed
                         bottom-0
@@ -95,10 +104,10 @@
                         border-solid
                         d-theme-border-grey-light
                         cursor-pointer">
-                        <span>View All Notifications</span>
+                        <span >View All Notifications</span>
                     </div>
         </vs-dropdown-menu>
-      </vs-dropdown> -->
+      </vs-dropdown>
 
         <!-- USER META -->
         <div class="the-navbar__user-meta flex items-center">
@@ -188,43 +197,11 @@ export default {
       unreadNotifications: [
         {
           index: 0,
-          title: "New Message",
-          msg: "Are your going to meet me tonight?",
-          icon: "ChevronsRightIcon",
+          title: "Book is out of zone!",
+          msg: "The fundomental principle of Physics, 1992",
+          icon: "AlertTriangleIcon",
           time: this.randomDate({ sec: 10 }),
-          category: "primary"
-        },
-        {
-          index: 1,
-          title: "New Order Recieved",
-          msg: "You got new order of goods.",
-          icon: "ChevronsRightIcon",
-          time: this.randomDate({ sec: 40 }),
-          category: "primary"
-        },
-        {
-          index: 2,
-          title: "Server Limit Reached!",
-          msg: "Server have 99% CPU usage.",
-          icon: "ChevronsRightIcon",
-          time: this.randomDate({ min: 1 }),
-          category: "primary"
-        },
-        {
-          index: 3,
-          title: "New Mail From Peter",
-          msg: "Cake sesame snaps cupcake",
-          icon: "ChevronsRightIcon",
-          time: this.randomDate({ min: 6 }),
-          category: "primary"
-        },
-        {
-          index: 4,
-          title: "Bruce's Party",
-          msg: "Chocolate cake oat cake tiramisu",
-          icon: "ChevronsRightIcon",
-          time: this.randomDate({ hr: 2 }),
-          category: "primary"
+          category: "warning"
         }
       ],
       userDetail:{},
@@ -245,10 +222,6 @@ export default {
     }
   },
   computed: {
-    //  getUserInfo () {
-    //    return this.$store.getters.userInfo
-    // },
-    // HELPER
 
     sidebarWidth() {
       return this.$store.state.sidebarWidth;
@@ -313,7 +286,7 @@ export default {
 
     },
     logout() {
-      this.checker =false
+      this.checker = false
       this.$store.dispatch("logout").then(() => {
         this.$router.push("/pages/login");
         this.userDetail = {}

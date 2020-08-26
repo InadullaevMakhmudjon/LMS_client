@@ -155,7 +155,7 @@ export default {
     submitData() {
       this.datalist.forEach(el => {
         el.store.push(el.read, el.create, el.update, el.delete)
-        console.log(el.store)
+        // console.log(el.store)
       })
     },
     revertData() {

@@ -17,6 +17,7 @@ import FeatherIcon from './components/FeatherIcon.vue'
 import VxInputGroup from './components/vx-input-group/VxInputGroup.vue'
 import vSelect from "vue-select";
 import { ValidationProvider } from 'vee-validate';
+
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component(VxTooltip.name, VxTooltip)
 Vue.component(VxCard.name, VxCard)
@@ -25,7 +26,7 @@ Vue.component(VxBreadcrumb.name, VxBreadcrumb)
 Vue.component(FeatherIcon.name, FeatherIcon)
 Vue.component(VxInputGroup.name, VxInputGroup)
 Vue.component('v-select', vSelect)
-
+Vue.use(require('vue-moment'));
 // v-select component
 
 // Set the components prop default to return our fresh components

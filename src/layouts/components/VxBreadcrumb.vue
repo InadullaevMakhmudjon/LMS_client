@@ -35,6 +35,9 @@
           ><feather-icon icon="ChevronsRightIcon" svgClasses="w-4 h-4"
         /></span>
       </li>
+      <li class="inline-flex">
+                <span v-if="props.route.meta.breadcrumb.slice(-1)[0].active" class="cursor-default">{{ props.route.meta.breadcrumb.slice(-1)[0].title }}</span>
+      </li>
     </ul>
   </div>
 </template>

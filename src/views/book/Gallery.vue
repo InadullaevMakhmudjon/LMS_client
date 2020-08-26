@@ -110,13 +110,12 @@
         </vs-row>
       </vx-card>
     </vs-row>
-
+    <div v-if="books.length>0">
     <p class="text-grey text-2xl text-center mt-5 mb-5">
-      {{ booksQuantity }} results found in Book list
+      {{ booksQuantity }} results found in book store
     </p>
-
-    <vs-row>
-      <vs-col vs-justify="start" v-for="book in books" :key="book.id" vs-w="3">
+    <vs-row  v-if="books.length > 0">
+      <vs-col vs-justify="center" v-for="book in books" :key="book.id" vs-w="12" vs-xs="12" vs-sm="4" vs-lg="3">
         <main @click="bookInfo(book.id)">
           <div class="book-card">
             <div class="book-card__cover">
@@ -148,7 +147,7 @@
               </div>
               <div class="book-card__author">
                 <span>{{ `ISBN: ${book.ISBNCode}` }}</span
-                ><span class="book_quantity">43</span>
+                ><span class="book_quantity">{{book.bookItems.length}}</span>
               </div>
             </div>
           </div>
@@ -162,6 +161,8 @@
         v-model="currentx"
       ></vs-pagination>
     </vs-row>
+    </div>
+     <vs-progress indeterminate color="primary"  :height="8" v-else></vs-progress>
   </div>
 </template>
 
@@ -180,7 +181,7 @@ export default {
     selectedCourse: "",
     disableField: false,
     disableAllfields: false,
-    currentx: 1,
+    currentx: parseInt(localStorage.getItem('page')),
     page: 1,
     booksQuantity: 0,
     required: "THE FIELD IS REQUIRED",
@@ -200,13 +201,6 @@ export default {
     categories: [],
     languages: [],
     books: [
-      {
-        id: 1,
-        title: "",
-        author: { name },
-        image: "",
-        ISBNCode: ""
-      }
     ]
   }),
   components: {
@@ -229,47 +223,42 @@ export default {
       deep: true
     },
     currentx(val) {
-      this.getAll(val,12);
+      console.log(val)
+        localStorage.setItem('page',val)
+        this.getAll(val,16)
     }
   },
   methods: {
     getResult() {
       this.loading(true);
       if (this.disableAllfields && this.disableAllfields) {
-        alert('sda')
-        Books.getISBN(this.filterList.isbn,this.currentx, 12).then(({ items: books, length }) => {
+        Books.getISBN(this.filterList.isbn,this.currentx, 16).then(({ items: books, length }) => {
           this.books = books;
+          console.log(this.books)
           this.booksQuantity = length;
-          this.page = Math.ceil(length / 12);
+          this.page = Math.ceil(length / 16);
           this.loading(false);
           this.books.forEach(book => {
               book.authorName = book.authors.map(({ name }) => name).join(", ");
             });
         }).catch(error => {
-            console.log(error);
+            // console.log(error);
             this.loading(false);})
 
       } else {
-        // this.$validator.validateAll().then(result => {
-        //   if (result) {
-
-        // const url = Object.keys(this.filterList)
-        //   .map(key => `${key}=${this.filterList[key]}`)
-        //   .join("&");
         const url = `title=${this.filterList.title}&courseYear=${this.filterList.courseYear}&languageId=${this.filterList.languageId}&categoryId=${this.filterList.categoryId}&subjectId=${this.filterList.subjectId}&typeId=${this.filterList.typeId}`;
-        console.log(url)
-        Books.getSearchedBooks(url,this.currentx,12)
+        Books.getSearchedBooks(url,1,16)
           .then(({ items: books, length }) => {
             this.books = books;
             this.booksQuantity = length;
-            this.page = Math.ceil(length / 12);
+            this.page = Math.ceil(length / 16);
             this.books.forEach(book => {
               book.authorName = book.authors.map(({ name }) => name).join(", ");
             });
             this.loading(false);
           })
           .catch(error => {
-            console.log(error);
+            // console.log(error);
             this.loading(false);
             //   });
             // } else {
@@ -281,22 +270,6 @@ export default {
     bookInfo(id) {
       this.$router.push("/books/" + id);
     },
-    //   languages() {
-    //     Languages.getAll().then((languages) => {
-    //     this.languages = languages;
-    //   });
-    // },
-    //   courses() {
-    //     Courses.getAll().then((courses) => {
-    //     this.courses = courses;
-    //   });
-    // },
-    //   courses() {
-    //     Courses.getAll().then((courses) => {
-    //     this.courses = courses;
-    //   });
-    // },
-
     getFilters() {
       Promise.all([
         Categories.getAll(),
@@ -313,12 +286,13 @@ export default {
         this.languages = languages;
       });
     },
-    getAll(val) {
-      Books.getAll(val, 16).then(({ items: books, length }) => {
+    getAll(val, range) {
+      Books.getAll(val, range).then(({ items: books, length }) => {
         this.books = books;
+        // console.log(this.books)
         this.booksQuantity = length;
         this.page = Math.ceil(length / 16);
-        this.books.forEach(book => {
+        this.books.forEach( book => {
           book.authorName = book.authors.map(({ name }) => name).join(", ");
         });
       });
@@ -351,9 +325,17 @@ export default {
       }
     }
   },
-  mounted() {
-    this.getAll(1, 12);
+  created() {
+    if(Number.isNaN(this.currentx)) {
+      localStorage.setItem('page', 1)
+      this.currentx = 1
+    }
+    // console.log(this.currentx)
+    this.getAll(this.currentx, 16);
     this.getFilters();
+  },
+  beforeDestroy() {
+    // localStorage.removeItem('page')
   }
 };
 </script>

@@ -73,12 +73,7 @@
           class="w-full"
         />
       </vs-select>
-         <!-- <vs-input
-        disabled
-        label="Responsible Person"
-        v-model="bookObj.userId"
-        class="w-full mt-5"
-      /> -->
+    
       <vs-select
         :disabled="isValidIsbn"
         v-model="bookObj.typeId"
@@ -151,7 +146,7 @@
         />
       </vs-select>
       <!--book is borrawable and duration in days-->
-      <!-- <vs-row class="mt-5" vs-align="center" vs-justify="between">
+      <vs-row class="mt-5" vs-align="center" vs-justify="between">
         <vs-checkbox
           :disabled="isValidIsbn"
           class=""
@@ -164,8 +159,8 @@
           class="flex-1 w-1/6"
           v-model="bookObj.duration"
         />
-      </vs-row> -->
-      <!--appended courses for the book-->
+      </vs-row>
+      <!-- appended courses for the book -->
       <vs-select
         :disabled="isValidIsbn || isTypeIssn"
         v-model="bookObj.courseYear"
@@ -226,8 +221,9 @@
       </template>
        <template v-if="point">
         <img
+          width="300"
           class="zooming"
-          height="300"
+          height="200"
           v-if="!popupActivo"
           @click="popupActivo = true"
           :src="bookObj.image"
@@ -286,8 +282,7 @@ export default {
       courseList: [],
       subjects: [],
       categoryList: [],
-      languageList: [],
-      responsible: this.$store.state.userInfo.lastName
+      languageList: []
     };
   },
   computed: {
@@ -386,7 +381,7 @@ export default {
         .catch(() => (this.isValidIsbn = true));
     }   
   },
-  mounted() {
+  created() {
     this.getAll();
   }
 };

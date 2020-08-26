@@ -38,7 +38,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
-                            { title: 'book item', active: true },
+                            { title: 'Dashboard', active: true },
                         ],
                         rule: 'editor',
                         pageTitle: 'Home',
@@ -53,8 +53,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Books', url: '/books' },
-                            { title: 'Books', url: '/books' },
-                            { title: 'book item', active: true },
+                            { title: 'Book item', active: true },
                         ],
                         parent: 'books',
                         pageTitle: 'Books',
@@ -113,7 +112,37 @@ const router = new Router({
                         requiresAuth: true
                     }
                 },
-
+                {
+                    path: '/book/add-book-item/:id',
+                    props: true,
+                    name: 'add_book_item',
+                    component: () =>
+                        import ('./components/LMS/Books/update-book-steps/AddBookItem.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Update', url: '/' },
+                            { title: 'All books', url: '/books' },
+                            { title: 'add Book', active: true },
+                        ],
+                        parent: 'books',
+                        pageTitle: 'Add Book item',
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: '/inventory',
+                    name: 'inventory',
+                    component: () =>
+                        import ('./views/Inventory/Inventory.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Monitorize book items', url: '/' },
+                            { title: 'Scan the books', active: true },
+                        ],
+                        pageTitle: 'Invetory',
+                        requiresAuth: true
+                    }
+                },
                 {
                     path: '/users',
                     name: 'Users',
@@ -136,7 +165,7 @@ const router = new Router({
                     props: true,
                     name: 'Userinfo',
                     component: () =>
-                        import ('./views/User/View.vue'),
+                        import ('./views/User/Update.vue'),
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
@@ -170,6 +199,56 @@ const router = new Router({
 
                     }
 
+                }, 
+                {
+                    path: '/transfer',
+                    name: 'Transfer',
+                    component: () =>
+                        import ('./views/book/GiveBooks.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Transfer', active: false },
+
+                        ],
+                        pageTitle: 'Book flow',
+                        parent: '',
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: '/transfer/return',
+                    name: 'Transfers',
+                    props: true,
+                    component: () =>
+                        import ('./components/LMS/Books/return-borrow-books/Return.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Transfer', active: false },
+
+                        ],
+                        pageTitle: 'Transformation',
+                        parent: 'Transfer',
+                        requiresAuth: true
+                    }
+                },
+                {
+                    path: '/transfer/borrow',
+                    name: 'Transferss',
+                    props: true,
+                    component: () =>
+                        import ('./components/LMS/Books/return-borrow-books/Borrow.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Transfer', active: false },
+
+                        ],
+                        pageTitle: 'Transformation',
+                        parent: 'Transfer',
+                        requiresAuth: true
+                    }
                 },
                 {
                     path: '/user-create/',
@@ -200,9 +279,24 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/' },
-                            { title: 'book item', active: true },
+                            { title: 'Settings', active: true },
                         ],
                         pageTitle: 'Settings',
+                        requiresAuth: true
+
+                    }
+                },
+                {
+                    path: '/book-control',
+                    name: 'Book Control',
+                    component: () =>
+                        import ('./components/LMS/System/Logs.vue'),
+                    meta: {
+                        breadcrumb: [
+                            { title: 'Home', url: '/' },
+                            { title: 'Log panel', active: true },
+                        ],
+                        pageTitle: 'Book Control',
                         requiresAuth: true
 
                     }
@@ -215,7 +309,7 @@ const router = new Router({
                     meta: {
                         breadcrumb: [
                             { title: 'Home', url: '/books' },
-                            { title: 'book item', active: true },
+                            { title: 'User profile', active: true },
                         ],
                         rule: '',
                         pageTitle: 'Profile info',
@@ -246,6 +340,17 @@ const router = new Router({
                     name: 'page-error-404',
                     component: () =>
                         import ('@/views/pages/Error404.vue')
+                },
+                {
+                    path: '/user/success',
+                    name: 'success-200',
+                    component: () => import ('@/views/pages/SuccessRegistered.vue')
+                },
+                {
+                    path: '/reset/user/pwd/:id',
+                    name: 'Reset',
+                    props: true,
+                    component: () => import('./views/pages/ResetPassword.vue'),
                 },
             ]
         },

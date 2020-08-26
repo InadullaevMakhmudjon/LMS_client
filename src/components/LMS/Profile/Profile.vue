@@ -41,6 +41,18 @@
                 <div class="vx-row mb-6">
                   <div class="vx-col w-full">
                     <vs-input
+                      class="w-full"
+                      icon-pack="feather"
+                      icon="icon-grid"
+                      icon-no-border
+                      label="username"
+                      v-model="userInfo.username"
+                    />
+                  </div>
+                </div>
+                <div class="vx-row mb-6">
+                  <div class="vx-col w-full">
+                    <vs-input
                     disabled
                       type="email"
                       class="w-full"
@@ -58,7 +70,7 @@
                 </div>
                 <div class="vx-row">
                   <div class="vx-col w-full">
-                    <vs-button @click="submitting" class="mr-3 mb-2">Save</vs-button>
+                    <vs-button @click="changeProfile" class="mr-3 mb-2">Save</vs-button>
                     <vs-button
                       color="warning"
                       type="border"
@@ -125,19 +137,19 @@
             <div class="vx-row mb-6">
               <div class="vx-col w-full">
                 <vs-input
-                  type="Confirm new password"
+                  type="password"
                   class="w-full"
                   icon-pack="feather"
                   icon="icon-lock"
                   icon-no-border
-                  label="Password"
+                  label="Confirm new password"
                   v-model="userPwd.confirm"
                 />
               </div>
             </div>
             <div class="vx-row">
               <div class="vx-col sm:w-2/3 w-full">
-                <vs-button class="mr-3 mb-2">Save</vs-button>
+                <vs-button class="mr-3 mb-2" @click="changePassword">Save</vs-button>
                 <vs-button
                   color="warning"
                   type="border"
@@ -154,6 +166,7 @@
 </template>
 
 <script>
+import Profile from "../../../services/Profile";
 export default {
   data() {
    return {
@@ -161,6 +174,7 @@ export default {
       id: '',
       lastName: '',
       firstName: '',
+      username: '',
       role: {},
       permissions: []
     },
@@ -169,30 +183,6 @@ export default {
       newPassword: '',
       confirm:''
     },
-      // datalist: [
-      // {
-      //  id: 2,
-      //  name: 'Settings',
-      //  permission: {
-      //       read: false,
-      //     create: false,
-      //     update: false,
-      //     delete: false,
-      //       prop: true,
-      //      store: []
-        
-      //  }
-      // },
-      //   {
-      //     type: "Books",
-      //     read: false,
-      //     create: false,
-      //     update: false,
-      //     delete: false,
-      //       prop: true,
-      //     store: []
-      //   }
-      //   ]
    }
   },
   computed:{
@@ -202,20 +192,60 @@ datalist() {
 
   },
   methods : {
-     userInfos() {
-    this.userInfo = JSON.parse(localStorage.getItem('profileInfo'))
-},
-    submitting() {
-      console.log({
-        id:this.userInfo.id,
+    getProfile() {
+      Profile.getOne().then(res => {
+        this.userInfo = res
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+
+    changeProfile() {
+      console.log(this.userInfo)
+      Profile.resetLocalProfile({
+        username: this.userInfo.username,
         firstName: this.userInfo.firstName,
-        lastName: this.userInfo.lastName,
-     //   email: this.userInfo.email
+        lastName: this.userInfo.lastName
+      }).then(() => {
+        this.$vs.notify({
+          title: 'Updating...',
+          text: 'Profile is updated',
+          color: 'primary'
+        })
+      }).catch(err => {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'Error occured while updating...',
+          color: 'danger'
+        })
+      })
+    },
+    changePassword() {
+      console.log({
+         currentPassword: this.userPwd.currentPassword,
+        newPassword: this.userPwd.newPassword,
+      })
+    Profile.resetLocalPassword({
+        currentPassword: this.userPwd.currentPassword,
+        newPassword: this.userPwd.newPassword,
+      }).then(() => {
+        this.$vs.notify({
+          title: 'Updating...',
+          text: 'Profile password is updated',
+          color: 'primary'
+        })
+      }).catch(err => {
+        this.$vs.notify({
+          title: 'Error',
+          text: 'Error occured while updating...',
+          color: 'danger'
+        })
       })
     }
   },
   mounted() {
-    this.userInfos()
+    this.getProfile()
+    // this.userInfos()
   }
 
 }

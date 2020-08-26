@@ -9,19 +9,19 @@
   >
     <!-- tab 1 content -->
     <tab-content title="Step 1" class="mb-5">
-      <vx-card fixed-height="1000">
+      <vx-card no-shadow fixed-height="1000">
         <first-step :bookObj="bookObj" />
       </vx-card>
     </tab-content>
     <!-- tab 2 content -->
     <tab-content title="Step 2" class="mb-5">
-      <second-step :shelfs="shelfs" :shelflist="shelfList" />
+      <second-step v-if="false" :bookObj="bookObj"  />
     </tab-content>
 
     <!-- tab 3 content -->
-    <tab-content title="Step 3" class="mb-5">
+    <!-- <tab-content title="Step 3" class="mb-5">
       <third-step :bookObj="bookObj" />
-    </tab-content>
+    </tab-content> -->
 
     <template slot="footer" slot-scope="props">
       <div class="wizard-footer-left">
@@ -34,7 +34,7 @@
       </div>
       <div class="wizard-footer-right">
         <wizard-button
-          disabled
+          :disabled="true"
           v-if="!props.isLastStep"
           @click.native="nextTab(props)"
           class="wizard-footer-right"
@@ -70,6 +70,7 @@ import Create_3 from "../../components/LMS/Books/create-book-steps/Create_3";
 import Books from '@/services/Books';
 
 export default {
+
   data() {
     return {
       onState: false,
@@ -93,16 +94,12 @@ export default {
         imageFile: new FormData(),
       },
       shelfs: [],
-      shelfList: [
-        { text: "A1", value: "1" },
-        { text: "A2", value: "2" },
-        { text: "A3", value: "3" },
-        { text: "A4", value: "4" }
-      ],
+      shelfList: [],
       categories: [],
       languages: [],
     };
   },
+
   methods: {
     formSubmitted() {
       // console.log(this.bookObj);
@@ -172,6 +169,14 @@ export default {
     FirstStep: Create_1,
     SecondStep: Create_2,
     ThirdStep: Create_3
-  }
+  },
+   beforeRouteLeave(to, from, next) {
+       const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+      if (answer) {
+         next()
+      } else {
+        next(false)
+      }
+    }
 };
 </script>
